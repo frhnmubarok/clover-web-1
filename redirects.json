@@ -1,0 +1,17 @@
+[
+  {
+    "source": "/login",
+    "destination": "/auth/login",
+    "permanent": false
+  },
+  {
+    "source": "/register",
+    "destination": "/auth/register",
+    "permanent": false
+  },
+  {
+    "source": "/forgot-password",
+    "destination": "/auth/forgot-password",
+    "permanent": false
+  }
+]
