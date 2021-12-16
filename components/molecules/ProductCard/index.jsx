@@ -3,7 +3,7 @@ import Link from "next/link";
 import { HiStar } from "react-icons/hi";
 import { MdFavorite, MdAddShoppingCart } from "react-icons/md";
 
-export default function CardProduct({
+export default function ProductCard({
   id,
   title,
   price,
