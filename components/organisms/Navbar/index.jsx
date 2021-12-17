@@ -10,7 +10,7 @@ import {
 } from "react-icons/hi";
 import { MdOutlineTouchApp } from "react-icons/md";
 
-import Link from "../atoms/Link";
+import Link from "../../atoms/Link";
 import logo from "@/assets/images/logo-clover.png";
 
 import { classNames } from "@/utils/helpers";
