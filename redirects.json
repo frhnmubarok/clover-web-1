@@ -1,17 +1,26 @@
 [
   {
     "source": "/login",
-    "destination": "/auth/login",
-    "permanent": false
+    "destination": "/auth/login"
   },
   {
     "source": "/register",
-    "destination": "/auth/register",
-    "permanent": false
+    "destination": "/auth/register"
+  },
+  {
+    "source": "/register/success",
+    "destination": "/auth/register/success"
   },
   {
     "source": "/forgot-password",
-    "destination": "/auth/forgot-password",
-    "permanent": false
+    "destination": "/auth/forgot-password"
+  },
+  {
+    "source": "/forgot-password/reset",
+    "destination": "/auth/forgot-password/reset"
+  },
+  {
+    "source": "/change-password",
+    "destination": "/auth/change-password"
   }
 ]
