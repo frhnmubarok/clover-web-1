@@ -34,7 +34,7 @@ const Dashboard = () => {
   useEffect(() => {
     console.log(loginStatus);
     setUserData({ username: localStorage.getItem('username') });
-  }, []);
+  }, [loginStatus]);
 
   const handleLogout = () => {
     userLogout({ id: Cookies.get('id') });

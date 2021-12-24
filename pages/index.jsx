@@ -204,7 +204,7 @@ export const getServerSideProps = async () => {
   });
 
   const getCSRF = await callAPI({
-    url: 'https://api-clover.herokuapp.com/sanctum/csrf-cookie',
+    path: '/sanctum/csrf-cookie',
     method: 'GET',
   });
 
