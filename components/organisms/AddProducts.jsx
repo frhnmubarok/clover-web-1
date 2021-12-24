@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
-import ProductInput from '../Atoms/ProductInput';
+import ProductInput from '../atoms/ProductInput';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '@/context/ProductContext';
 
@@ -160,9 +160,9 @@ const AddProducts = () => {
       ) : (
         <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
           <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Tambah Produk</h1>
-          <h2 className='text-md text-gray-400'>
+          {/* <h2 className='text-md text-gray-400'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.
-          </h2>
+          </h2> */}
           <form onSubmit={formik.handleSubmit}>
             <div className='pt-8'>
               <div className='md:grid md:grid-cols-4 md:gap-6'>
@@ -173,7 +173,7 @@ const AddProducts = () => {
                   </div>
                 </div>
                 <div className='mt-5 md:mt-0 md:col-span-3'>
-                  <div className='shadow sm:rounded-md sm:overflow-hidden'>
+                  <div className='shadow-lg sm:rounded-md sm:overflow-hidden'>
                     <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
                       <div className='grid grid-cols-3 gap-6'>
                         <ProductInput
@@ -312,7 +312,7 @@ const AddProducts = () => {
                   </div>
                 </div>
                 <div className='mt-5 md:mt-0 md:col-span-3'>
-                  <div className='shadow sm:rounded-md sm:overflow-hidden'>
+                  <div className='shadow-lg sm:rounded-md sm:overflow-hidden'>
                     <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
                       <div className='grid grid-cols-3 gap-6'>
                         <ProductInput
