@@ -42,7 +42,7 @@ const validate = (values) => {
 
   if (!values.profile_postal_code) {
     errors.profile_postal_code = 'Wajib diisi';
-  } else if (values.profile_postal_code.length < 5) {
+  } else if (values.profile_postal_code.length === 5) {
     errors.profile_postal_code = 'Kode pos harus 5 digit';
   }
 
@@ -112,7 +112,7 @@ const RegisterPartner = ({ data }) => {
       formData.append('self_photo', values.self_photo);
       formData.append('ktp_photo', values.ktp_photo);
       console.log(formData);
-      // registerKYC(formData);
+      registerKYC(formData);
       setDataDiri(formData);
     },
   });

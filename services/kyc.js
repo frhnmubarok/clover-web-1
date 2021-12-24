@@ -16,6 +16,17 @@ export async function addKYC(userData) {
     formData,
   });
 }
+export async function addReview(userData) {
+  const url = `${API_ENDPOINT}/add-review`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data: userData,
+    token,
+    formData,
+  });
+}
 
 // export async function createStore(formData) {
 //   const url = `${API_ENDPOINT}/store`;

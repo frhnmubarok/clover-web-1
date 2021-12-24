@@ -8,10 +8,12 @@ async function callAPI({ url, method, data, token, formData }) {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
+        'Access-Control-Allow-Credentials': true,
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
+        'Access-Control-Allow-Credentials': true,
       };
 
   const response = await axios({

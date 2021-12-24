@@ -1,10 +1,12 @@
 import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
 
 export async function authRegister(userData) {
+  axios.get('https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie');
   const url = `${API_ENDPOINT}/register`;
 
   return callAPI({
@@ -15,6 +17,7 @@ export async function authRegister(userData) {
 }
 
 export async function authLogin(userData) {
+  axios.get('https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie');
   const url = `${API_ENDPOINT}/login`;
 
   return callAPI({
