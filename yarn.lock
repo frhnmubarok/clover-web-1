@@ -180,6 +180,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@heroicons/react@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@heroicons/react@npm:1.0.5"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 12114af19c17f69140cc7338e4cd12fe38098ad3ed79f02762106160655cde3ebdba58a2b26f1067f720786187364fd9465bc72f02aad85b0ead8172d76aa51d
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.9.2":
   version: 0.9.2
   resolution: "@humanwhocodes/config-array@npm:0.9.2"
@@ -391,10 +400,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.9.2":
+  version: 2.11.0
+  resolution: "@popperjs/core@npm:2.11.0"
+  checksum: 84d6f197d3ddfd8a5b05c7276c3692d8404c96128a946ab0a800b25567d8fc231928319c1f97a67e0817e76ce2a1b735589ef0f38f8e8835692408660a2395a1
+  languageName: node
+  linkType: hard
+
 "@rushstack/eslint-patch@npm:^1.0.8":
   version: 1.1.0
   resolution: "@rushstack/eslint-patch@npm:1.1.0"
   checksum: 4602c23454c8bb03502da12398cb5c4c0bfb3b1772535b418ec94ab8c47824f70e6ff32206a35fe7086042d9516959edea439e2371147b1de7eee50ef03ace65
+  languageName: node
+  linkType: hard
+
+"@tailwindcss/forms@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@tailwindcss/forms@npm:0.4.0"
+  dependencies:
+    mini-svg-data-uri: ^1.2.3
+  peerDependencies:
+    tailwindcss: ">=3.0.0 || >= 3.0.0-alpha.1"
+  checksum: 881a80b136f22b3da68323166ddfbcd844841f711d75ce4d64479302ae523ac7c1fe8a3bb57370216e6da69303640d70d543ecdb3ec2086f1ddf428a6c13566f
   languageName: node
   linkType: hard
 
@@ -1069,9 +1096,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001202, caniuse-lite@npm:^1.0.30001219, caniuse-lite@npm:^1.0.30001228, caniuse-lite@npm:^1.0.30001272, caniuse-lite@npm:^1.0.30001286":
-  version: 1.0.30001286
-  resolution: "caniuse-lite@npm:1.0.30001286"
-  checksum: 04de4742552d4aeb713677b40693d9ac1fbd259573e0ff739565278bcecb6f398f3227546a4e930f4d5cf95b61458f4a53c9c1f90f5b0c4f6063b32e4c54b89e
+  version: 1.0.30001287
+  resolution: "caniuse-lite@npm:1.0.30001287"
+  checksum: b53c26a3a267a2920394e4aa5d1f60a76f891943914068066700e5497dda512f096d8a77dfefda17306a9df06e16ce9c6b5179f8856cc0efbcd8873d13b2fbea
   languageName: node
   linkType: hard
 
@@ -1103,6 +1130,13 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "chart.js@npm:3.6.2"
+  checksum: 0883adced890eb0ee77a8374e6f89412a82df694f25767a5b14a200735922adf6521366a1419a24025e53203ea00ed70ba1dfc86e2f030c9ef183c6909f9dbdd
   languageName: node
   linkType: hard
 
@@ -1168,6 +1202,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.2.6":
+  version: 2.3.1
+  resolution: "classnames@npm:2.3.1"
+  checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -1181,17 +1222,24 @@ __metadata:
   dependencies:
     "@badrap/bar-of-progress": ^0.1.2
     "@headlessui/react": ^1.4.2
+    "@heroicons/react": ^1.0.5
+    "@tailwindcss/forms": ^0.4.0
     "@tailwindcss/typography": ^0.5.0
     autoprefixer: ^10.4.0
     axios: ^0.24.0
+    chart.js: ^3.6.2
+    daisyui: ^1.19.0
     eslint: 8.4.1
     eslint-config-next: 12.0.7
+    faker: ^5.5.3
     formik: ^2.2.9
     framer-motion: ^5.5.3
     js-cookie: ^3.0.1
     next: 12.0.7
     postcss: ^8.4.5
     react: 17.0.2
+    react-chartjs-2: ^4.0.0
+    react-datepicker: ^4.5.0
     react-dom: 17.0.2
     react-hot-toast: ^2.1.1
     react-icons: ^4.3.1
@@ -1414,6 +1462,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"daisyui@npm:^1.19.0":
+  version: 1.19.0
+  resolution: "daisyui@npm:1.19.0"
+  checksum: f9a853aab28ec495f9b4fcedc29d1903933648ca5b7cbd2823baee9c38466e53eda99a9f77c77e8b04245820e313959c8a2dd7680bdc1654297af00adc43d02a
+  languageName: node
+  linkType: hard
+
 "damerau-levenshtein@npm:^1.0.7":
   version: 1.0.7
   resolution: "damerau-levenshtein@npm:1.0.7"
@@ -1425,6 +1480,13 @@ __metadata:
   version: 3.0.1
   resolution: "data-uri-to-buffer@npm:3.0.1"
   checksum: c59c3009686a78c071806b72f4810856ec28222f0f4e252aa495ec027ed9732298ceea99c50328cf59b151dd34cbc3ad6150bbb43e41fc56fa19f48c99e9fc30
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.24.0":
+  version: 2.27.0
+  resolution: "date-fns@npm:2.27.0"
+  checksum: db62036b3816eb0322c9532b353beac7f660a91e1a55dbd21c14893c621ebb8509f21c66ba287844dabd34dee0207edd54a9537bce6bb7cab9383dedc6b8bc90
   languageName: node
   linkType: hard
 
@@ -1592,9 +1654,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.723, electron-to-chromium@npm:^1.4.17":
-  version: 1.4.19
-  resolution: "electron-to-chromium@npm:1.4.19"
-  checksum: a99d237839ecd65e93966f80039dd85d6a00a5a1dfa99b97546889773186b0e44ad8e81410e82faaaea13fb54375cc73ec343510317bc90941c2ffff051b3ab7
+  version: 1.4.22
+  resolution: "electron-to-chromium@npm:1.4.22"
+  checksum: 30fe097b7a80dabb6dafc951b3da4056e25777184298ccb94d855c4abc64162e7e05b681f0b4b4bf34c7c30f51d5f6b090011bd7ab1a50011b76cee300c93b72
   languageName: node
   linkType: hard
 
@@ -2032,6 +2094,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"faker@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "faker@npm:5.5.3"
+  checksum: 684fd64c8d3897e54248f95b4f6319f75d97691b8500cd13adf4af2c28f9204f766c1d1aaa6b41338f0beaaa87256c3132f8708a1a8f189d122b92f6b98081c3
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -2182,8 +2251,8 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^5.5.3":
-  version: 5.5.3
-  resolution: "framer-motion@npm:5.5.3"
+  version: 5.5.4
+  resolution: "framer-motion@npm:5.5.4"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     framesync: 6.0.1
@@ -2206,7 +2275,7 @@ __metadata:
       optional: true
     three:
       optional: true
-  checksum: 8edcb39e1bc9216b36ebc924e18e36f2ad105e2a0ecddce9bfd551e770cd81994811445061514dbb0cc320b2d020f226523869408c5dd505a027f41fa2dad843
+  checksum: 7d2eb75848edf1afba5b44ea70922503beb6a5233e7909039a897e0c1607519a875f5d5aabab5d1a9b06ef30293ea2cd47db82b5fac592cbd110d081337793e7
   languageName: node
   linkType: hard
 
@@ -3111,7 +3180,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -3208,6 +3277,15 @@ __metadata:
   bin:
     miller-rabin: bin/miller-rabin
   checksum: 00cd1ab838ac49b03f236cc32a14d29d7d28637a53096bf5c6246a032a37749c9bd9ce7360cbf55b41b89b7d649824949ff12bc8eee29ac77c6b38eada619ece
+  languageName: node
+  linkType: hard
+
+"mini-svg-data-uri@npm:^1.2.3":
+  version: 1.4.3
+  resolution: "mini-svg-data-uri@npm:1.4.3"
+  bin:
+    mini-svg-data-uri: cli.js
+  checksum: bd1789c34907a36ae9157897b7c7f6ad700e71c8cb6d725bb2810ce6211abcaa3717333ca17408f6f8b2a44055e571cd5b78d478688e1864513cb7f8e023ae3f
   languageName: node
   linkType: hard
 
@@ -3939,7 +4017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.6":
+"postcss-selector-parser@npm:^6.0.6, postcss-selector-parser@npm:^6.0.7":
   version: 6.0.7
   resolution: "postcss-selector-parser@npm:6.0.7"
   dependencies:
@@ -4109,6 +4187,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-chartjs-2@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-chartjs-2@npm:4.0.0"
+  peerDependencies:
+    chart.js: ^3.5.0
+    react: ^16.8.0 || ^17.0.0
+  checksum: 25998a4cc14910641c1184245c6672211d436877a456c70fa16bf67e2b470e7899cef578618fd8842a7d25103a973f25c7f7ec01200fdcbe1b04913fabb87650
+  languageName: node
+  linkType: hard
+
+"react-datepicker@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "react-datepicker@npm:4.5.0"
+  dependencies:
+    "@popperjs/core": ^2.9.2
+    classnames: ^2.2.6
+    date-fns: ^2.24.0
+    prop-types: ^15.7.2
+    react-onclickoutside: ^6.12.0
+    react-popper: ^2.2.5
+  peerDependencies:
+    react: ^16.9.0 || ^17
+    react-dom: ^16.9.0 || ^17
+  checksum: a1e810707911f48a0c95bacf99d5d012606f1d31fd728ece933d5784ad09d88b4e71e87a91761cc935537f18b8667d0d4365935581e7439ca2746a65441925d2
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:17.0.2":
   version: 17.0.2
   resolution: "react-dom@npm:17.0.2"
@@ -4126,6 +4231,13 @@ __metadata:
   version: 2.0.4
   resolution: "react-fast-compare@npm:2.0.4"
   checksum: 06046595f90a4e3e3a56f40a8078c00aa71bdb064ddb98343f577f546aa22e888831fd45f009c93b34707cc842b4c637737e956fd13d6f80607ee92fb9cf9a1c
+  languageName: node
+  linkType: hard
+
+"react-fast-compare@npm:^3.0.1":
+  version: 3.2.0
+  resolution: "react-fast-compare@npm:3.2.0"
+  checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
   languageName: node
   linkType: hard
 
@@ -4171,6 +4283,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-onclickoutside@npm:^6.12.0":
+  version: 6.12.1
+  resolution: "react-onclickoutside@npm:6.12.1"
+  peerDependencies:
+    react: ^15.5.x || ^16.x || ^17.x
+    react-dom: ^15.5.x || ^16.x || ^17.x
+  checksum: aae4c1c2e77a4c601d53ba0aa0fbb4ab295a518b3f522ea29e7712c2310c57f2a051a70bdb0bc62424ca124b804a1a007ea1c32319e8c0cfbac417c601ff0f1a
+  languageName: node
+  linkType: hard
+
 "react-otp-input@npm:^2.4.0":
   version: 2.4.0
   resolution: "react-otp-input@npm:2.4.0"
@@ -4178,6 +4300,19 @@ __metadata:
     react: ^16.2.0
     react-dom: ^16.2.0
   checksum: c73230be43fcc4d4abf8c39e9fe546a40637dae3e9633dc0af1727bc6ef14839b7e2d455216208ab718697c40513781740c95a2c300e8c5513954842e18c1dbf
+  languageName: node
+  linkType: hard
+
+"react-popper@npm:^2.2.5":
+  version: 2.2.5
+  resolution: "react-popper@npm:2.2.5"
+  dependencies:
+    react-fast-compare: ^3.0.1
+    warning: ^4.0.2
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    react: ^16.8.0 || ^17
+  checksum: 915fcf08e1da4fd48a200074fcdd936f601ee2173f1e730cfed8a54fd47716aa8bf9cce2392463e3bcbe64a096d0baf463809ed2874b94d3a9d430ae6d817b5d
   languageName: node
   linkType: hard
 
@@ -4784,8 +4919,8 @@ __metadata:
   linkType: hard
 
 "tailwindcss@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "tailwindcss@npm:3.0.5"
+  version: 3.0.6
+  resolution: "tailwindcss@npm:3.0.6"
   dependencies:
     arg: ^5.0.1
     chalk: ^4.1.2
@@ -4803,7 +4938,7 @@ __metadata:
     postcss-js: ^3.0.3
     postcss-load-config: ^3.1.0
     postcss-nested: 5.0.6
-    postcss-selector-parser: ^6.0.6
+    postcss-selector-parser: ^6.0.7
     postcss-value-parser: ^4.2.0
     quick-lru: ^5.1.1
     resolve: ^1.20.0
@@ -4814,7 +4949,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 8509923d71e83348a4f9871c545bc44eb2c8ffb2d8e78d7018bde964812d60c9ac2b3a43bd3a001ca15e20efe32c79cd5e378df7267d8b9d970a4b2e3f1b4022
+  checksum: 9b381caadb1d058fbfede02d87a3f3ce2d64de08fd1b13528b2bdc8aebb31d66af254355dbe96195cb5fb7769631803396494a452cb3b373b0e4f79a8fe1169a
   languageName: node
   linkType: hard
 
@@ -5052,6 +5187,15 @@ __metadata:
   version: 1.1.2
   resolution: "vm-browserify@npm:1.1.2"
   checksum: 10a1c50aab54ff8b4c9042c15fc64aefccce8d2fb90c0640403242db0ee7fb269f9b102bdb69cfb435d7ef3180d61fd4fb004a043a12709abaf9056cfd7e039d
+  languageName: node
+  linkType: hard
+
+"warning@npm:^4.0.2":
+  version: 4.0.3
+  resolution: "warning@npm:4.0.3"
+  dependencies:
+    loose-envify: ^1.0.0
+  checksum: 4f2cb6a9575e4faf71ddad9ad1ae7a00d0a75d24521c193fa464f30e6b04027bd97aa5d9546b0e13d3a150ab402eda216d59c1d0f2d6ca60124d96cd40dfa35c
   languageName: node
   linkType: hard
 

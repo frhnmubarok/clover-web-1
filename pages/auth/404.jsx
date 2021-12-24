@@ -1,7 +1,7 @@
 import { HiArrowCircleLeft } from 'react-icons/hi';
 import Link from 'next/link';
 
-import Main from '@/components/Main';
+import Main from '@/components/atoms/Main';
 
 const Custom404 = () => {
   return (
