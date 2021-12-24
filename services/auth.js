@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
 
-export async function authRegister(userData) {  
+export async function authRegister(userData) {
   const url = `${API_ENDPOINT}/register`;
 
   return callAPI({

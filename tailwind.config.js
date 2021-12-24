@@ -30,5 +30,5 @@ module.exports = {
       center: true,
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms'), require('daisyui')],
 };

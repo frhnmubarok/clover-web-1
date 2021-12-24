@@ -414,6 +414,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tailwindcss/forms@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@tailwindcss/forms@npm:0.4.0"
+  dependencies:
+    mini-svg-data-uri: ^1.2.3
+  peerDependencies:
+    tailwindcss: ">=3.0.0 || >= 3.0.0-alpha.1"
+  checksum: 881a80b136f22b3da68323166ddfbcd844841f711d75ce4d64479302ae523ac7c1fe8a3bb57370216e6da69303640d70d543ecdb3ec2086f1ddf428a6c13566f
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/typography@npm:^0.5.0":
   version: 0.5.0
   resolution: "@tailwindcss/typography@npm:0.5.0"
@@ -1122,6 +1133,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chart.js@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "chart.js@npm:3.6.2"
+  checksum: 0883adced890eb0ee77a8374e6f89412a82df694f25767a5b14a200735922adf6521366a1419a24025e53203ea00ed70ba1dfc86e2f030c9ef183c6909f9dbdd
+  languageName: node
+  linkType: hard
+
 "chokidar@npm:3.5.1":
   version: 3.5.1
   resolution: "chokidar@npm:3.5.1"
@@ -1205,17 +1223,22 @@ __metadata:
     "@badrap/bar-of-progress": ^0.1.2
     "@headlessui/react": ^1.4.2
     "@heroicons/react": ^1.0.5
+    "@tailwindcss/forms": ^0.4.0
     "@tailwindcss/typography": ^0.5.0
     autoprefixer: ^10.4.0
     axios: ^0.24.0
+    chart.js: ^3.6.2
+    daisyui: ^1.19.0
     eslint: 8.4.1
     eslint-config-next: 12.0.7
+    faker: ^5.5.3
     formik: ^2.2.9
     framer-motion: ^5.5.3
     js-cookie: ^3.0.1
     next: 12.0.7
     postcss: ^8.4.5
     react: 17.0.2
+    react-chartjs-2: ^4.0.0
     react-datepicker: ^4.5.0
     react-dom: 17.0.2
     react-hot-toast: ^2.1.1
@@ -1436,6 +1459,13 @@ __metadata:
     postcss:
       optional: true
   checksum: 6d2410f91202aa0edd6a74363d34fcf9dada5b7f9d2127950785e50b1de4ff2144f2c81b72be87a93e7700c251858750df3128542ca44d0d505e430dfdf84b19
+  languageName: node
+  linkType: hard
+
+"daisyui@npm:^1.19.0":
+  version: 1.19.0
+  resolution: "daisyui@npm:1.19.0"
+  checksum: f9a853aab28ec495f9b4fcedc29d1903933648ca5b7cbd2823baee9c38466e53eda99a9f77c77e8b04245820e313959c8a2dd7680bdc1654297af00adc43d02a
   languageName: node
   linkType: hard
 
@@ -2061,6 +2091,13 @@ __metadata:
     node-gyp: latest
     safe-buffer: ^5.1.1
   checksum: ad4e1577f1a6b721c7800dcc7c733fe01f6c310732bb5bf2240245c2a5b45a38518b91d8be2c610611623160b9d1c0e91f1ce96d639f8b53e8894625cf20fa45
+  languageName: node
+  linkType: hard
+
+"faker@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "faker@npm:5.5.3"
+  checksum: 684fd64c8d3897e54248f95b4f6319f75d97691b8500cd13adf4af2c28f9204f766c1d1aaa6b41338f0beaaa87256c3132f8708a1a8f189d122b92f6b98081c3
   languageName: node
   linkType: hard
 
@@ -3243,6 +3280,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mini-svg-data-uri@npm:^1.2.3":
+  version: 1.4.3
+  resolution: "mini-svg-data-uri@npm:1.4.3"
+  bin:
+    mini-svg-data-uri: cli.js
+  checksum: bd1789c34907a36ae9157897b7c7f6ad700e71c8cb6d725bb2810ce6211abcaa3717333ca17408f6f8b2a44055e571cd5b78d478688e1864513cb7f8e023ae3f
+  languageName: node
+  linkType: hard
+
 "minimalistic-assert@npm:^1.0.0, minimalistic-assert@npm:^1.0.1":
   version: 1.0.1
   resolution: "minimalistic-assert@npm:1.0.1"
@@ -4138,6 +4184,16 @@ __metadata:
     iconv-lite: 0.4.24
     unpipe: 1.0.0
   checksum: d5e9179d2f1f0a652cd107c080f25d165c724f546124d620c8df7fb80322df42bff547a8b310e55e1f7952556d013716a21b30162192eb0b3332d7efcba75883
+  languageName: node
+  linkType: hard
+
+"react-chartjs-2@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-chartjs-2@npm:4.0.0"
+  peerDependencies:
+    chart.js: ^3.5.0
+    react: ^16.8.0 || ^17.0.0
+  checksum: 25998a4cc14910641c1184245c6672211d436877a456c70fa16bf67e2b470e7899cef578618fd8842a7d25103a973f25c7f7ec01200fdcbe1b04913fabb87650
   languageName: node
   linkType: hard
 

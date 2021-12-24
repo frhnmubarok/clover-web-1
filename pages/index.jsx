@@ -20,7 +20,7 @@ const JoinAndWatchButton = () => {
   return (
     <div className='order-4 w-full py-5 text-center grid grid-cols-1 gap-3 sm:flex sm:gap-0 sm:space-x-6'>
       <Link
-        href='/register'
+        href='/register-partner'
         className='inline-flex justify-center items-center space-x-2 text-sm font-semibold bg-primary-500 text-white py-3 px-4 rounded-lg hover:bg-primary-500 hover:ring-2 hover:ring-blue-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 duration-200 ease-in-out'>
         <HiOutlineExternalLink className='w-5 h-5' />
         <span>Mulai Menjadi Mitra</span>

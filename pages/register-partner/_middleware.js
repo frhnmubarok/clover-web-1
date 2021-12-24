@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 
 export const middleware = (req, res) => {
-  const { token } = req.cookies;
+  const { token, role } = req.cookies;
   console.log(token);
 
   if (!token) return NextResponse.redirect('/login');

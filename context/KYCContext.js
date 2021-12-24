@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 export const KYCContext = createContext();
 
 export const KYCProvider = (props) => {
+  const [dataDiri, setDataDiri] = useState(null);
   const router = useRouter();
   // useEffect(() => {
   //   if (Cookies.get("token") !== undefined) {
@@ -25,15 +26,13 @@ export const KYCProvider = (props) => {
       // router.push('/forgot-password/reset');
     }
   };
-  
- 
-
-  
 
   return (
     <KYCContext.Provider
       value={{
         registerKYC,
+        dataDiri,
+        setDataDiri,
       }}>
       {props.children}
     </KYCContext.Provider>

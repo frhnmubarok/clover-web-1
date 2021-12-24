@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 
 const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
+const formData = true;
 
 export async function addKYC(userData) {
   const url = `${API_ENDPOINT}/register-partner`;
@@ -12,6 +13,7 @@ export async function addKYC(userData) {
     method: 'POST',
     data: userData,
     token,
+    formData,
   });
 }
 
