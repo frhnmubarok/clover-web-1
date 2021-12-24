@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
-import ProductInput from '../Atoms/ProductInput';
+import ProductInput from '../atoms/ProductInput';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '@/context/ProductContext';
 

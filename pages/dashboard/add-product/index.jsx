@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 
-// import AddProducts from '@/components/organisms/AddProducts';
 import AddProducts from '@/components/organisms/AddProducts';
 import DashboardLayout from '@/components/templates/DashboardLayout';
 

@@ -1,11 +1,9 @@
-import React, { Fragment, useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from 'context/AuthContext';
-import { authGetRoles } from 'services/Auth';
+import { authGetRoles } from 'services/auth';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import DashboardLayout from '@/components/templates/DashboardLayout';
 import DashboardHomepage from '@/components/organisms/DashboardHomepage';
 const user = {

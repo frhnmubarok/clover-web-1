@@ -1,14 +1,10 @@
 import React, { Fragment, useEffect, useContext, useState } from 'react';
-import { AuthContext } from 'context/AuthContext';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import Clover from '@/assets/images/logo-clover.png';
 import Avatar from '@/assets/images/avatar.jpg';
 
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
-import DashboardHomepage from '../Organisms/DashboardHomepage';
+import { Menu, Transition } from '@headlessui/react';
 
 const user = {
   name: 'Tom Cook',

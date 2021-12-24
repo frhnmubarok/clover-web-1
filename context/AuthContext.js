@@ -9,7 +9,7 @@ import {
   authConfirmPassword,
   authLogout,
   authGetRoles,
-} from 'services/Auth';
+} from 'services/auth';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
