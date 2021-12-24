@@ -63,65 +63,71 @@ const Register = () => {
   });
 
   return (
-    <AuthLayout formImage formLabel='Daftar dan buat akun mu'>
+    <AuthLayout formImage formLabel="Daftar dan buat akun mu">
       <form onSubmit={formik.handleSubmit}>
         <Input
-          id='account'
-          name='account'
-          type='text'
-          label='Email / No. Handphone'
+          id="account"
+          name="account"
+          type="text"
+          label="Email / No. Handphone"
           handleChange={formik.handleChange}
           value={formik.values.account}
-          placeholder='Masukkan Email / No. Handphone kamu'
+          placeholder="Masukkan Email / No. Handphone kamu"
           errors={formik.errors.account}
         />
 
         <Input
-          id='username'
-          name='username'
-          type='text'
-          label='Username'
+          id="username"
+          name="username"
+          type="text"
+          label="Username"
           handleChange={formik.handleChange}
           value={formik.values.username}
-          placeholder='Masukkan username kamu'
+          placeholder="Masukkan username kamu"
           errors={formik.errors.username}
         />
 
         <Input
-          id='password'
-          name='password'
-          type='password'
-          label='Password'
+          id="password"
+          name="password"
+          type="password"
+          label="Password"
           handleChange={formik.handleChange}
           value={formik.values.password}
-          placeholder='Masukkan password'
+          placeholder="Masukkan password"
           errors={formik.errors.password}
         />
 
         <Input
-          id='confirmPassword'
-          name='confirmPassword'
-          type='password'
-          label='Konfirmasi Password'
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          label="Konfirmasi Password"
           handleChange={formik.handleChange}
           value={formik.values.confirmPassword}
-          placeholder='Masukkan password'
+          placeholder="Masukkan password"
           errors={formik.errors.confirmPassword}
         />
-        <div className='mt-6 flex justify-between content-center items-center'>
+        <div className="flex items-center content-center justify-between mt-6">
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
           </AuthButton>
-          <p className='pt-4 '>
+          <p className="pt-4 ">
             Sudah punya akun ?{' '}
-            <Link href='/login'>
-              <a className='text-blue-400'>Masuk</a>
+            <Link href="/login">
+              <a className="text-blue-400">Masuk</a>
             </Link>
           </p>
         </div>
       </form>
     </AuthLayout>
   );
+};
+
+Register.layoutProps = {
+  meta: {
+    title: 'Register',
+  },
 };
 
 export default Register;

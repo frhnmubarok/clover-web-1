@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import NextLink from 'next/link';
 
 export default function Link({
   href,
@@ -8,11 +8,11 @@ export default function Link({
   ...props
 }) {
   const externalProps = isExternal && {
-    rel: "noreferrer",
-    target: "_blank",
+    rel: 'noreferrer',
+    target: '_blank',
   };
 
-  const isRouteLink = href.startsWith("/");
+  const isRouteLink = href.startsWith('/');
 
   if (isRouteLink && !isExternal) {
     return (

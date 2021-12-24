@@ -15,9 +15,19 @@ const months = [
 
 export const formatDate = (dateString) => {
   const dateObj = new Date(dateString);
-  return `${months[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+  return `${
+    months[dateObj.getMonth()]
+  } ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
 };
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
+};
+
+export const formatRupiah = (money) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(money);
 };

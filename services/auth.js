@@ -1,34 +1,34 @@
 import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
 
-const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
+// const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
 
-export async function authRegister(userData) {  
-  const url = `${API_ENDPOINT}/register`;
+export async function authRegister(userData) {
+  const path = `/api/register`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
   });
 }
 
 export async function authLogin(userData) {
-  const url = `${API_ENDPOINT}/login`;
+  const path = `/api/login`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
   });
 }
 
 export async function authChangePassword(userData) {
-  const url = `${API_ENDPOINT}/update-password`;
+  const path = `/api/update-password`;
 
   return callAPI({
-    url,
+    path,
     method: 'PUT',
     data: userData,
     token,
@@ -36,40 +36,40 @@ export async function authChangePassword(userData) {
 }
 
 export async function authForgotPassword(userData) {
-  const url = `${API_ENDPOINT}/forgot-password`;
+  const path = `/api/forgot-password`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
   });
 }
 
 export async function authVerifOTP(userData) {
-  const url = `${API_ENDPOINT}/confirm-otp/${localStorage?.getItem('userId')}`;
+  const path = `/api/confirm-otp/${localStorage?.getItem('userId')}`;
 
   return callAPI({
-    url,
+    path,
     method: 'PUT',
     data: userData,
   });
 }
 
 export async function authConfirmPassword(userData) {
-  const url = `${API_ENDPOINT}/confirm-password/${localStorage?.getItem('userId')}`;
+  const path = `/api/confirm-password/${localStorage?.getItem('userId')}`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
   });
 }
 
 export async function authLogout(userData) {
-  const url = `${API_ENDPOINT}/logout`;
+  const path = `/api/logout`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
     token,
@@ -77,10 +77,10 @@ export async function authLogout(userData) {
 }
 
 export async function authGetRoles(userData) {
-  const url = `${API_ENDPOINT}/roles`;
+  const path = `/api/roles`;
 
   return callAPI({
-    url,
+    path,
     method: 'GET',
     data: userData,
     token,

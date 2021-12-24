@@ -4,6 +4,7 @@ import { authGetRoles } from 'services/Auth';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 
+import { classNames } from '@/utils/helpers';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import DashboardLayout from '@/components/templates/DashboardLayout';
@@ -26,10 +27,6 @@ const userNavigation = [
   { name: 'Settings', href: '#' },
   { name: 'Logout', href: '#' },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 const Dashboard = () => {
   const { setLoginStatus, loginStatus, userLogout } = useContext(AuthContext);
