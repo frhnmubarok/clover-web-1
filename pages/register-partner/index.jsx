@@ -28,7 +28,7 @@ const validate = (values) => {
 
   if (!values.profile_ktp) {
     errors.profile_ktp = 'Wajib diisi';
-  } else if (values.profile_ktp.length < 16) {
+  } else if (values.profile_ktp.length !== 16) {
     errors.profile_ktp = 'KTP harus 16 digit';
   }
 
@@ -42,7 +42,7 @@ const validate = (values) => {
 
   if (!values.profile_postal_code) {
     errors.profile_postal_code = 'Wajib diisi';
-  } else if (values.profile_postal_code.length === 5) {
+  } else if (values.profile_postal_code.length !== 5) {
     errors.profile_postal_code = 'Kode pos harus 5 digit';
   }
 
@@ -60,16 +60,16 @@ const validate = (values) => {
 const RegisterPartner = ({ data }) => {
   const { registerKYC, dataDiri, setDataDiri } = useContext(KYCContext);
   const [startDate, setStartDate] = useState(new Date());
-  const [province, setProvince] = useState(data.rajaongkir.results);
+  const [province, setProvince] = useState(data.data);
   const [provinceId, setProvinceId] = useState(null);
   const [city, setCity] = useState([]);
-  const [nextStep, setNextStep] = useState(true);
+  const [nextStep, setNextStep] = useState(false);
 
   useEffect(() => {
     if (provinceId !== null) {
       async function fetchData() {
         const { data } = await callRajaOngkirAPI({
-          url: `https://dev-api-clover.herokuapp.com/api/city/${provinceId}`,
+          path: `/api/city/${provinceId}`,
           method: 'GET',
           token,
         });
@@ -345,9 +345,11 @@ const RegisterPartner = ({ data }) => {
 
 export const getServerSideProps = async () => {
   const { data } = await callRajaOngkirAPI({
-    url: 'https://api.rajaongkir.com/starter/province',
+    path: '/api/province',
     method: 'GET',
   });
+
+  console.log(data);
 
   return {
     props: {

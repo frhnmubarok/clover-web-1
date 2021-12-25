@@ -2,28 +2,25 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 import Cookies from 'js-cookie';
 
-const BASE_URL = 'https://dev-api-clover.herokuapp.com';
+// const BASE_URL = 'https://dev-api-clover.herokuapp.com';
+import { BASE_URL_DEV, BASE_URL_MAIN } from '@/config/app';
 
 async function callAPI({ path, method, data, token, formData }) {
   const headers = token
     ? {
-        'Content-Type': `${
-          formData ? 'multipart/form-data' : 'application/json'
-        }`,
+        'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
         'Access-Control-Allow-Credentials': true,
       }
     : {
-        'Content-Type': `${
-          formData ? 'multipart/form-data' : 'application/json'
-        }`,
+        'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         'Access-Control-Allow-Credentials': true,
       };
 
   const response = await axios({
-    url: BASE_URL + path,
+    url: BASE_URL_DEV + path,
     method,
     data,
     headers,
@@ -49,28 +46,23 @@ async function callAPI({ path, method, data, token, formData }) {
 }
 export default callAPI;
 
-export async function callRajaOngkirAPI({ url, method, token }) {
-  // const headers = {
-  //   'Access-Control-Allow-Origin': '*',
-  //   Accept: `*/*`,
-  //   key: 'e98c6aeac3ed3f46ba4f5828e6bbe0ab',
-  // };
+export async function callRajaOngkirAPI({ path, method, token }) {
   const headers = token
     ? {
         Accept: `*/*`,
         Authorization: 'Bearer ' + token,
-        key: 'e98c6aeac3ed3f46ba4f5828e6bbe0ab',
       }
     : {
         Accept: `*/*`,
-        key: 'e98c6aeac3ed3f46ba4f5828e6bbe0ab',
       };
 
   const response = await axios({
-    url,
+    url: BASE_URL_DEV + path,
     method,
     headers,
   }).catch((err) => err.response);
+
+  console.log(response);
 
   if (response.status > 300) {
     const res = {

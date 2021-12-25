@@ -6,10 +6,10 @@ const token = Cookies.get('token');
 const formData = true;
 
 export async function insertProductAPI(productData) {
-  const url = `${API_ENDPOINT}/products`;
+  const path = `/api/products`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: productData,
     token,
@@ -26,10 +26,10 @@ export async function insertProductAPI(productData) {
 }
 
 export async function createStoreAPI(formData) {
-  const url = `${API_ENDPOINT}/store`;
+  const path = `/api/store`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: formData,
     token,
@@ -38,10 +38,10 @@ export async function createStoreAPI(formData) {
 }
 
 export async function insertProductImageAPI(productData, id) {
-  const url = `${API_ENDPOINT}/add-image/${id}`;
+  const path = `/api/add-image/${id}`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: productData,
     token,

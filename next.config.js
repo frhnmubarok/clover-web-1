@@ -4,6 +4,6 @@ module.exports = {
     return require('./redirects.json');
   },
   images: {
-    domains: ['images.unsplash.com', 'api-clover.herokuapp.com', 'localhost'],
+    domains: ['images.unsplash.com', 'api-clover.herokuapp.com', 'localhost', 'drive.google.com'],
   },
 };

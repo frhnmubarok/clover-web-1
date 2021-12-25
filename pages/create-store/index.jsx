@@ -14,6 +14,7 @@ import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
 import TextArea from '@/components/atoms/TextArea';
+import { callRajaOngkirAPI } from '@/config/api';
 
 const validate = (values) => {
   const errors = {};
@@ -21,23 +22,48 @@ const validate = (values) => {
   if (!values.store_name) {
     errors.store_name = 'Wajib diisi';
   }
+  if (!values.store_province) {
+    errors.store_province = 'Wajib diisi';
+  }
+  if (!values.store_city) {
+    errors.store_city = 'Wajib diisi';
+  }
+  if (!values.store_complete_address) {
+    errors.store_complete_address = 'Wajib diisi';
+  }
   if (!values.store_description) {
     errors.store_description = 'Wajib diisi';
   } else if (values.store_description.length < 20) {
     errors.store_description = 'Deskripsi toko minimal 20 karakter';
   }
+  if (!values.store_postal_code) {
+    errors.store_postal_code = 'Wajib diisi';
+  } else if (values.store_postal_code.length !== 5) {
+    errors.store_postal_code = 'Kode pos harus 5 digit';
+  }
 
   return errors;
 };
 
-const CreateStore = () => {
+const CreateStore = ({ data }) => {
   const { createStore } = useContext(ProductContext);
+  const [province, setProvince] = useState(data.data);
+  const [provinceId, setProvinceId] = useState(null);
+  const [city, setCity] = useState([]);
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
+  useEffect(() => {
+    if (provinceId !== null) {
+      async function fetchData() {
+        const { data } = await callRajaOngkirAPI({
+          path: `/api/city/${provinceId}`,
+          method: 'GET',
+        });
+        setCity(data.data);
+        console.log(data);
+      }
+      fetchData();
+    }
+  }, [provinceId]);
 
   const formik = useFormik({
     initialValues: {
@@ -50,6 +76,10 @@ const CreateStore = () => {
       formData.append('store_name', values.store_name);
       formData.append('store_description', values.store_description);
       formData.append('store_image_profile', values.store_image_profile);
+      formData.append('store_city', values.store_city);
+      formData.append('store_province', values.store_province);
+      formData.append('store_complete_address', values.store_complete_address);
+      formData.append('store_postal_code', values.store_postal_code);
       createStore(formData);
       console.log(formData);
     },
@@ -120,7 +150,74 @@ const CreateStore = () => {
             </div>
           </div>
         </div>
-        <div classNameName='mt-6 flex justify-between content-center items-center'>
+
+        <div className='relative mt-2'>
+          <label className='text-sm font-medium text-gray-700 tracking-wide'>Provinsi Asal</label>
+          <select
+            className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+            name='store_province'
+            id='store_province'>
+            {province.map((item) => (
+              <option
+                key={item.province_id}
+                value={item.province}
+                onClick={() => {
+                  formik.setFieldValue('store_province', item.province);
+                  // formik.setFieldValue('store_province_id', item.province_id);
+                  setProvinceId(item.province_id);
+                }}>
+                {item.province}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {provinceId !== null && (
+          <div className='relative mt-2'>
+            <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
+            <select
+              className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+              name='store_city'
+              id='store_city'
+              onChange={formik.handleChange}
+              value={formik.values.store_city}>
+              {city.map((item) => (
+                <option
+                  key={item.city_id}
+                  value={item.city_name}
+                  onClick={() => {
+                    formik.setFieldValue('store_city', item.city_name);
+                    // formik.setFieldValue('store_city_id', item.city_id);
+                  }}>
+                  {item.city_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <Input
+          id='store_postal_code'
+          name='store_postal_code'
+          type='text'
+          label='Kode Pos'
+          handleChange={formik.handleChange}
+          value={formik.values.store_postal_code}
+          placeholder='Masukkan kode pos'
+          errors={formik.errors.store_postal_code}
+        />
+        <TextArea
+          id='store_complete_address'
+          name='store_complete_address'
+          type='text'
+          label='Alamat'
+          handleChange={formik.handleChange}
+          value={formik.values.store_complete_address}
+          placeholder='Masukkan alamat lengkap'
+          errors={formik.errors.store_complete_address}
+        />
+
+        <div className='mt-6 flex justify-between content-center items-center'>
           <span></span>
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
@@ -137,6 +234,19 @@ const CreateStore = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps = async () => {
+  const { data } = await callRajaOngkirAPI({
+    path: '/api/province',
+    method: 'GET',
+  });
+
+  return {
+    props: {
+      data,
+    },
+  };
 };
 
 export default CreateStore;

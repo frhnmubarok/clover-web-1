@@ -69,15 +69,16 @@ export const ProductProvider = (props) => {
 
   const createStore = async (formData) => {
     const response = await createStoreAPI(formData);
+    console.log(response);
     if (response.error) {
       const errData = response.message;
       'store_name' in errData && toast.error('Error Store Name');
       'store_description' in errData && toast.error('Deskripsi toko harus terdiri dari minimal 20 karakter');
       'store_image_profile' in errData && toast.error('Error Store Image Profile');
+      console.log(response.error);
     } else {
       toast.success(response.data.message);
       console.log(response.data);
-      // router.push('/forgot-password/reset');
     }
   };
 

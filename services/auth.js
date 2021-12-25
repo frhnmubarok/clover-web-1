@@ -6,6 +6,8 @@ import axios from 'axios';
 const token = Cookies.get('token');
 
 export async function authRegister(userData) {
+  axios.get('https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie');
+
   const path = `/api/register`;
 
   return callAPI({
@@ -16,6 +18,7 @@ export async function authRegister(userData) {
 }
 
 export async function authLogin(userData) {
+  axios.get('https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie');
   const path = `/api/login`;
 
   return callAPI({
@@ -78,6 +81,7 @@ export async function authLogout(userData) {
 }
 
 export async function authGetRoles(userData) {
+  axios.get('https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie');
   const path = `/api/roles`;
 
   return callAPI({
