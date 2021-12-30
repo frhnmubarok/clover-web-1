@@ -12,11 +12,13 @@ async function callAPI({ path, method, data, token, formData }) {
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
         'Access-Control-Allow-Credentials': true,
+        // Origin: 'https://clover-web-b7d402pby-frhnmubarok.vercel.app/',
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         'Access-Control-Allow-Credentials': true,
+        // Origin: 'https://clover-web-b7d402pby-frhnmubarok.vercel.app/',
       };
 
   const response = await axios({
