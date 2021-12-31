@@ -1,14 +1,10 @@
 import React, { Fragment, useEffect, useContext, useState } from 'react';
-import { AuthContext } from 'context/AuthContext';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import Clover from '@/assets/images/logo-clover.png';
 import Avatar from '@/assets/images/avatar.jpg';
 
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
-import DashboardHomepage from '../Organisms/DashboardHomepage';
+import { Menu, Transition } from '@headlessui/react';
 
 const user = {
   name: 'Tom Cook',
@@ -17,11 +13,36 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 };
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'Product', href: '/dashboard/add-product', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
+  {
+    name: 'Dashboard',
+    href: '/dashboard',
+    current: true,
+    icon: (
+      <svg width='20' height='20' fill='currentColor' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'>
+        <path d='M1472 992v480q0 26-19 45t-45 19h-384v-384h-256v384h-384q-26 0-45-19t-19-45v-480q0-1 .5-3t.5-3l575-474 575 474q1 2 1 6zm223-69l-62 74q-8 9-21 11h-3q-13 0-21-7l-692-577-692 577q-12 8-24 7-13-2-21-11l-62-74q-8-10-7-23.5t11-21.5l719-599q32-26 76-26t76 26l244 204v-195q0-14 9-23t23-9h192q14 0 23 9t9 23v408l219 182q10 8 11 21.5t-7 23.5z'></path>
+      </svg>
+    ),
+  },
+  {
+    name: 'All Product',
+    href: '/dashboard/all-products',
+    current: false,
+    icon: (
+      <svg width='20' height='20' fill='currentColor' viewBox='0 0 2048 1792' xmlns='http://www.w3.org/2000/svg'>
+        <path d='M1070 1178l306-564h-654l-306 564h654zm722-282q0 182-71 348t-191 286-286 191-348 71-348-71-286-191-191-286-71-348 71-348 191-286 286-191 348-71 348 71 286 191 191 286 71 348z'></path>
+      </svg>
+    ),
+  },
+  {
+    name: 'Add Product',
+    href: '/dashboard/add-product',
+    current: false,
+    icon: (
+      <svg width='20' height='20' fill='currentColor' viewBox='0 0 2048 1792' xmlns='http://www.w3.org/2000/svg'>
+        <path d='M1070 1178l306-564h-654l-306 564h654zm722-282q0 182-71 348t-191 286-286 191-348 71-348-71-286-191-191-286-71-348 71-348 191-286 286-191 348-71 348 71 286 191 191 286 71 348z'></path>
+      </svg>
+    ),
+  },
 ];
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -36,7 +57,7 @@ function classNames(...classes) {
 const DashboardLayout = ({ children, handleLogout }) => {
   return (
     <>
-      <main className='bg-gray-100 dark:bg-gray-800 h-screen overflow-hidden relative'>
+      <main className='bg-gray-100 dark:bg-gray-800 h-screen overflow-hidden relative font-lato'>
         <div className='flex items-start justify-between'>
           {/* Sidebar */}
           <div className='h-screen hidden lg:block shadow-lg relative w-80'>
@@ -45,43 +66,21 @@ const DashboardLayout = ({ children, handleLogout }) => {
                 <Image src={Clover} alt='Picture of the author' width={220} height={78} quality={100} />
               </div>
               <nav className='mt-6'>
-                <div>
+                <div className='px-4'>
                   {/* <a
-                    className="w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start border-l-4 border-purple-500"
-                    href="#"
-                  > */}
-                  <Link href='/dashboard'>
-                    <a
-                      className='w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start'
-                      href='#'>
-                      <span className='text-left'>
-                        <svg
-                          width='20'
-                          height='20'
-                          fill='currentColor'
-                          viewBox='0 0 1792 1792'
-                          xmlns='http://www.w3.org/2000/svg'>
-                          <path d='M1472 992v480q0 26-19 45t-45 19h-384v-384h-256v384h-384q-26 0-45-19t-19-45v-480q0-1 .5-3t.5-3l575-474 575 474q1 2 1 6zm223-69l-62 74q-8 9-21 11h-3q-13 0-21-7l-692-577-692 577q-12 8-24 7-13-2-21-11l-62-74q-8-10-7-23.5t11-21.5l719-599q32-26 76-26t76 26l244 204v-195q0-14 9-23t23-9h192q14 0 23 9t9 23v408l219 182q10 8 11 21.5t-7 23.5z'></path>
-                        </svg>
-                      </span>
-                      <span className='mx-2 text-sm font-normal'>Home</span>
-                    </a>
-                  </Link>
-                  <Link href='/dashboard/add-product'>
-                    <a className='w-full text-gray-800 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-gray-800 border-l-4 border-transparent'>
-                      <span className='text-left'>
-                        <svg
-                          width='20'
-                          height='20'
-                          fill='currentColor'
-                          viewBox='0 0 2048 1792'
-                          xmlns='http://www.w3.org/2000/svg'>
-                          <path d='M1070 1178l306-564h-654l-306 564h654zm722-282q0 182-71 348t-191 286-286 191-348 71-348-71-286-191-191-286-71-348 71-348 191-286 286-191 348-71 348 71 286 191 191 286 71 348z'></path>
-                        </svg>
-                      </span>
-                      <span className='mx-2 text-sm font-normal'>Tambah Produk</span>
-                    </a>
-                  </Link>
+                    className='w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start border-l-4 border-purple-500'
+                    href='#'
+                  /> */}
+                  {navigation.map((item, index) => (
+                    <Link href={item.href} key={index}>
+                      <a
+                        className='hover:bg-gray-100 rounded-lg h-12 px-4 w-full text-gray-800 dark:text-white flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start'
+                        href='#'>
+                        <span className='text-left'>{item.icon}</span>
+                        <span className='mx-2 text-sm font-medium'>{item.name}</span>
+                      </a>
+                    </Link>
+                  ))}
                   {/* <a
                     className="w-full text-gray-400 flex items-center pl-6 p-2 my-2 transition-colors duration-200 justify-start hover:text-gray-800 border-l-4 border-transparent"
                     href="#"

@@ -9,6 +9,7 @@ module.exports = {
       fontFamily: {
         qs: ['Quicksand', ...defaultTheme.fontFamily.sans],
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        lato: ['Lato', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {

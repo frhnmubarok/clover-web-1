@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, createContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -9,7 +10,7 @@ import {
   authConfirmPassword,
   authLogout,
   authGetRoles,
-} from 'services/Auth';
+} from 'services/auth';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
@@ -27,6 +28,7 @@ export const AuthProvider = (props) => {
   }, []);
 
   const userRegister = async (formData) => {
+    // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authRegister(formData);
     if (response.error) {
       const errData = response.message;
@@ -42,6 +44,7 @@ export const AuthProvider = (props) => {
   };
 
   const userLogin = async (formData) => {
+    // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authLogin(formData);
     if (response.error) {
       console.log(response.error);
@@ -54,6 +57,7 @@ export const AuthProvider = (props) => {
       localStorage.setItem('username', username);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
+      Cookies.set('role', role.role);
       setLoginStatus(true);
       toast.success('Login berhasil');
       router.push('/');

@@ -3,11 +3,12 @@ import Cookies from 'js-cookie';
 
 import AddProducts from '@/components/organisms/AddProducts';
 import DashboardLayout from '@/components/templates/DashboardLayout';
+import EditProduct from '@/components/organisms/EditProduct';
 
 import { AuthContext } from 'context/AuthContext';
 import { ProductContext } from '@/context/ProductContext';
 
-const AddProductPage = () => {
+const EditProductPage = () => {
   const { addProduct } = useContext(ProductContext);
   const { userLogout } = useContext(AuthContext);
 
@@ -16,9 +17,10 @@ const AddProductPage = () => {
   };
   return (
     <DashboardLayout handleLogout={handleLogout}>
-      <AddProducts addProduct={addProduct} />
+      {/* <AddProducts addProduct={addProduct} /> */}
+      <EditProduct addProduct={addProduct} />
     </DashboardLayout>
   );
 };
 
-export default AddProductPage;
+export default EditProductPage;

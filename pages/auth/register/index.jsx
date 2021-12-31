@@ -23,6 +23,12 @@ const validate = (values) => {
     errors.username = 'Username minimal 8 karakter';
   }
 
+  if (!values.fullname) {
+    errors.fullname = 'Wajib diisi';
+  } else if (values.fullname.length < 8) {
+    errors.fullname = 'Username minimal 8 karakter';
+  }
+
   if (!values.password) {
     errors.password = 'Wajib diisi';
   } else if (values.password.length < 8) {
@@ -45,6 +51,7 @@ const Register = () => {
     initialValues: {
       account: '',
       username: '',
+      fullName: '',
       password: '',
       confirmPassword: '',
     },
@@ -74,6 +81,17 @@ const Register = () => {
           value={formik.values.account}
           placeholder='Masukkan Email / No. Handphone kamu'
           errors={formik.errors.account}
+        />
+
+        <Input
+          id='fullname'
+          name='fullname'
+          type='text'
+          label='Nama Lengkap'
+          handleChange={formik.handleChange}
+          value={formik.values.fullname}
+          placeholder='Masukkan nama lengkap kamu'
+          errors={formik.errors.fullname}
         />
 
         <Input
@@ -108,7 +126,7 @@ const Register = () => {
           placeholder='Masukkan password'
           errors={formik.errors.confirmPassword}
         />
-        <div className='mt-6 flex justify-between content-center items-center'>
+        <div className='flex items-center content-center justify-between mt-6'>
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
           </AuthButton>
@@ -122,6 +140,12 @@ const Register = () => {
       </form>
     </AuthLayout>
   );
+};
+
+Register.layoutProps = {
+  meta: {
+    title: 'Register',
+  },
 };
 
 export default Register;
