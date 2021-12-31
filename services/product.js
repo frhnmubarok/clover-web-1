@@ -5,6 +5,24 @@ const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
 const formData = true;
 
+export async function getProductAPI() {
+  const path = `/api/products`;
+
+  return callAPI({
+    path,
+    method: 'GET',
+  });
+}
+
+export async function getProductByIdAPI(id) {
+  const path = `/api/products/${id}/id`;
+
+  return callAPI({
+    path,
+    method: 'GET',
+  });
+}
+
 export async function insertProductAPI(productData) {
   const path = `/api/products`;
 
@@ -13,16 +31,29 @@ export async function insertProductAPI(productData) {
     method: 'POST',
     data: productData,
     token,
+    formData,
   });
-  // const result = await axios.post(`${API_ENDPOINT}/products`, JSON.stringify(productData), {
-  //   headers: {
-  //     Authorization: 'Bearer ' + Cookies.get('token'),
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-  // const axiosResult = result;
-  // return axiosResult;
+}
+
+export async function updateProductAPI(productData, id) {
+  const path = `/api/products/${id}`;
+
+  return callAPI({
+    path,
+    method: 'PUT',
+    data: productData,
+    token,
+  });
+}
+
+export async function deleteProductAPI(id) {
+  const path = `/api/products/${id}`;
+
+  return callAPI({
+    path,
+    method: 'DELETE',
+    token,
+  });
 }
 
 export async function createStoreAPI(formData) {
