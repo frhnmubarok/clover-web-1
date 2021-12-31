@@ -6,7 +6,7 @@ import Slider from '@/components/molecules/Slider';
 import AppLayout from '@/components/templates/AppLayout';
 import callAPI from '@/config/api';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiArrowRight, HiOutlineExternalLink, HiOutlinePlay } from 'react-icons/hi';
 
 const images = [
@@ -37,11 +37,15 @@ const JoinAndWatchButton = () => {
 export default function Home({ data }) {
   const [loading, setLoading] = useState(false);
   const [more, setMore] = useState(1);
-  const [products, setProducts] = useState(data.data.data);
-  const [nextPage, setNextPage] = useState(data.data.next_page_url);
+  const [products, setProducts] = useState([]);
+  const [nextPage, setNextPage] = useState(null);
 
-  // console.log(data.data);
-  // console.log(products);
+  useEffect(() => {
+    if (data !== null) {
+      setProducts(data.data.data);
+      setNextPage(data.data.next_page_url);
+    }
+  }, [data]);
 
   const loadMore = async () => {
     setLoading(true);
@@ -108,6 +112,7 @@ export default function Home({ data }) {
                     src='https://images.unsplash.com/photo-1543364195-bfe6e4932397?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80'
                     alt='Special'
                     layout='fill'
+                    priority={true}
                     className='object-cover object-center'
                   />
                   <div className='absolute w-full h-full bg-gradient-to-r from-gray-700 to-transparent'></div>
@@ -184,6 +189,8 @@ export const getServerSideProps = async () => {
     path: '/api/products',
     method: 'GET',
   });
+
+  console.info(data);
 
   return {
     props: {
