@@ -1,6 +1,14 @@
 import React, { useState, createContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { insertProductAPI, insertProductImageAPI, createStoreAPI } from 'services/product';
+import {
+  insertProductAPI,
+  insertProductImageAPI,
+  createStoreAPI,
+  deleteProductAPI,
+  getProductAPI,
+  getProductByIdAPI,
+  updateProductAPI,
+} from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
@@ -41,6 +49,21 @@ export const ProductProvider = (props) => {
     //   });
   };
 
+  const updateProduct = async (formData, id) => {
+    console.log(formData);
+    console.log(id);
+    const response = await updateProductAPI(formData, id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success(response.message);
+      console.log(response.data.data.id);
+      localStorage.setItem('product_id', response.data.data.id);
+    }
+  };
+
   const addProductImage = async (formData, id) => {
     const response = await insertProductImageAPI(formData, id);
     if (response.error) {
@@ -52,19 +75,44 @@ export const ProductProvider = (props) => {
       console.log(response.data);
       localStorage.removeItem('product_id');
     }
-    // insertProductImageAPI(formData, id)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     if (res.status === 200) {
-    //       toast.success(`Produk berhasil ditambahkan`);
-    //     } else {
-    //       toast.error(`Produk gagal ditambahkan`);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     toast.error(`Produk gagal ditambahkan`);
-    //   });
+  };
+
+  const deleteProduct = async (id) => {
+    const response = await deleteProductAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Produk berhasil dihapus');
+      console.log(response.data);
+    }
+  };
+
+  const getProduct = async () => {
+    const response = await getProductAPI();
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
+  const getProductById = async (id) => {
+    const response = await getProductByIdAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
   };
 
   const createStore = async (formData) => {
@@ -87,6 +135,10 @@ export const ProductProvider = (props) => {
       value={{
         addProduct,
         addProductImage,
+        deleteProduct,
+        updateProduct,
+        getProduct,
+        getProductById,
         createStore,
       }}>
       {props.children}

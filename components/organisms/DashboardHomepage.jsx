@@ -48,7 +48,7 @@ export const data = {
 
 const DashboardHomepage = ({ user }) => {
   return (
-    <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
+    <div className='overflow-auto h-screen pb-24 px-4 md:px-6 font-lato'>
       <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Selamat datang, {user}</h1>
       <h2 className='text-md text-gray-400'>Here&#x27;s what&#x27;s happening with your account today.</h2>
       <div className='flex my-6 items-center w-full space-y-4 md:space-x-4 md:space-y-0 flex-col md:flex-row'>

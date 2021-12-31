@@ -11,12 +11,14 @@ async function callAPI({ path, method, data, token, formData }) {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
-        'Access-Control-Allow-Credentials': true,
+        // 'Access-Control-Allow-Credentials': 'true',
+        Origin: 'http://localhost:3000',
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
-        'Access-Control-Allow-Credentials': true,
+        // 'Access-Control-Allow-Credentials': 'true',
+        Origin: 'http://localhost:3000',
       };
 
   const response = await axios({
@@ -51,9 +53,11 @@ export async function callRajaOngkirAPI({ path, method, token }) {
     ? {
         Accept: `*/*`,
         Authorization: 'Bearer ' + token,
+        Origin: 'http://localhost:3000',
       }
     : {
         Accept: `*/*`,
+        Origin: 'http://localhost:3000',
       };
 
   const response = await axios({

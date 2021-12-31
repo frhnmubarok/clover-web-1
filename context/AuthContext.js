@@ -28,7 +28,7 @@ export const AuthProvider = (props) => {
   }, []);
 
   const userRegister = async (formData) => {
-    await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
+    // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authRegister(formData);
     if (response.error) {
       const errData = response.message;
@@ -44,7 +44,7 @@ export const AuthProvider = (props) => {
   };
 
   const userLogin = async (formData) => {
-    await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
+    // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authLogin(formData);
     if (response.error) {
       console.log(response.error);
@@ -57,6 +57,7 @@ export const AuthProvider = (props) => {
       localStorage.setItem('username', username);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
+      Cookies.set('role', role.role);
       setLoginStatus(true);
       toast.success('Login berhasil');
       router.push('/');
@@ -113,9 +114,7 @@ export const AuthProvider = (props) => {
       toast.error(response.message);
     } else {
       console.log(response.data);
-      toast.success(
-        `${response.data.message}, anda akan segera dialihkan ke halaman login`
-      );
+      toast.success(`${response.data.message}, anda akan segera dialihkan ke halaman login`);
       localStorage.removeItem('userId');
       setTimeout(() => {
         router.push('/login');
@@ -168,8 +167,7 @@ export const AuthProvider = (props) => {
         setLoginStatus,
         loginStatus,
         isLoading,
-      }}
-    >
+      }}>
       {props.children}
     </AuthContext.Provider>
   );
