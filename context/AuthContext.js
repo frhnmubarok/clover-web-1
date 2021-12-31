@@ -57,6 +57,7 @@ export const AuthProvider = (props) => {
       localStorage.setItem('username', username);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
+      Cookies.set('role', role.role);
       setLoginStatus(true);
       toast.success('Login berhasil');
       router.push('/');

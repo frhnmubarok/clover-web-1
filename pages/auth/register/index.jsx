@@ -23,10 +23,10 @@ const validate = (values) => {
     errors.username = 'Username minimal 8 karakter';
   }
 
-  if (!values.fullName) {
-    errors.fullName = 'Wajib diisi';
-  } else if (values.fullName.length < 8) {
-    errors.fullName = 'Username minimal 8 karakter';
+  if (!values.fullname) {
+    errors.fullname = 'Wajib diisi';
+  } else if (values.fullname.length < 8) {
+    errors.fullname = 'Username minimal 8 karakter';
   }
 
   if (!values.password) {
@@ -84,14 +84,14 @@ const Register = () => {
         />
 
         <Input
-          id='fullName'
-          name='fullName'
+          id='fullname'
+          name='fullname'
           type='text'
           label='Nama Lengkap'
           handleChange={formik.handleChange}
-          value={formik.values.fullName}
+          value={formik.values.fullname}
           placeholder='Masukkan nama lengkap kamu'
-          errors={formik.errors.fullName}
+          errors={formik.errors.fullname}
         />
 
         <Input
