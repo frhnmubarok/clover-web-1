@@ -98,6 +98,11 @@ const Login = () => {
               <a className="text-green-400">Daftar</a>
             </Link>
           </p> */}
+          <p>
+            <Link href="https://dev-api-clover.herokuapp.com/auth">
+              <a className="text-blue-400">Google Sign</a>
+            </Link>
+          </p>
         </div>
       </form>
     </AuthLayout>
