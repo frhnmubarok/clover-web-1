@@ -72,7 +72,7 @@ const navigation = {
       ],
     },
   ],
-  pages: [{ name: 'Favorit', href: '/favorit' }],
+  pages: [{ name: 'Wishlist', href: '/wishlist' }],
 };
 
 export default function Navbar() {
