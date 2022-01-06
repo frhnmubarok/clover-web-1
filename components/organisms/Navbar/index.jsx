@@ -13,6 +13,7 @@ import logo from '@/assets/images/logo-clover.png';
 
 import { classNames, formatRupiah } from '@/utils/helpers';
 import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
+import Cookies from 'js-cookie';
 
 const products = [
   {
@@ -77,7 +78,12 @@ const navigation = {
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [openCart, setOpenCart] = React.useState(false);
-  const { loginStatus } = React.useContext(AuthContext);
+  const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
+
+  const handleLogout = () => {
+    userLogout({ id: Cookies.get('id') });
+    setLoginStatus(false);
+  };
 
   return (
     <div className='bg-white'>
@@ -268,7 +274,8 @@ export default function Navbar() {
                                   <button
                                     className={`${
                                       active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
-                                    } group flex items-center w-full px-4 py-2 text-sm`}>
+                                    } group flex items-center w-full px-4 py-2 text-sm`}
+                                    onClick={handleLogout}>
                                     Logout
                                   </button>
                                 )}

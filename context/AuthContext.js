@@ -19,11 +19,13 @@ export const AuthContext = createContext();
 export const AuthProvider = (props) => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [cookies, setCookies] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     if (Cookies.get('token') !== undefined) {
       setLoginStatus(true);
+      setCookies(Cookies.get('token'));
     }
   }, []);
 
@@ -50,14 +52,15 @@ export const AuthProvider = (props) => {
       console.log(response.error);
       toast.error('Akun atau password anda salah');
     } else {
-      const { id, username, email, role } = response.data.data;
+      const { id, fullname, email, role } = response.data.data;
       console.log(response.data);
+      setCookies(response.data.token);
       Cookies.set('token', response.data.token, { expires: 30 });
+      Cookies.set('role', role.role);
       localStorage.setItem('id', id);
-      localStorage.setItem('username', username);
+      localStorage.setItem('fullname', fullname);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
-      Cookies.set('role', role.role);
       setLoginStatus(true);
       toast.success('Login berhasil');
       router.push('/');
@@ -167,6 +170,7 @@ export const AuthProvider = (props) => {
         setLoginStatus,
         loginStatus,
         isLoading,
+        cookies,
       }}>
       {props.children}
     </AuthContext.Provider>

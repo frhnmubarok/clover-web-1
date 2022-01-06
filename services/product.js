@@ -1,7 +1,6 @@
 import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
 
-const API_ENDPOINT = `https://dev-api-clover.herokuapp.com/api`;
 const token = Cookies.get('token');
 const formData = true;
 
