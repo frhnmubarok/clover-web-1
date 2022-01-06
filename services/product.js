@@ -77,13 +77,26 @@ export async function insertProductImageAPI(productData, id) {
     token,
     formData,
   });
-  // const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {
-  //   headers: {
-  //     Authorization: 'Bearer ' + Cookies.get('token'),
-  //     Accept: 'multipart/form-data',
-  //     'Content-Type': 'multipart/form-data',
-  //   },
-  // });
-  // const axiosResult = result;
-  // return axiosResult;
 }
+
+export async function updateTransactionStatusAPI(id, body) {
+  const path = `/api/transaction/${id}/pesanan`;
+
+  console.log(id, body);
+
+  return callAPI({
+    path,
+    method: 'PUT',
+    data: body,
+    token,
+  });
+}
+// const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {
+//   headers: {
+//     Authorization: 'Bearer ' + Cookies.get('token'),
+//     Accept: 'multipart/form-data',
+//     'Content-Type': 'multipart/form-data',
+//   },
+// });
+// const axiosResult = result;
+// return axiosResult;
