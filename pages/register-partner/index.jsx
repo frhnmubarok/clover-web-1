@@ -65,21 +65,6 @@ const RegisterPartner = ({ data }) => {
   const [city, setCity] = useState([]);
   const [nextStep, setNextStep] = useState(false);
 
-  useEffect(() => {
-    if (provinceId !== null) {
-      async function fetchData() {
-        const { data } = await callRajaOngkirAPI({
-          path: `/api/city/${provinceId}`,
-          method: 'GET',
-          token,
-        });
-        setCity(data.data);
-        console.log(data);
-      }
-      fetchData();
-    }
-  }, [provinceId]);
-
   const formik = useFormik({
     initialValues: {
       profile_name: '',
@@ -116,6 +101,39 @@ const RegisterPartner = ({ data }) => {
       setDataDiri(formData);
     },
   });
+
+  useEffect(() => {
+    if (provinceId !== null) {
+      async function fetchData() {
+        const { data } = await callRajaOngkirAPI({
+          path: `/api/city/${provinceId}`,
+          method: 'GET',
+          token,
+        });
+        setCity(data.data);
+        console.log(data);
+      }
+      fetchData();
+    }
+  }, [provinceId]);
+
+  // setTimeout(() => {
+  //   if (provinceId !== null) {
+  //     async function fetchData() {
+  //       const { data } = await callRajaOngkirAPI({
+  //         path: `/api/city/${provinceId}`,
+  //         method: 'GET',
+  //         token,
+  //       });
+  //       setCity(data.data);
+  //       console.log(data);
+  //       setProvinceId(null);
+  //     }
+  //     fetchData();
+  //   }
+  // }, 1000);
+
+  const handleOnChange = (ev) => setProvinceId(ev.target.value);
 
   return (
     <>
@@ -170,15 +188,16 @@ const RegisterPartner = ({ data }) => {
               <select
                 className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
                 name='profile_province'
-                id='profile_province'>
+                id='profile_province'
+                onChange={handleOnChange}
+                value={formik.values.profile_province}>
                 {province.map((item) => (
                   <option
                     key={item.province_id}
-                    value={item.province}
+                    value={item.province_id}
                     onClick={() => {
                       formik.setFieldValue('profile_province', item.province);
                       formik.setFieldValue('profile_province_id', item.province_id);
-                      setProvinceId(item.province_id);
                     }}>
                     {item.province}
                   </option>
@@ -186,7 +205,7 @@ const RegisterPartner = ({ data }) => {
               </select>
             </div>
 
-            {provinceId !== null && (
+            {provinceId && (
               <div className='relative mt-2'>
                 <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
                 <select
@@ -263,7 +282,7 @@ const RegisterPartner = ({ data }) => {
                 id='profile_gender'
                 onChange={formik.handleChange}
                 value={formik.values.profile_gender}>
-                <option value={'Laki-laki'} selected>
+                <option value={'Laki-laki'} defaultValue={'Laki-laki'}>
                   Laki-laki
                 </option>
                 <option value={'Perempuan'}>Perempuan</option>

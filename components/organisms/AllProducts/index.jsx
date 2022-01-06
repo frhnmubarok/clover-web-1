@@ -9,6 +9,7 @@ import { ExclamationIcon } from '@heroicons/react/outline';
 import DeleteModal from '@/components/atoms/DeleteModal';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { formatRupiah } from '@/utils/helpers';
 
 const AllProducts = ({ data }) => {
   const { deleteProduct, getProduct } = useContext(ProductContext);
@@ -18,13 +19,17 @@ const AllProducts = ({ data }) => {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
 
-  useEffect(() => {
-    const get = async () => {
-      const { data } = await getProduct();
-      setProducts(data.data);
-    };
-    get();
-  }, [deleteSuccessful, getProduct]);
+  setTimeout(() => {
+    if (deleteSuccessful === true) {
+      const get = async () => {
+        const { data } = await getProduct();
+        setProducts(data.data);
+        console.log(data.data);
+      };
+      get();
+      setDeleteSuccessful(false);
+    }
+  }, 1000);
 
   const handleDelete = async (id) => {
     deleteProduct(id);
@@ -55,11 +60,7 @@ const AllProducts = ({ data }) => {
       {
         Header: 'Harga',
         accessor: 'product_price',
-        Cell: ({ cell: { value } }) =>
-          new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-          }).format(value),
+        Cell: ({ cell: { value } }) => formatRupiah(value),
       },
       {
         Header: 'Stok Tersedia',

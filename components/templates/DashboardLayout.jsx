@@ -63,7 +63,11 @@ const DashboardLayout = ({ children, handleLogout }) => {
           <div className='h-screen hidden lg:block shadow-lg relative w-80'>
             <div className='bg-white h-full dark:bg-gray-700'>
               <div className='flex items-center justify-center pt-6 '>
-                <Image src={Clover} alt='Picture of the author' width={220} height={78} quality={100} />
+                <Link href='/'>
+                  <a className='cursor-pointer'>
+                    <Image src={Clover} alt='Picture of the author' width={220} height={78} quality={100} />
+                  </a>
+                </Link>
               </div>
               <nav className='mt-6'>
                 <div className='px-4'>

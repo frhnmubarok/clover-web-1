@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const months = [
   'January',
   'February',
@@ -15,9 +17,7 @@ const months = [
 
 export const formatDate = (dateString) => {
   const dateObj = new Date(dateString);
-  return `${
-    months[dateObj.getMonth()]
-  } ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+  return `${months[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
 };
 
 export const classNames = (...classes) => {
