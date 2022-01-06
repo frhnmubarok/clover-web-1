@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import faker from 'faker';
+import { AuthContext } from '@/context/AuthContext';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 export const options = {
@@ -47,6 +48,10 @@ export const data = {
 };
 
 const DashboardHomepage = ({ user }) => {
+  const { cookies } = useContext(AuthContext);
+  useEffect(() => {
+    console.log(cookies);
+  }, []);
   return (
     <div className='overflow-auto h-screen pb-24 px-4 md:px-6 font-lato'>
       <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Selamat datang, {user}</h1>

@@ -14,7 +14,7 @@ export default function ProductCard({ slug, title, price, owner, rating, soldout
             alt={title}
             layout='fill'
             priority={true}
-            unoptimized={true} // for handle access for bidden
+            unoptimized={false} // for handle access for bidden
             className='object-cover object-center w-full h-full lg:w-full lg:h-full'
           />
           <button type='button' className='absolute p-2 text-white top-4 right-4 bg-primary-500 rounded-xl'>

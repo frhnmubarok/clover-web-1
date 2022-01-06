@@ -4,6 +4,7 @@ import AppLayout from '@/components/templates/AppLayout';
 import Image from 'next/image';
 import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
+import CardProduct from '@/components/molecules/ProductCard';
 
 import { formatRupiah } from '@/utils/helpers';
 
@@ -142,6 +143,25 @@ export default function Cart() {
             <EmptyCart />
           )}
         </div>
+        <div className='relative max-w-5xl px-4 py-12 mx-auto sm:px-6 lg:px-8'>
+          <h3 className='flex items-center justify-start pb-6 space-x-3 text-xl font-semibold'>
+            <span>Rekomendasi untuk kamu</span>
+          </h3>
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8'>
+            {[1, 2, 3, 4].map((i) => (
+              <CardProduct
+                key={i}
+                slug={'buah-naga-kahdaksjhdkashdkahsdkajshdkahds'}
+                title={'Buah Naga'}
+                price={1000000}
+                owner={'Fahmi Idris'}
+                rating={5}
+                soldout={1000}
+                image={'/images/products/kol.png'}
+              />
+            ))}
+          </div>
+        </div>
       </Main>
     </>
   );
@@ -171,6 +191,6 @@ const EmptyCart = () => {
 Cart.layoutProps = {
   Layout: AppLayout,
   meta: {
-    title: 'Yout Cart',
+    title: 'Your Cart',
   },
 };
