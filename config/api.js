@@ -12,13 +12,13 @@ async function callAPI({ path, method, data, token, formData }) {
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
         // 'Access-Control-Allow-Credentials': 'true',
-        Origin: 'https://clover-web.vercel.app',
+        Origin: 'http://localhost:3000',
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         // 'Access-Control-Allow-Credentials': 'true',
-        Origin: 'https://clover-web.vercel.app',
+        Origin: 'http://localhost:3000',
       };
 
   const response = await axios({
@@ -66,7 +66,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
     headers,
   }).catch((err) => err.response);
 
-  console.log(response);
+  // console.log(response);
 
   if (response.status > 300) {
     const res = {
@@ -82,7 +82,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
     data: response.data,
   };
 
-  console.log(res);
+  // console.log(res);
 
   return res;
 }
