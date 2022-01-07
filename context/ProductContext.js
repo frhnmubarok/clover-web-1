@@ -8,6 +8,7 @@ import {
   getProductAPI,
   getProductByIdAPI,
   updateProductAPI,
+  updateTransactionStatusAPI,
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
@@ -130,6 +131,20 @@ export const ProductProvider = (props) => {
     }
   };
 
+  const updateTransactionStatus = async (id, data) => {
+    console.log(id);
+    console.log(data);
+    const response = await updateTransactionStatusAPI(id, data);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Status transaksi berhasil diubah');
+      console.log(response.data);
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -140,6 +155,7 @@ export const ProductProvider = (props) => {
         getProduct,
         getProductById,
         createStore,
+        updateTransactionStatus,
       }}>
       {props.children}
     </ProductContext.Provider>
