@@ -126,7 +126,7 @@ const Register = () => {
           placeholder='Masukkan password'
           errors={formik.errors.confirmPassword}
         />
-        <div className='flex items-center content-center justify-between mt-6'>
+        <div className='flex flex-col items-center content-center justify-between mt-6'>
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
           </AuthButton>

@@ -44,53 +44,53 @@ const Login = () => {
     },
   });
   return (
-    <AuthLayout formImage login={true} formLabel="Masuk">
-      <div className="flex flex-col items-center mb-2">
+    <AuthLayout formImage login={true} formLabel='Masuk'>
+      <div className='flex flex-col items-center mb-2'>
         <p>
           Belum punya akun ?{' '}
-          <Link href="/register">
-            <a className="text-blue-400">Daftar</a>
+          <Link href='/register'>
+            <a className='text-blue-400'>Daftar</a>
           </Link>
         </p>
       </div>
       <form onSubmit={formik.handleSubmit}>
         <Input
-          id="account"
-          name="account"
-          type="text"
-          label="Username/Email/No. Handphone"
+          id='account'
+          name='account'
+          type='text'
+          label='Username/Email/No. Handphone'
           handleChange={formik.handleChange}
           value={formik.values.account}
-          placeholder="Username/Email/No. Handphone"
+          placeholder='Username/Email/No. Handphone'
           errors={formik.errors.account}
         />
         <Input
-          id="password"
-          name="password"
-          type="password"
-          label="Password"
+          id='password'
+          name='password'
+          type='password'
+          label='Password'
           handleChange={formik.handleChange}
           value={formik.values.password}
-          placeholder="Masukkan password"
+          placeholder='Masukkan password'
           errors={formik.errors.password}
         />
-        <div className="flex items-center justify-between">
-          <div className="py-4">
-            <label className="inline-flex items-center">
+        <div className='flex items-center justify-between'>
+          <div className='py-4'>
+            <label className='inline-flex items-center'>
               <input
-                className="w-6 h-6 mr-2 text-indigo-500 border border-gray-300 rounded focus:ring-indigo-400 focus:ring-opacity-25"
-                type="checkbox"
+                className='w-6 h-6 mr-2 text-indigo-500 border border-gray-300 rounded focus:ring-indigo-400 focus:ring-opacity-25'
+                type='checkbox'
               />
               Ingat saya
             </label>
           </div>
-          <p>
-            <Link href="/forgot-password">
-              <a className="text-blue-400">Lupa Password ?</a>
+          <p className='py-4'>
+            <Link href='/forgot-password'>
+              <a className='text-blue-400'>Lupa Password ?</a>
             </Link>
           </p>
         </div>
-        <div className="items-center mt-4">
+        <div className='items-center'>
           <AuthButton icon={<MdLogin />}>Masuk</AuthButton>
           {/* <p className="pt-4 ">
             Belum punya akun ?{" "}
@@ -99,8 +99,8 @@ const Login = () => {
             </Link>
           </p> */}
           <p>
-            <Link href="https://dev-api-clover.herokuapp.com/auth">
-              <a className="text-blue-400">Google Sign</a>
+            <Link href='https://dev-api-clover.herokuapp.com/auth'>
+              <a className='text-blue-400'>Google Sign</a>
             </Link>
           </p>
         </div>
