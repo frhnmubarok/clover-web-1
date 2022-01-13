@@ -98,7 +98,7 @@ const Login = () => {
           </p>
         </div>
         <div className='items-center'>
-          <AuthButton icon={<MdLogin />}>Masuk</AuthButton>
+          {/* <AuthButton icon={<MdLogin />}>Masuk</AuthButton> */}
           {/* <p className="pt-4 ">
             Belum punya akun ?{" "}
             <Link href="/register">

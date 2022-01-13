@@ -13,7 +13,7 @@ import { formatRupiah } from '@/utils/helpers';
 
 const AllProducts = ({ data }) => {
   const { deleteProduct, getProduct } = useContext(ProductContext);
-  const [products, setProducts] = useState(data.data.data);
+  const [products, setProducts] = useState(data.data.products);
   const [productId, setProductId] = useState(null);
   const [deleteSuccessful, setDeleteSuccessful] = useState(false);
   const [open, setOpen] = useState(false);

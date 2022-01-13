@@ -29,15 +29,25 @@ const AllProductPage = ({ data }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+  const req = context.req;
+  const token = req.headers.cookie
+    .split(';')
+    .find((c) => c.trim().startsWith('token='))
+    .split('=')[1];
   const { data } = await callAPI({
-    path: '/api/products',
+    path: '/api/store',
     method: 'GET',
+    token,
   });
+
+  console.log(data.data.products);
+
+  // console.log('token', token);
 
   return {
     props: {
-      data,
+      data: data,
     },
   };
 };

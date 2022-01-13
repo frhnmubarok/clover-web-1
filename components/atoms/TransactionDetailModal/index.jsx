@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationIcon, PaperClipIcon } from '@heroicons/react/outline';
-import { formatRupiah } from '@/utils/helpers';
+import { formatRupiah, orderStatus } from '@/utils/helpers';
+import { badgeOrderStatus } from '@/utils/helpers';
 
 const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
   const badgeColor = () => {
-    if (data.status_pesanan === 'pesanan dibuat') {
+    if (data.transaction_order_status === '1') {
       return 'bg-yellow-500';
-    } else if (data.status_pesanan === 'pesanan dikirim') {
+    } else if (data.transaction_order_status === '4') {
       return 'bg-green-500';
-    } else if (data.status_pesanan === 'failed') {
+    } else if (data.transaction_order_status === '6') {
       return 'bg-red-500';
     }
   };
@@ -61,41 +62,46 @@ const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
                         <dl>
                           <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Nama Pembeli</dt>
-                            <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>Margot Foster</dd>
+                            <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>{data.user.fullname}</dd>
                           </div>
                           <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Tanggal Pembelian</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                              {/* {data.created_at.substring(0, 10)} */}
+                              {data.created_at.substring(0, 10)}
                             </dd>
                           </div>
                           <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Status Pesanan</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                               <div
-                                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 ${badgeColor()} rounded-full`}>
-                                {data.status_pesanan}
+                                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 ${badgeOrderStatus(
+                                  data.transaction_order_status,
+                                )} rounded-full`}>
+                                {orderStatus(data.transaction_order_status)}
                               </div>
                             </dd>
                           </div>
                           <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Status Pembayaran</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                              <div className='inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 bg-red-600 rounded-full'>
-                                {data.status_pembayaran}
+                              <div
+                                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 ${
+                                  data.transaction_is_paid ? 'bg-green-600' : 'bg-red-600'
+                                } rounded-full`}>
+                                {data.transaction_is_paid ? 'Sudah Dibayar' : 'Belum Dibayar'}
                               </div>
                             </dd>
                           </div>
                           <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Total Belanja</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 font-semibold'>
-                              {formatRupiah(data.total_price)}
+                              {formatRupiah(data.transaction_total_price)}
                             </dd>
                           </div>
                           <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Ongkos Kirim</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                              {formatRupiah(data.ongkir)}
+                              {formatRupiah(data.transaction_shipping_cost)}
                             </dd>
                           </div>
                           <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>

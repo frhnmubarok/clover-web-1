@@ -39,7 +39,7 @@ export const AuthProvider = (props) => {
       'email' in errData && toast.error('Email sudah digunakan');
       'username' in errData && toast.error('Username sudah digunakan');
     } else {
-      toast.success(`Pendaftaran akun berhasil`);
+      console.log(response);
       router.push('/register/success');
       setIsLoading(false);
     }

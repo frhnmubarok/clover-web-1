@@ -153,7 +153,7 @@ export default function Home({ data }) {
                     rating={5}
                     soldout={1000}
                     image={
-                      product.photos.length > 0 ? product.photos[0].path_to_product_image : '/images/products/kol.png'
+                      product.photos.length > 0 ? product.photos[0].product_image_path : '/images/products/kol.png'
                     }
                   />
                 ))}

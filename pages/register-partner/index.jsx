@@ -16,6 +16,7 @@ import AuthButton from '@/components/atoms/AuthButton';
 import TextArea from '@/components/atoms/TextArea';
 import { callRajaOngkirAPI } from '@/config/api';
 import StoreDetails from '@/components/organisms/StoreDetails';
+import toast from 'react-hot-toast';
 
 const token = Cookies.get('token');
 
@@ -81,7 +82,6 @@ const RegisterPartner = ({ data }) => {
       // registerKYC({ ...values, kyc_date_of_birth: startDate.toISOString().split('T')[0] });
 
       console.log({ ...values, kyc_date_of_birth: startDate.toISOString().split('T')[0] });
-      setNextStep(true);
       const form = new FormData();
       form.append('kyc_name', values.kyc_name);
       form.append('kyc_ktp', values.kyc_ktp);
@@ -97,7 +97,12 @@ const RegisterPartner = ({ data }) => {
       form.append('kyc_self_photo', values.kyc_self_photo);
       form.append('kyc_ktp_photo', values.kyc_ktp_photo);
       console.log(form);
-      registerKYC(form);
+      toast.promise(registerKYC(form), {
+        loading: 'Mohon tunggu...',
+        success: 'Login berhasil !',
+        error: 'Login gagal !',
+      });
+      setNextStep(true);
       setDataDiri(form);
     },
   });
@@ -189,7 +194,7 @@ const RegisterPartner = ({ data }) => {
             <div className='relative mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Provinsi Asal</label>
               <select
-                className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 name='kyc_province'
                 id='kyc_province'
                 onChange={handleOnChange}
@@ -213,7 +218,7 @@ const RegisterPartner = ({ data }) => {
               <div className='relative mt-2'>
                 <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
                 <select
-                  className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+                  className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                   name='kyc_city'
                   id='kyc_city'
                   onChange={formik.handleChange}
@@ -268,7 +273,7 @@ const RegisterPartner = ({ data }) => {
             <div className='space-y-2 mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Tanggal Lahir</label>
               <DatePicker
-                className='w-full text-base px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
                 peekNextMonth
@@ -281,7 +286,7 @@ const RegisterPartner = ({ data }) => {
             <div className='relative mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Jenis Kelamin</label>
               <select
-                className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 name='kyc_gender'
                 id='kyc_gender'
                 onChange={formik.handleChange}

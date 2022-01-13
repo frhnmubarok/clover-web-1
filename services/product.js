@@ -99,6 +99,15 @@ export async function getTransactionDetailAPI(id) {
     token: Cookies.get('token'),
   });
 }
+export async function getAllTransactionAPI() {
+  const path = `/api/transaction`;
+
+  return callAPI({
+    path,
+    method: 'GET',
+    token: Cookies.get('token'),
+  });
+}
 // const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {
 //   headers: {
 //     Authorization: 'Bearer ' + Cookies.get('token'),

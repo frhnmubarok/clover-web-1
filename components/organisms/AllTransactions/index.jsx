@@ -13,8 +13,9 @@ import { ExclamationIcon } from '@heroicons/react/outline';
 import DeleteModal from '@/components/atoms/DeleteModal';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { formatRupiah } from '@/utils/helpers';
+import { badgeOrderStatus, formatRupiah, orderStatus } from '@/utils/helpers';
 import TransactionDetailModal from '@/components/atoms/TransactionDetailModal';
+import { getAllTransactionAPI } from '@/services/product';
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
@@ -28,25 +29,49 @@ const AllTransactions = ({ data }) => {
   const [transactionId, setTransactionId] = useState(null);
   const [transactionDetail, setTransactionDetail] = useState({});
   const [open, setOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
   const cancelButtonRef = useRef(null);
 
   useEffect(() => {
+    const get = async () => {
+      const { data } = await getTransactionDetail(transactionId);
+      setTransactionDetail(data);
+      setOpenDetail(true);
+      console.log(data);
+    };
     if (transactionId !== null) {
-      const get = async () => {
-        const { data } = await getTransactionDetail(transactionId);
-        setTransactionDetail(data);
-        console.log(data);
-      };
       get();
       console.log(transactionId);
     }
   }, [transactionId]);
 
   const transactionType = (type) => {
-    return transactions.filter((item) => item.status_pesanan === type);
+    return transactions.filter((item) => item.transaction_order_status === type);
+  };
+
+  const handleUpdateStatus = async (id, status) => {
+    const response = await updateTransactionStatus(id, status);
+    console.log(response);
+    if (response.error === false) {
+      const newTransactions = await getAllTransactionAPI();
+      setTransactions(newTransactions.data.data);
+    }
+  };
+
+  const updateButton = (id, status, text) => {
+    return (
+      <div data-tip='Proses Pesanan' className='tooltip'>
+        <button
+          className='text-white bg-blue-700 transition-all ease-in-out hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          onClick={() => handleUpdateStatus(id, { transaction_order_status: status + 1 })}>
+          <span className='text-md'>{text}</span>
+        </button>
+      </div>
+    );
   };
 
   const tableColumn = (body, badge) => {
+    const newOrderStatus = parseInt(body);
     return React.useMemo(
       () => [
         {
@@ -61,37 +86,42 @@ const AllTransactions = ({ data }) => {
         {
           Header: 'Pembeli',
           accessor: 'user',
-          Cell: ({ cell: { value } }) => <div className='font-semibold'>{value.username}</div>,
+          Cell: ({ cell: { value } }) => <div className='font-semibold'>{value.fullname}</div>,
         },
         {
           Header: 'Ongkir',
-          accessor: 'ongkir',
+          accessor: 'transaction_shipping_cost',
           Cell: ({ cell: { value } }) => formatRupiah(value),
         },
         {
           Header: 'Total Harga',
-          accessor: 'total_price',
+          accessor: 'transaction_total_price',
           Cell: ({ cell: { value } }) => formatRupiah(value),
         },
         {
           Header: 'Status Pesanan',
-          accessor: 'status_pesanan',
+          accessor: 'transaction_order_status',
           Cell: ({ value }) => (
             <div className='flex'>
               <div
-                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none ${badge} text-red-100 rounded-full`}>
-                {value}
+                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none ${badgeOrderStatus(
+                  value,
+                )} text-red-100 rounded-full`}>
+                {orderStatus(value)}
               </div>
             </div>
           ),
         },
         {
           Header: 'Status Pembayaran',
-          accessor: 'status_pembayaran',
+          accessor: 'transaction_is_paid',
           Cell: ({ value }) => (
             <div className='flex'>
-              <div className='inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 bg-red-600 rounded-full'>
-                {value}
+              <div
+                className={`inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-red-100 ${
+                  value ? 'bg-green-600' : 'bg-red-600'
+                } rounded-full`}>
+                {value ? 'Sudah Dibayar' : 'Belum Dibayar'}
               </div>
             </div>
           ),
@@ -121,7 +151,7 @@ const AllTransactions = ({ data }) => {
           Cell: ({ value }) => (
             <div className='flex'>
               {/* <Link href='/admin/transaction/[id]' as={`/admin/transaction/${value}`}> */}
-              {body !== 'pesanan dibuat' ? (
+              {body !== '1' ? (
                 <>
                   <p className='hidden'>{value}</p>
                 </>
@@ -129,17 +159,17 @@ const AllTransactions = ({ data }) => {
                 <>
                   <div data-tip='Konfirmasi' className='tooltip'>
                     <button
-                      className='text-white bg-blue-700 transition-all ease-in-out hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-                      onClick={() => updateTransactionStatus(value, { status_pesanan: body })}>
-                      <span className='text-2xl'>
+                      className='text-white bg-emerald-500 transition-all ease-in-out hover:bg-emerald-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-l-md text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                      onClick={() => handleUpdateStatus(value, { transaction_order_status: newOrderStatus + 1 })}>
+                      <span className='text-xl'>
                         <MdCheck />
                       </span>
                     </button>
                   </div>
-                  {body === 'pesanan dibuat' && (
+                  {body === '1' && (
                     <div data-tip='Batalkan' className='tooltip'>
-                      <button className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-                        <span className='text-2xl'>
+                      <button className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-r-md text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+                        <span className='text-xl'>
                           <MdOutlineClose />
                         </span>
                       </button>
@@ -147,6 +177,9 @@ const AllTransactions = ({ data }) => {
                   )}
                 </>
               )}
+              {body == 2 && updateButton(value, newOrderStatus, 'Proses')}
+              {body == 3 && updateButton(value, newOrderStatus, 'Kirim')}
+              {body == 4 && updateButton(value, newOrderStatus, 'Batal')}
             </div>
           ),
         },
@@ -182,28 +215,25 @@ const AllTransactions = ({ data }) => {
           </Tab.List>
           <Tab.Panels className='mt-2'>
             <Tab.Panel>
-              <ListTable
-                columns={tableColumn('pesanan dikirim', 'bg-blue-600')}
-                data={transactionType('pesanan dibuat')}
-              />
+              <ListTable columns={tableColumn('1', 'bg-blue-600')} data={transactionType('1')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1)} data={transactionType('pesanan dikonfirmasi')} />
+              <ListTable columns={tableColumn('2')} data={transactionType('2')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1)} data={transactionType('pesanan diproses')} />
+              <ListTable columns={tableColumn('3')} data={transactionType('3')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1, 'bg-teal-600')} data={transactionType('pesanan dikirim')} />
+              <ListTable columns={tableColumn('4', 'bg-teal-600')} data={transactionType('4')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1)} data={transactionType('pesanan selesai')} />
+              <ListTable columns={tableColumn('5')} data={transactionType('5')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1)} data={transactionType('pesanan dibatalkan')} />
+              <ListTable columns={tableColumn('6')} data={transactionType('6')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn(1)} data={transactionType('pesanan direfund')} />
+              <ListTable columns={tableColumn('7')} data={transactionType('7')} />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
@@ -215,12 +245,14 @@ const AllTransactions = ({ data }) => {
           // handleDelete={handleDelete}
           productId={productId}
         /> */}
-        <TransactionDetailModal
-          setOpen={setOpen}
-          open={open}
-          cancelButtonRef={cancelButtonRef}
-          data={transactionDetail}
-        />
+        {openDetail !== false && (
+          <TransactionDetailModal
+            setOpen={setOpen}
+            open={open}
+            cancelButtonRef={cancelButtonRef}
+            data={transactionDetail}
+          />
+        )}
       </div>
     </>
   );

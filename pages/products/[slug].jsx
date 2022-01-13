@@ -67,9 +67,7 @@ export default function ProductDetail({ data }) {
               <div className='rounded-2xl'>
                 <div className='relative w-full overflow-hidden border border-gray-200 aspect-square rounded-2xl'>
                   <Image
-                    src={
-                      product.photos.length > 0 ? product.photos[0].path_to_product_image : '/images/products/kol.png'
-                    }
+                    src={product.photos.length > 0 ? product.photos[0].product_image_path : '/images/products/kol.png'}
                     alt='Image 1'
                     layout='fill'
                     priority={true}
@@ -86,7 +84,7 @@ export default function ProductDetail({ data }) {
                       i === 0 && 'border-2 border-primary-500',
                     )}>
                     <Image
-                      src={photo.path_to_product_image}
+                      src={photo.product_image_path}
                       alt='Image 1'
                       layout='fill'
                       priority={true}
@@ -351,6 +349,7 @@ export async function getStaticPaths() {
     path: '/api/products',
     method: 'GET',
   });
+  // console.log(data.data.data);
   const paths = data.data.data.map((item) => ({
     params: { slug: item.product_slug },
   }));

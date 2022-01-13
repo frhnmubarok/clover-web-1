@@ -10,6 +10,7 @@ import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
 import useLoadingToast from '@/hooks/useLoadingToast';
+import toast from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -51,20 +52,23 @@ const Register = () => {
     initialValues: {
       account: '',
       username: '',
-      fullName: '',
+      fullname: '',
       password: '',
       confirmPassword: '',
     },
     validate,
     onSubmit: (values) => {
-      let temp = { password: values.password, username: values.username };
+      let temp = { password: values.password, username: values.username, fullname: values.fullname };
       if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.account)) {
         temp = { ...temp, email: values.account };
       } else {
         temp = { ...temp, handphone: values.account };
       }
-      userRegister(temp);
-
+      toast.promise(userRegister(temp), {
+        loading: 'Mohon tunggu...',
+        success: 'Pendaftaran akun berhasil !',
+        error: 'Register gagal !',
+      });
       console.log(temp);
     },
   });

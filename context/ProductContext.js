@@ -33,6 +33,7 @@ export const ProductProvider = (props) => {
     } else {
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
+      router.push('/dashboard/all-products');
     }
     // insertProductAPI(formData)
     //   .then((res) => {
@@ -143,6 +144,10 @@ export const ProductProvider = (props) => {
     } else {
       toast.success('Status transaksi berhasil diubah');
       console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
     }
   };
 
