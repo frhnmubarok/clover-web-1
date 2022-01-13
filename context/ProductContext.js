@@ -9,6 +9,7 @@ import {
   getProductByIdAPI,
   updateProductAPI,
   updateTransactionStatusAPI,
+  getTransactionDetailAPI,
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
@@ -28,9 +29,8 @@ export const ProductProvider = (props) => {
     if (response.error) {
       // const errData = response.message;
       console.log(response);
-      toast.error(response.message);
+      // toast.error(response.message);
     } else {
-      toast.success(response.message);
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
     }
@@ -59,7 +59,7 @@ export const ProductProvider = (props) => {
       console.log(response);
       toast.error(response.message);
     } else {
-      toast.success(response.message);
+      // toast.success(response.message);
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
     }
@@ -121,9 +121,10 @@ export const ProductProvider = (props) => {
     console.log(response);
     if (response.error) {
       const errData = response.message;
-      'store_name' in errData && toast.error('Error Store Name');
-      'store_description' in errData && toast.error('Deskripsi toko harus terdiri dari minimal 20 karakter');
-      'store_image_profile' in errData && toast.error('Error Store Image Profile');
+      toast.error(response.message);
+      // 'store_name' in errData && toast.error('Error Store Name');
+      // 'store_description' in errData && toast.error('Deskripsi toko harus terdiri dari minimal 20 karakter');
+      // 'store_image_profile' in errData && toast.error('Error Store Image Profile');
       console.log(response.error);
     } else {
       toast.success(response.data.message);
@@ -145,6 +146,19 @@ export const ProductProvider = (props) => {
     }
   };
 
+  const getTransactionDetail = async (id) => {
+    const response = await getTransactionDetailAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -156,6 +170,7 @@ export const ProductProvider = (props) => {
         getProductById,
         createStore,
         updateTransactionStatus,
+        getTransactionDetail,
       }}>
       {props.children}
     </ProductContext.Provider>

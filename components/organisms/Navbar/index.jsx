@@ -14,6 +14,7 @@ import logo from '@/assets/images/logo-clover.png';
 import { classNames, formatRupiah } from '@/utils/helpers';
 import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 const products = [
   {
@@ -81,7 +82,11 @@ export default function Navbar() {
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
 
   const handleLogout = () => {
-    userLogout({ id: Cookies.get('id') });
+    toast.promise(userLogout(), {
+      loading: 'Mohon tunggu...',
+      success: 'Berhasil Logout !',
+      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+    });
     setLoginStatus(false);
   };
 

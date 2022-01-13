@@ -3,11 +3,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useFormik } from 'formik';
 import { MdLogin } from 'react-icons/md';
+import toast from 'react-hot-toast';
 
 import { AuthContext } from 'context/AuthContext';
 import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
+import useLoadingToast from '@/hooks/useLoadingToast';
 
 const validate = (values) => {
   const errors = {};
@@ -23,6 +25,7 @@ const validate = (values) => {
 
 const Login = () => {
   const { userLogin, loginStatus } = useContext(AuthContext);
+  const isLoading = useLoadingToast();
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +42,11 @@ const Login = () => {
       } else {
         temp = { ...temp, handphone: values.account };
       }
-      userLogin(temp);
+      toast.promise(userLogin(temp), {
+        loading: 'Mohon tunggu...',
+        success: 'Login berhasil !',
+        error: 'Login gagal !',
+      });
       console.log('halo');
     },
   });
@@ -103,6 +110,9 @@ const Login = () => {
               <a className='text-blue-400'>Google Sign</a>
             </Link>
           </p>
+          <AuthButton icon={<MdLogin />} isLoading={isLoading}>
+            Masuk
+          </AuthButton>
         </div>
       </form>
     </AuthLayout>

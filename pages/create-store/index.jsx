@@ -68,7 +68,11 @@ const CreateStore = ({ data }) => {
   const formik = useFormik({
     initialValues: {
       store_name: '',
-      store_description: '',
+      store_province: '',
+      store_city: '',
+      store_complete_address: '',
+      store_postal_code: '',
+
     },
     validate,
     onSubmit: (values) => {

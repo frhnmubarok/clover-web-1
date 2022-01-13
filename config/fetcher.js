@@ -2,73 +2,33 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 import Cookies from 'js-cookie';
 
-// const BASE_URL = 'https://dev-api-clover.herokuapp.com';
+const token = Cookies.get('token');
+
 import { BASE_URL_DEV, BASE_URL_MAIN } from '@/config/app';
 
-async function callAPI({ path, method, data, token, formData }) {
+const fetcher = async (path, formData) => {
   const headers = token
     ? {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         Authorization: 'Bearer ' + token,
         // 'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Origin': '*',
         Origin: 'http://localhost:3000',
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         // 'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Origin': '*',
         Origin: 'http://localhost:3000',
       };
 
   const response = await axios({
     url: BASE_URL_DEV + path,
-    method,
-    data,
+    method: 'GET',
     headers,
   }).catch((err) => err.response);
-
-  return response;
-
-  // if (response.status > 300) {
-  //   const res = {
-  //     error: true,
-  //     message: response.data.message,
-  //     data: null,
-  //   };
-  //   return res;
-  // }
-  // const res = {
-  //   error: false,
-  //   message: 'success',
-  //   data: response.data,
-  // };
-
-  // return res;
-}
-export default callAPI;
-
-export async function callRajaOngkirAPI({ path, method, token }) {
-  const headers = token
-    ? {
-        Accept: `*/*`,
-        Authorization: 'Bearer ' + token,
-        Origin: 'http://localhost:3000',
-      }
-    : {
-        Accept: `*/*`,
-        Origin: 'http://localhost:3000',
-      };
-
-  const response = await axios({
-    url: BASE_URL_DEV + path,
-    method,
-    headers,
-  }).catch((err) => err.response);
-
-  // console.log(response);
 
   if (response.status > 300) {
     const res = {
@@ -76,7 +36,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
       message: response.data.message,
       data: null,
     };
-    return res;
+    return response.data.message;
   }
   const res = {
     error: false,
@@ -86,5 +46,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
 
   // console.log(res);
 
-  return res;
-}
+  return response.data;
+};
+
+export default fetcher;
