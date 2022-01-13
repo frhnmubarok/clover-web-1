@@ -287,7 +287,7 @@ export default function Products({ data }) {
                   {products.map((product, i) => (
                     <CardProduct
                       key={i}
-                      slug={product.slug}
+                      slug={product.product_slug}
                       title={product.product_name}
                       price={product.product_price}
                       owner={product.store.store_name}

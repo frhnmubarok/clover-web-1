@@ -67,7 +67,9 @@ export default function ProductDetail({ data }) {
               <div className='rounded-2xl'>
                 <div className='relative w-full overflow-hidden border border-gray-200 aspect-square rounded-2xl'>
                   <Image
-                    src={product.photos[0].path_to_product_image}
+                    src={
+                      product.photos.length > 0 ? product.photos[0].path_to_product_image : '/images/products/kol.png'
+                    }
                     alt='Image 1'
                     layout='fill'
                     priority={true}
@@ -350,7 +352,7 @@ export async function getStaticPaths() {
     method: 'GET',
   });
   const paths = data.data.data.map((item) => ({
-    params: { slug: item.slug },
+    params: { slug: item.product_slug },
   }));
 
   console.info(paths);
