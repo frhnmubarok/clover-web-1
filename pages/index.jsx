@@ -21,7 +21,7 @@ const JoinAndWatchButton = () => {
     <div className='grid order-4 w-full grid-cols-1 gap-3 py-5 text-center sm:flex sm:gap-0 sm:space-x-6'>
       <Link
         href='/register-partner'
-        className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-500 hover:ring-2 hover:ring-blue-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>
+        className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-500 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
         <HiOutlineExternalLink className='w-5 h-5' />
         <span>Mulai Menjadi Mitra</span>
       </Link>
@@ -137,7 +137,7 @@ export default function Home({ data }) {
                 </div>
                 <Link
                   href='/products'
-                  className='inline-flex items-center justify-center px-4 py-2 space-x-2 text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-blue-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>
+                  className='inline-flex items-center justify-center px-4 py-2 space-x-2 text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
                   <span>Lihat Semua Produk</span>
                   <HiArrowRight className='w-5 h-5' />
                 </Link>
@@ -189,8 +189,6 @@ export const getServerSideProps = async () => {
     path: '/api/products',
     method: 'GET',
   });
-
-  console.info(data);
 
   return {
     props: {

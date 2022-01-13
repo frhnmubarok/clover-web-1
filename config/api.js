@@ -68,7 +68,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
     headers,
   }).catch((err) => err.response);
 
-  console.log(response);
+  // console.log(response);
 
   if (response.status > 300) {
     const res = {
@@ -84,7 +84,7 @@ export async function callRajaOngkirAPI({ path, method, token }) {
     data: response.data,
   };
 
-  console.log(res);
+  // console.log(res);
 
   return res;
 }

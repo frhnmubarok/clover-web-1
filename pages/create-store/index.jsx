@@ -124,7 +124,7 @@ const CreateStore = ({ data }) => {
           errors={formik.errors.store_description}
         />
         <div className='my-4'>
-          <label className='text-sm font-medium text-gray-700 tracking-wide'>Foto Toko</label>
+          <label className='text-sm font-medium tracking-wide text-gray-700'>Foto Toko</label>
 
           <div className='m-4'>
             <div className='flex items-center justify-center w-full'>
@@ -156,9 +156,9 @@ const CreateStore = ({ data }) => {
         </div>
 
         <div className='relative mt-2'>
-          <label className='text-sm font-medium text-gray-700 tracking-wide'>Provinsi Asal</label>
+          <label className='text-sm font-medium tracking-wide text-gray-700'>Provinsi Asal</label>
           <select
-            className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+            className='w-full px-4 py-4 text-base text-gray-700 bg-white border border-gray-200 shadow-md rounded-2xl focus:outline-none focus:border-green-400'
             name='store_province'
             id='store_province'>
             {province.map((item) => (
@@ -178,9 +178,9 @@ const CreateStore = ({ data }) => {
 
         {provinceId !== null && (
           <div className='relative mt-2'>
-            <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
+            <label className='text-sm font-medium tracking-wide text-gray-700'>Kota Asal</label>
             <select
-              className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+              className='w-full px-4 py-4 text-base text-gray-700 bg-white border border-gray-200 shadow-md rounded-2xl focus:outline-none focus:border-green-400'
               name='store_city'
               id='store_city'
               onChange={formik.handleChange}
@@ -221,14 +221,14 @@ const CreateStore = ({ data }) => {
           errors={formik.errors.store_complete_address}
         />
 
-        <div className='mt-6 flex justify-between content-center items-center'>
+        <div className='flex items-center content-center justify-between mt-6'>
           <span></span>
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
           </AuthButton>
           {/* <button
             type='button'
-            className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+            className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
             onClick={() => {
               console.log(formData);
             }}>

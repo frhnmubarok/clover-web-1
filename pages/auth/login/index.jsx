@@ -91,13 +91,14 @@ const Login = () => {
               Ingat saya
             </label>
           </div>
-          <p>
+          <p className='py-4'>
             <Link href='/forgot-password'>
               <a className='text-blue-400'>Lupa Password ?</a>
             </Link>
           </p>
         </div>
-        <div className='items-center mt-4 flex justify-between'>
+        <div className='items-center'>
+          <AuthButton icon={<MdLogin />}>Masuk</AuthButton>
           {/* <p className="pt-4 ">
             Belum punya akun ?{" "}
             <Link href="/register">
