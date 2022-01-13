@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import React, { useContext } from 'react';
+import { FcGoogle } from 'react-icons/fc';
 import { useFormik } from 'formik';
 import { MdLogin } from 'react-icons/md';
 import toast from 'react-hot-toast';
@@ -10,6 +9,7 @@ import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
 import useLoadingToast from '@/hooks/useLoadingToast';
+import Link from '@/components/atoms/Link';
 
 const validate = (values) => {
   const errors = {};
@@ -98,21 +98,26 @@ const Login = () => {
           </p>
         </div>
         <div className='items-center'>
-          <AuthButton icon={<MdLogin />}>Masuk</AuthButton>
           {/* <p className="pt-4 ">
             Belum punya akun ?{" "}
             <Link href="/register">
               <a className="text-green-400">Daftar</a>
             </Link>
           </p> */}
-          <p>
-            <Link href='https://dev-api-clover.herokuapp.com/auth'>
-              <a className='text-blue-400'>Google Sign</a>
-            </Link>
-          </p>
           <AuthButton icon={<MdLogin />} isLoading={isLoading}>
             Masuk
           </AuthButton>
+
+          <div className='pt-3'>
+            <Link
+              href='https://dev-api-clover.herokuapp.com/auth'
+              className='relative inline-flex items-center justify-center w-full px-4 py-3 text-sm font-semibold text-gray-700 duration-150 ease-in-out bg-white border border-gray-200 rounded-lg group hover:bg-gray-200 hover:ring-2 hover:ring-offset-2 hover:ring-blue-500'>
+              <span className='absolute inset-y-0 left-0 flex items-center pl-3'>
+                <FcGoogle className='w-5 h-5' />
+              </span>
+              Sign in with Google
+            </Link>
+          </div>
         </div>
       </form>
     </AuthLayout>
