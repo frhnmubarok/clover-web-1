@@ -10,10 +10,15 @@ import { ProductContext } from '@/context/ProductContext';
 
 const EditProductPage = () => {
   const { addProduct } = useContext(ProductContext);
-  const { userLogout } = useContext(AuthContext);
+  const { userLogout, setLoginStatus } = useContext(AuthContext);
 
   const handleLogout = () => {
-    userLogout({ id: Cookies.get('id') });
+    toast.promise(userLogout(), {
+      loading: 'Mohon tunggu...',
+      success: 'Berhasil Logout !',
+      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+    });
+    setLoginStatus(false);
   };
   return (
     <DashboardLayout handleLogout={handleLogout}>

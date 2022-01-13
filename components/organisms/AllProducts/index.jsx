@@ -55,7 +55,12 @@ const AllProducts = ({ data }) => {
       {
         Header: 'Kategori',
         accessor: 'category',
-        Cell: ({ value }) => value.category_name[0].toUpperCase() + value.category_name.substring(1),
+        Cell: ({ value }) => value.category_name,
+      },
+      {
+        Header: 'Sub Kategori',
+        accessor: 'sub_category',
+        Cell: ({ value }) => value.sub_category_name,
       },
       {
         Header: 'Harga',
@@ -64,11 +69,11 @@ const AllProducts = ({ data }) => {
       },
       {
         Header: 'Stok Tersedia',
-        accessor: 'stock',
+        accessor: 'product_stock',
       },
       {
         Header: 'Diskon',
-        accessor: 'discount',
+        accessor: 'product_discount',
         Cell: ({ value }) => `${value}%`,
       },
       {

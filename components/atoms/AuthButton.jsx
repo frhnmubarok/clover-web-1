@@ -1,13 +1,16 @@
 import React from 'react';
+import clsxm from '@/utils/clsxm';
+import { ImSpinner2 } from 'react-icons/im';
 
 const AuthButton = ({ children, icon, isLoading }) => {
-  const classes = `w-44 flex justify-center bg-primary-500 hover:bg-primary-600 text-gray-100 p-3 rounded-2xl tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 text-xl ${
-    isLoading === true && 'animate-spin'
-  }`;
+  console.log(isLoading);
   return (
     <button
       type='submit'
-      className='w-40 flex justify-center items-center bg-primary-500 hover:bg-primary-600 text-gray-100 p-2 rounded-2xl tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 text-lg'>
+      disabled={isLoading}
+      className={`btn rounded-2xl bg-primary-500 border-0 px-8 disabled:cursor-not-allowed hover:bg-primary-600 disabled:bg-primary-500 ${
+        isLoading && 'relative disabled:cursor-wait loading'
+      }`}>
       <span className='mr-4'>{icon}</span>
       {children}
     </button>

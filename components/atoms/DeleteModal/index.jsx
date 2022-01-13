@@ -47,8 +47,8 @@ const DeleteModal = ({ open, setOpen, cancelButtonRef, handleDelete, productId }
                       </Dialog.Title>
                       <div className='mt-2'>
                         <p className='text-sm text-gray-500'>
-                          Apa kamu yakin ingin menghapus produk ini ? Semua data produk akan dihapus secara permanen.
-                          Aksi ini tidak dapat dibatalkan.
+                          Apa kamu yakin ingin menghapus produk ini ? Data produk ini akan dihapus secara permanen. Aksi
+                          ini tidak dapat dibatalkan.
                         </p>
                       </div>
                     </div>

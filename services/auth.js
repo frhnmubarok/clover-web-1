@@ -6,7 +6,6 @@ import axios from 'axios';
 const token = Cookies.get('token');
 
 export async function authRegister(userData) {
-
   const path = `/api/register`;
 
   return callAPI({
@@ -33,7 +32,7 @@ export async function authChangePassword(userData) {
     path,
     method: 'PUT',
     data: userData,
-    token,
+    token: Cookies.get('token'),
   });
 }
 
@@ -67,14 +66,13 @@ export async function authConfirmPassword(userData) {
   });
 }
 
-export async function authLogout(userData) {
+export async function authLogout() {
   const path = `/api/logout`;
 
   return callAPI({
     path,
     method: 'POST',
-    data: userData,
-    token,
+    token: Cookies.get('token'),
   });
 }
 
@@ -86,6 +84,6 @@ export async function authGetRoles(userData) {
     path,
     method: 'GET',
     data: userData,
-    token,
+    token: Cookies.get('token'),
   });
 }

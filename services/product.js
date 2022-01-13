@@ -29,7 +29,7 @@ export async function insertProductAPI(productData) {
     path,
     method: 'POST',
     data: productData,
-    token,
+    token: Cookies.get('token'),
     formData,
   });
 }
@@ -41,7 +41,7 @@ export async function updateProductAPI(productData, id) {
     path,
     method: 'PUT',
     data: productData,
-    token,
+    token: Cookies.get('token'),
   });
 }
 
@@ -51,7 +51,7 @@ export async function deleteProductAPI(id) {
   return callAPI({
     path,
     method: 'DELETE',
-    token,
+    token: Cookies.get('token'),
   });
 }
 
@@ -62,7 +62,7 @@ export async function createStoreAPI(formData) {
     path,
     method: 'POST',
     data: formData,
-    token,
+    token: Cookies.get('token'),
     formData,
   });
 }
@@ -74,7 +74,7 @@ export async function insertProductImageAPI(productData, id) {
     path,
     method: 'POST',
     data: productData,
-    token,
+    token: Cookies.get('token'),
     formData,
   });
 }
@@ -82,13 +82,21 @@ export async function insertProductImageAPI(productData, id) {
 export async function updateTransactionStatusAPI(id, body) {
   const path = `/api/transaction/${id}/pesanan`;
 
-  console.log(id, body);
-
   return callAPI({
     path,
     method: 'PUT',
     data: body,
-    token,
+    token: Cookies.get('token'),
+  });
+}
+
+export async function getTransactionDetailAPI(id) {
+  const path = `/api/transaction/${id}`;
+
+  return callAPI({
+    path,
+    method: 'GET',
+    token: Cookies.get('token'),
   });
 }
 // const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {

@@ -9,6 +9,7 @@ import { AuthContext } from 'context/AuthContext';
 import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
+import useLoadingToast from '@/hooks/useLoadingToast';
 
 const validate = (values) => {
   const errors = {};
@@ -25,8 +26,6 @@ const validate = (values) => {
 
   if (!values.fullname) {
     errors.fullname = 'Wajib diisi';
-  } else if (values.fullname.length < 8) {
-    errors.fullname = 'Username minimal 8 karakter';
   }
 
   if (!values.password) {
@@ -45,7 +44,8 @@ const validate = (values) => {
 };
 
 const Register = () => {
-  const { userRegister, isLoading } = useContext(AuthContext);
+  const { userRegister } = useContext(AuthContext);
+  const isLoading = useLoadingToast();
 
   const formik = useFormik({
     initialValues: {
@@ -127,7 +127,7 @@ const Register = () => {
           errors={formik.errors.confirmPassword}
         />
         <div className='flex items-center content-center justify-between mt-6'>
-          <AuthButton icon={<MdLogin />} isLoading>
+          <AuthButton icon={<MdLogin />} isLoading={isLoading}>
             Daftar
           </AuthButton>
           <p className='pt-4 '>

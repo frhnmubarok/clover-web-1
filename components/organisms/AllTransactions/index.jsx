@@ -14,6 +14,7 @@ import DeleteModal from '@/components/atoms/DeleteModal';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { formatRupiah } from '@/utils/helpers';
+import TransactionDetailModal from '@/components/atoms/TransactionDetailModal';
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
@@ -22,12 +23,24 @@ const classNames = (...classes) => {
 const tabName = ['Perlu Konfirmasi', 'Dikonfirmasi', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan', 'Refund'];
 
 const AllTransactions = ({ data }) => {
-  const { updateTransactionStatus } = useContext(ProductContext);
+  const { updateTransactionStatus, getTransactionDetail } = useContext(ProductContext);
   const [transactions, setTransactions] = useState(data.data);
-  const [productId, setProductId] = useState(null);
-  const [deleteSuccessful, setDeleteSuccessful] = useState(false);
+  const [transactionId, setTransactionId] = useState(null);
+  const [transactionDetail, setTransactionDetail] = useState({});
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (transactionId !== null) {
+      const get = async () => {
+        const { data } = await getTransactionDetail(transactionId);
+        setTransactionDetail(data);
+        console.log(data);
+      };
+      get();
+      console.log(transactionId);
+    }
+  }, [transactionId]);
 
   const transactionType = (type) => {
     return transactions.filter((item) => item.status_pesanan === type);
@@ -84,24 +97,56 @@ const AllTransactions = ({ data }) => {
           ),
         },
         {
+          Header: 'Detail Transaksi',
+          accessor: 'id',
+          id: 'transactionId',
+          disableSortBy: true,
+          disableFilters: true,
+          Cell: ({ value }) => (
+            <button
+              className='rounded-lg px-2 py-1 text-white text-sm bg-cyan-700 '
+              onClick={() => {
+                setOpen(!open);
+                setTransactionId(value);
+              }}>
+              Lihat
+            </button>
+          ),
+        },
+        {
           Header: 'Action',
           accessor: 'id',
           disableSortBy: true,
           disableFilters: true,
           Cell: ({ value }) => (
             <div className='flex'>
-              <button
-                className='text-white bg-blue-700 transition-all ease-in-out hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-l-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-                onClick={() => updateTransactionStatus(value, { status_pesanan: body })}>
-                <span className='text-2xl'>
-                  <MdCheck />
-                </span>
-              </button>
-              <button className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-r-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-                <span className='text-2xl'>
-                  <MdOutlineClose />
-                </span>
-              </button>
+              {/* <Link href='/admin/transaction/[id]' as={`/admin/transaction/${value}`}> */}
+              {body !== 'pesanan dibuat' ? (
+                <>
+                  <p className='hidden'>{value}</p>
+                </>
+              ) : (
+                <>
+                  <div data-tip='Konfirmasi' className='tooltip'>
+                    <button
+                      className='text-white bg-blue-700 transition-all ease-in-out hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                      onClick={() => updateTransactionStatus(value, { status_pesanan: body })}>
+                      <span className='text-2xl'>
+                        <MdCheck />
+                      </span>
+                    </button>
+                  </div>
+                  {body === 'pesanan dibuat' && (
+                    <div data-tip='Batalkan' className='tooltip'>
+                      <button className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+                        <span className='text-2xl'>
+                          <MdOutlineClose />
+                        </span>
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           ),
         },
@@ -163,12 +208,18 @@ const AllTransactions = ({ data }) => {
           </Tab.Panels>
         </Tab.Group>
 
-        <DeleteModal
+        {/* <DeleteModal
           setOpen={setOpen}
           open={open}
           cancelButtonRef={cancelButtonRef}
           // handleDelete={handleDelete}
           productId={productId}
+        /> */}
+        <TransactionDetailModal
+          setOpen={setOpen}
+          open={open}
+          cancelButtonRef={cancelButtonRef}
+          data={transactionDetail}
         />
       </div>
     </>
