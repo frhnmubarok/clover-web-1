@@ -2,6 +2,7 @@ import Link from '@/components/atoms/Link';
 import Main from '@/components/atoms/Main';
 import AppLayout from '@/components/templates/AppLayout';
 import callAPI from '@/config/api';
+import { useCartContext } from '@/context/CartContext';
 import { classNames, formatRupiah } from '@/utils/helpers';
 import { Dialog, Tab, Transition } from '@headlessui/react';
 import Image from 'next/image';
@@ -11,8 +12,10 @@ import { HiChat, HiPlusCircle, HiStar } from 'react-icons/hi';
 import { MdFavorite } from 'react-icons/md';
 
 export default function ProductDetail({ data }) {
-  const [product] = useState(data.data);
+  const { product, category, sub_category, photos, store, reviews } = data.data;
   const [isOpen, setIsOpen] = useState(false);
+
+  const { dispatch } = useCartContext();
 
   function closeModal() {
     setIsOpen(false);
@@ -27,7 +30,7 @@ export default function ProductDetail({ data }) {
       {
         id: 1,
         title: 'Stok',
-        description: data.data.stock,
+        description: product.product_stock,
       },
       {
         id: 1,
@@ -37,12 +40,12 @@ export default function ProductDetail({ data }) {
       {
         id: 1,
         title: 'Category',
-        description: data.data.category.category_name,
+        description: category.category_name,
       },
       {
         id: 2,
         title: 'Deskripsi Barang',
-        description: data.data.product_description,
+        description: product.product_description,
       },
     ],
     'Catatan Penjual': [
@@ -67,9 +70,7 @@ export default function ProductDetail({ data }) {
               <div className='rounded-2xl'>
                 <div className='relative w-full overflow-hidden border border-gray-200 aspect-square rounded-2xl'>
                   <Image
-                    src={
-                      product.photos.length > 0 ? product.photos[0].path_to_product_image : '/images/products/kol.png'
-                    }
+                    src={photos.length > 0 ? photos[0].product_image_path : '/images/products/kol.png'}
                     alt='Image 1'
                     layout='fill'
                     priority={true}
@@ -78,15 +79,15 @@ export default function ProductDetail({ data }) {
                 </div>
               </div>
               <div className='flex items-center justify-between py-4'>
-                {product.photos.map((photo, i) => (
+                {photos.map((photo, i) => (
                   <div
                     key={i}
                     className={classNames(
-                      'relative bg-gray-100 rounded-xl h-[80px] aspect-square',
+                      'relative bg-gray-100 rounded-xl h-[80px] aspect-square overflow-hidden',
                       i === 0 && 'border-2 border-primary-500',
                     )}>
                     <Image
-                      src={photo.path_to_product_image}
+                      src={photo.product_image_path}
                       alt='Image 1'
                       layout='fill'
                       priority={true}
@@ -148,17 +149,17 @@ export default function ProductDetail({ data }) {
                   <div className='flex items-center space-x-4'>
                     <div className='relative h-[48px] overflow-hidden rounded-full aspect-square '>
                       <Image
-                        src={product.store.store_image_profile}
+                        src={store.store_image_profile}
                         alt='Photo Store'
                         layout='fill'
                         className='object-cover object-center'
                       />
                     </div>
                     <div>
-                      <h1 className='font-semibold'>{product.store.store_name}</h1>
+                      <h1 className='font-semibold'>{store.store_name}</h1>
                       <p className='text-xs text-gray-500'>
                         Lokasi di{' '}
-                        <span className='text-primary-500'>{`${product.store.store_city} - ${product.store.store_province}`}</span>
+                        <span className='text-primary-500'>{`${store.store_city} - ${store.store_province}`}</span>
                       </p>
                     </div>
                   </div>
@@ -181,6 +182,12 @@ export default function ProductDetail({ data }) {
               <div className='flex flex-col space-y-5'>
                 <button
                   type='button'
+                  onClick={() =>
+                    dispatch({
+                      type: 'ADD_TO_CART',
+                      item: { product: { product }, store, category, sub_category, photos },
+                    })
+                  }
                   className='inline-flex items-center justify-center w-full py-2 space-x-2 text-sm text-white duration-150 ease-in-out border border-transparent rounded-lg bg-primary-500 group hover:bg-primary-600 hover:ring-2 hover:ring-offset-2 hover:ring-sky-500'>
                   <HiPlusCircle className='w-5 h-5 text-primary-300 group-hover:text-primary-400' />
                   <span>Keranjang</span>

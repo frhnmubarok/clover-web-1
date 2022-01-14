@@ -15,30 +15,7 @@ import { classNames, formatRupiah } from '@/utils/helpers';
 import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
-
-const products = [
-  {
-    id: 1,
-    name: 'Jeruk Manis',
-    href: '#',
-    category: 'Buah - buahan',
-    price: 200000,
-    quantity: 1,
-    imageSrc: '/images/products/jeruk.png',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-  },
-  {
-    id: 2,
-    name: 'Sayur Kol',
-    href: '#',
-    category: 'Sayur - sayuran',
-    price: 200000,
-    quantity: 1,
-    imageSrc: '/images/products/kol.png',
-    imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-  },
-];
+import { useCartContext } from '@/context/CartContext';
 
 const navigation = {
   categories: [
@@ -78,8 +55,26 @@ const navigation = {
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
-  const [openCart, setOpenCart] = React.useState(false);
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
+
+  const [userLoggedIn, setUserLoggedIn] = React.useState(null);
+  const [productInCart, setProductsInCart] = React.useState({
+    key: '',
+    count: 0,
+  });
+  const { state } = useCartContext();
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUserLoggedIn(JSON.parse(localStorage.getItem('fullname')));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    for (let i = 0; i < Object.keys(state.cart).length; i++) {
+      //
+    }
+  }, [state.cart]);
 
   const handleLogout = () => {
     toast.promise(userLogout(), {
@@ -235,7 +230,7 @@ export default function Navbar() {
                       <Menu as='div' className='relative inline-block text-left'>
                         <div>
                           <Menu.Button className='inline-flex justify-center w-full py-2 pl-4 pr-3 text-sm font-medium text-white rounded-md bg-primary-500 hover:bg-primary-600 focus:outline-none '>
-                            Fahmi Idris
+                            {userLoggedIn ?? 'Customer'}
                             <HiChevronDown
                               className='w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100'
                               aria-hidden='true'
@@ -318,137 +313,16 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
-                  <button
-                    type='button'
-                    onClick={() => setOpenCart(true)}
-                    className={classNames(open && 'bg-gray-200', 'p-2 rounded-lg hover:bg-gray-200')}>
-                    <ShoppingCartIcon className={classNames(open && 'text-sky-500', 'w-5 h-5')} />
-                  </button>
-                  <Transition.Root show={openCart} as={React.Fragment}>
-                    <Dialog as='div' className='fixed inset-0 z-50 overflow-hidden' onClose={setOpenCart}>
-                      <div className='absolute inset-0 overflow-hidden'>
-                        <Transition.Child
-                          as={React.Fragment}
-                          enter='ease-in-out duration-500'
-                          enterFrom='opacity-0'
-                          enterTo='opacity-100'
-                          leave='ease-in-out duration-500'
-                          leaveFrom='opacity-100'
-                          leaveTo='opacity-0'>
-                          <Dialog.Overlay className='absolute inset-0 transition-opacity bg-gray-500 bg-opacity-75' />
-                        </Transition.Child>
-
-                        <div className='fixed inset-y-0 right-0 flex max-w-full pl-10'>
-                          <Transition.Child
-                            as={React.Fragment}
-                            enter='transform transition ease-in-out duration-500 sm:duration-700'
-                            enterFrom='translate-x-full'
-                            enterTo='translate-x-0'
-                            leave='transform transition ease-in-out duration-500 sm:duration-700'
-                            leaveFrom='translate-x-0'
-                            leaveTo='translate-x-full'>
-                            <div className='w-screen max-w-md'>
-                              <div className='flex flex-col h-full overflow-y-auto bg-white shadow-xl'>
-                                <div className='flex-1 px-4 py-6 overflow-y-auto sm:px-6'>
-                                  <div className='flex items-start justify-between'>
-                                    <Dialog.Title className='text-lg font-medium text-gray-900'>
-                                      <Link
-                                        onClick={() => setOpenCart(false)}
-                                        href='/cart'
-                                        className='flex items-center justify-center space-x-3 underline decoration-primary-500'>
-                                        <span>Keranjang Belanja</span>
-                                        <ExternalLinkIcon className='w-5 h-5' />
-                                      </Link>
-                                    </Dialog.Title>
-                                    <div className='flex items-center ml-3 h-7'>
-                                      <button
-                                        type='button'
-                                        className='p-2 -m-2 text-gray-400 hover:text-gray-500'
-                                        onClick={() => setOpenCart(false)}>
-                                        <span className='sr-only'>Close panel</span>
-                                        <XIcon className='w-6 h-6' aria-hidden='true' />
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  <div className='mt-8'>
-                                    <div className='flow-root'>
-                                      <ul role='list' className='-my-6 divide-y divide-gray-200'>
-                                        {products.map((product) => (
-                                          <li key={product.id} className='flex py-6'>
-                                            <div className='relative flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md'>
-                                              <Image
-                                                src={product.imageSrc}
-                                                alt={product.imageAlt}
-                                                layout='fill'
-                                                className='object-cover object-center w-full h-full'
-                                              />
-                                            </div>
-
-                                            <div className='flex flex-col flex-1 ml-4'>
-                                              <div>
-                                                <div className='flex justify-between text-base font-medium text-gray-900'>
-                                                  <h3>
-                                                    <a href={product.href}>{product.name}</a>
-                                                  </h3>
-                                                  <p className='ml-4'>{formatRupiah(product.price)}</p>
-                                                </div>
-                                                <p className='mt-1 text-sm text-gray-500'>{product.category}</p>
-                                              </div>
-                                              <div className='flex items-end justify-between flex-1 text-sm'>
-                                                <p className='text-gray-500'>Jumlah {product.quantity}</p>
-
-                                                <div className='flex'>
-                                                  <button
-                                                    type='button'
-                                                    className='font-medium text-primary-600 hover:text-primary-500'>
-                                                    Hapus
-                                                  </button>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className='px-4 py-6 border-t border-gray-200 sm:px-6'>
-                                  <div className='flex justify-between text-base font-medium text-gray-900'>
-                                    <p>Total Harga</p>
-                                    <p>{formatRupiah(100000)}</p>
-                                  </div>
-                                  <p className='mt-0.5 text-sm text-gray-500'>
-                                    Pengiriman dan pajak dihitung saat checkout.
-                                  </p>
-                                  <div className='mt-6'>
-                                    <button
-                                      type='button'
-                                      className='flex items-center justify-center w-full px-6 py-2 text-base font-medium text-white duration-200 ease-in-out border border-transparent rounded-lg shadow-sm bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
-                                      Checkout
-                                    </button>
-                                  </div>
-                                  <div className='flex justify-center mt-6 text-sm text-center text-gray-500'>
-                                    <p>
-                                      atau{' '}
-                                      <button
-                                        type='button'
-                                        className='font-medium text-primary-500 hover:text-primary-600'
-                                        onClick={() => setOpenCart(false)}>
-                                        Lanjut Belanja
-                                        <span aria-hidden='true'> &rarr;</span>
-                                      </button>
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </Transition.Child>
-                        </div>
-                      </div>
-                    </Dialog>
-                  </Transition.Root>
+                  <Link href='/cart' className={'relative bg-gray-200 p-2 rounded-lg hover:bg-gray-200'}>
+                    <div
+                      className={classNames(
+                        Object.keys(state.cart).length > 0 ? 'block' : 'hidden',
+                        'absolute py-px px-[6px] text-white rounded-md text-xs -top-2 -right-2 bg-sky-500',
+                      )}>
+                      {Object.keys(state.cart).length}
+                    </div>
+                    <ShoppingCartIcon className={'hover:text-sky-500 w-5 h-5'} />
+                  </Link>
                 </div>
               </div>
             </div>
