@@ -48,7 +48,7 @@ export default function Cart() {
                   </div>
                   <div className='space-y-3'>
                     {Object.keys(state.cart).map((i) => {
-                      const { product } = state.cart[i];
+                      const { product, store, photos } = state.cart[i];
                       return (
                         <li key={i} className='flex py-6'>
                           <div className='flex items-center h-5'>
@@ -61,11 +61,7 @@ export default function Cart() {
                           </div>
                           <div className='relative flex-shrink-0 w-24 h-24 ml-3 overflow-hidden border border-gray-200 rounded-md'>
                             <Image
-                              src={
-                                product.photos.length > 0
-                                  ? product.photos[0].product_image_path
-                                  : '/images/products/kol.png'
-                              }
+                              src={photos.length > 0 ? photos[0].product_image_path : '/images/products/kol.png'}
                               alt={product.product_name}
                               layout='fill'
                               className='object-cover object-center w-full h-full'

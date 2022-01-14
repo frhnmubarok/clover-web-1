@@ -66,7 +66,7 @@ export default function Navbar() {
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      setUserLoggedIn(JSON.parse(localStorage.getItem('fullname')));
+      setUserLoggedIn(localStorage.getItem('fullname'));
     }
   }, []);
 
