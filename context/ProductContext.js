@@ -14,6 +14,7 @@ import {
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { deleteTransactionAPI } from '@/services/transaction';
 
 export const ProductContext = createContext();
 
@@ -178,6 +179,22 @@ export const ProductProvider = (props) => {
     }
   };
 
+  const deleteTransaction = async (id) => {
+    const response = await deleteTransactionAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Transaksi berhasil dihapus');
+      console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -191,6 +208,7 @@ export const ProductProvider = (props) => {
         updateTransactionStatus,
         getTransactionDetail,
         getAllTransaction,
+        deleteTransaction,
       }}>
       {props.children}
     </ProductContext.Provider>

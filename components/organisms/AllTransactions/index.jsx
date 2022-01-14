@@ -24,7 +24,7 @@ const classNames = (...classes) => {
 const tabName = ['Perlu Konfirmasi', 'Dikonfirmasi', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan', 'Refund'];
 
 const AllTransactions = ({ data }) => {
-  const { updateTransactionStatus, getTransactionDetail } = useContext(ProductContext);
+  const { updateTransactionStatus, getTransactionDetail, deleteTransaction } = useContext(ProductContext);
   const [transactions, setTransactions] = useState(data.data);
   const [transactionId, setTransactionId] = useState(null);
   const [transactionDetail, setTransactionDetail] = useState({});
@@ -51,6 +51,20 @@ const AllTransactions = ({ data }) => {
 
   const handleUpdateStatus = async (id, status) => {
     const response = await updateTransactionStatus(id, status);
+    console.log(response);
+    if (response.error === false) {
+      const newTransactions = await getAllTransactionAPI();
+      setTransactions(newTransactions.data.data);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const response = await deleteTransaction(id);
+    // toast.promise(deleteTransaction(id), {
+    //   loading: 'Mohon tunggu...',
+    //   success: 'Berhasil hapus transaksi',
+    //   error: 'Gagal hapus transaksi',
+    // });
     console.log(response);
     if (response.error === false) {
       const newTransactions = await getAllTransactionAPI();
@@ -177,6 +191,15 @@ const AllTransactions = ({ data }) => {
               {body == 2 && updateButton(value, newOrderStatus, 'Proses')}
               {body == 3 && updateButton(value, newOrderStatus, 'Kirim')}
               {body == 4 && updateButton(value, newOrderStatus, 'Batal')}
+              {body == 6 && (
+                <div data-tip='Proses Pesanan' className='tooltip'>
+                  <button
+                    className='text-white bg-red-600 transition-all ease-in-out hover:bg-red-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                    onClick={() => handleDelete(value)}>
+                    <span className='text-md'>Hapus</span>
+                  </button>
+                </div>
+              )}
             </div>
           ),
         },

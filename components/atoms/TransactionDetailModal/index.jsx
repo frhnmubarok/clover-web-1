@@ -117,32 +117,23 @@ const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
                             <dt className='text-sm font-medium text-gray-500'>Detail Produk</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                               <ul role='list' className='border border-gray-200 rounded-md divide-y divide-gray-200'>
-                                {data.products.map((item, index) => (
-                                  <li key={index} className='pl-3 pr-4 py-3 text-sm'>
-                                    {/* <div className='w-0 flex-1 flex items-center'>
-                                      <MinusSmIcon className='flex-shrink-0 h-5 w-5 text-gray-400' aria-hidden='true' />
-                                      <span className='ml-2 flex-1'>{item.product.product_name}</span>
-                                    </div> */}
-                                    <div className='bg-gray-50 px-0 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-2'>
-                                      <dt className='text-sm font-medium text-gray-500'>Produk </dt>
-                                      <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                                        {item.product.product_name}
-                                      </dd>
-                                    </div>
-                                    <div className='bg-gray-50 px-0 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-2'>
-                                      <dt className='text-sm font-medium text-gray-500'>Jumlah </dt>
-                                      <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                                        {item.detail_transaction_amount}
-                                      </dd>
-                                    </div>
-
-                                    {/* <div className='ml-4 flex-shrink-0'>
-                                      <a href='#' className='font-medium text-indigo-600 hover:text-indigo-500'>
-                                        Download
-                                      </a>
-                                    </div> */}
-                                  </li>
-                                ))}
+                                {data.products !== null &&
+                                  data?.products?.map((item, index) => (
+                                    <li key={index} className='pl-3 pr-4 py-3 text-sm'>
+                                      <div className='bg-gray-50 px-0 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-2'>
+                                        <dt className='text-sm font-medium text-gray-500'>Produk </dt>
+                                        <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                                          {item?.product?.product_name}
+                                        </dd>
+                                      </div>
+                                      <div className='bg-gray-50 px-0 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-2'>
+                                        <dt className='text-sm font-medium text-gray-500'>Jumlah </dt>
+                                        <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                                          {item?.detail_transaction_amount}
+                                        </dd>
+                                      </div>
+                                    </li>
+                                  ))}
                               </ul>
                             </dd>
                           </div>
