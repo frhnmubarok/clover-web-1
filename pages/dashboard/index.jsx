@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 import DashboardLayout from '@/components/templates/DashboardLayout';
 import DashboardHomepage from '@/components/organisms/DashboardHomepage';
+import toast from 'react-hot-toast';
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
@@ -36,8 +37,21 @@ const Dashboard = () => {
     setUserData({ username: localStorage.getItem('username') });
   }, [loginStatus]);
 
+  if (typeof window !== 'undefined') {
+    Echo.channel('Clover-channel')
+		.listen('.dashboard', (e) => {
+			console.log('ok')
+      // alert(e)
+		});
+    // console.log('tes')
+  }
+
   const handleLogout = () => {
-    userLogout({ id: Cookies.get('id') });
+    toast.promise(userLogout(), {
+      loading: 'Mohon tunggu...',
+      success: 'Berhasil Logout !',
+      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+    });
     setLoginStatus(false);
   };
 

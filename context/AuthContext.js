@@ -39,7 +39,7 @@ export const AuthProvider = (props) => {
       'email' in errData && toast.error('Email sudah digunakan');
       'username' in errData && toast.error('Username sudah digunakan');
     } else {
-      toast.success(`Pendaftaran akun berhasil`);
+      console.log(response);
       router.push('/register/success');
       setIsLoading(false);
     }
@@ -48,10 +48,7 @@ export const AuthProvider = (props) => {
   const userLogin = async (formData) => {
     // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authLogin(formData);
-    if (response.error) {
-      console.log(response.error);
-      toast.error('Akun atau password anda salah');
-    } else {
+    if (!response.error) {
       const { id, fullname, email, role } = response.data.data;
       console.log(response.data);
       setCookies(response.data.token);
@@ -62,9 +59,9 @@ export const AuthProvider = (props) => {
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
       setLoginStatus(true);
-      toast.success('Login berhasil');
       router.push('/');
     }
+    return response;
   };
 
   const userChangePassword = async (formData) => {
@@ -138,23 +135,17 @@ export const AuthProvider = (props) => {
     //   });
   };
 
-  const userLogout = (formData) => {
-    authLogout(formData)
-      .then((res) => {
-        console.log(res.data);
-        Cookies.remove('id');
-        Cookies.remove('email');
-        Cookies.remove('handphone');
-        Cookies.remove('user');
-        Cookies.remove('token');
-        setLoginStatus(false);
-        toast.success(`Berhasil Logout`);
-        router.push('/');
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error('Gagal Logout');
-      });
+  const userLogout = async () => {
+    const response = await authLogout();
+    if (response.error) {
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      Cookies.remove('role');
+      Cookies.remove('token');
+      setLoginStatus(false);
+      router.push('/');
+    }
   };
 
   return (

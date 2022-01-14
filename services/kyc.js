@@ -6,24 +6,27 @@ const token = Cookies.get('token');
 const formData = true;
 
 export async function addKYC(userData) {
-  const url = `${API_ENDPOINT}/register-partner`;
+  // const url = `${API_ENDPOINT}/register-partner`;
+  const path = '/api/register-partner';
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
-    token,
+    token: Cookies.get('token'),
     formData,
   });
 }
 export async function addReview(userData) {
-  const url = `${API_ENDPOINT}/add-review`;
+  const path = '/api/add-review';
+
+  // const url = `${API_ENDPOINT}/add-review`;
 
   return callAPI({
-    url,
+    path,
     method: 'POST',
     data: userData,
-    token,
+    token: Cookies.get('token'),
     formData,
   });
 }

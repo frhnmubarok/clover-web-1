@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
+
 import ProductInput from '../atoms/ProductInput';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '@/context/ProductContext';
+import useLoadingToast from '@/hooks/useLoadingToast';
 
 const validate = (values) => {
   const errors = {};
@@ -22,8 +26,13 @@ const validate = (values) => {
   if (!values.product_stock) {
     errors.product_stock = 'Wajib diisi';
   }
+
   if (!values.product_category_id) {
     errors.product_category_id = 'Wajib diisi';
+  }
+
+  if (!values.product_sub_category_id) {
+    errors.product_sub_category_id = 'Wajib diisi';
   }
 
   if (values.product_discount < 0 || values.product_discount > 100) {
@@ -35,7 +44,9 @@ const validate = (values) => {
 
 const AddProducts = () => {
   const { addProduct } = useContext(ProductContext);
+  const isLoading = useLoadingToast();
   const [productDataSubmitted, setProductDataSubmitted] = useState(false);
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       product_name: '',
@@ -44,7 +55,8 @@ const AddProducts = () => {
       product_stock: '',
       product_discount: 0,
       product_category_id: 1,
-      image: '',
+      product_sub_category_id: 1,
+      product_image: '',
     },
     validate,
     onSubmit: (values) => {
@@ -55,15 +67,22 @@ const AddProducts = () => {
       formData.append('product_stock', values.product_stock);
       formData.append('product_discount', values.product_discount);
       formData.append('product_category_id', values.product_category_id);
-      formData.append('image', values.image);
-      addProduct(formData);
+      formData.append('product_sub_category_id', values.product_sub_category_id);
+      formData.append('product_image', values.product_image);
+      toast.promise(addProduct(formData), {
+        loading: 'Mohon tunggu...',
+        success: 'Produk berhasil ditambah!',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+      });
+
       formik.setFieldValue('product_name', '');
       formik.setFieldValue('product_price', '');
       formik.setFieldValue('product_description', '');
       formik.setFieldValue('product_stock', '');
       formik.setFieldValue('product_discount', '');
       formik.setFieldValue('product_category_id', '');
-      formik.setFieldValue('image', '');
+      formik.setFieldValue('product_sub_category_id', '');
+      formik.setFieldValue('product_image', '');
       console.log(values);
     },
   });
@@ -168,15 +187,17 @@ const AddProducts = () => {
                           </svg>
                           <div className='flex text-sm text-gray-600'>
                             <label
-                              htmlFor='image'
+                              htmlFor='product_image'
                               className='relative cursor-pointer bg-white rounded-md font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500'>
                               <span>Upload a file</span>
                               <input
-                                id='image'
-                                name='image'
+                                id='product_image'
+                                name='product_image'
                                 type='file'
                                 className='sr-only'
-                                onChange={(event) => formik.setFieldValue('image', event.currentTarget.files[0])}
+                                onChange={(event) =>
+                                  formik.setFieldValue('product_image', event.currentTarget.files[0])
+                                }
                               />
                             </label>
                             <p className='pl-1'>or drag and drop</p>
@@ -234,6 +255,28 @@ const AddProducts = () => {
                               id='product_category_id'
                               onChange={formik.handleChange}
                               value={formik.values.product_category_id}>
+                              <option value={1}>Hidroponik</option>
+                              <option value={2}>Non Hidroponik</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='grid grid-cols-3 gap-6'>
+                      <div className='col-span-3 sm:col-span-3'>
+                        <label htmlFor='product_category_id' className='block text-sm font-semibold text-gray-700'>
+                          Sub Kategori Produk *
+                        </label>
+                        <div className='mt-1 flex rounded-md shadow-sm'>
+                          <div className='relative inline-block w-full text-gray-700'>
+                            <select
+                              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                              placeholder='Regular input'
+                              name='product_sub_category_id'
+                              id='product_sub_category_id'
+                              onChange={formik.handleChange}
+                              value={formik.values.product_sub_category_id}>
                               <option value={1}>Buah</option>
                               <option value={2}>Sayuran</option>
                             </select>
@@ -256,8 +299,9 @@ const AddProducts = () => {
                   </div>
                   <div className='px-4 py-3 bg-gray-50 text-right sm:px-6'>
                     <button
+                      disabled={isLoading}
                       type='submit'
-                      className='inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-semibold rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                      className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-500 disabled:cursor-not-allowed'>
                       Simpan
                     </button>
                   </div>

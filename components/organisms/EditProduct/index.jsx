@@ -5,6 +5,7 @@ import ProductInput from '@/components/atoms/ProductInput';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '@/context/ProductContext';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -21,12 +22,12 @@ const validate = (values) => {
     errors.product_description = 'Wajib diisi';
   }
 
-  if (!values.stock) {
-    errors.stock = 'Wajib diisi';
+  if (!values.product_stock) {
+    errors.product_stock = 'Wajib diisi';
   }
 
-  if (values.discount < 0 || values.discount > 100) {
-    errors.discount = 'Wajib diisi';
+  if (values.product_discount < 0 || values.product_discount > 100) {
+    errors.product_discount = 'Wajib diisi';
   }
 
   // if (!values.product_category_id) {
@@ -46,14 +47,18 @@ const EditProduct = () => {
       product_name: productById.product_name,
       product_price: productById.product_price,
       product_description: productById.product_description,
-      stock: productById.stock,
-      discount: productById.discount,
+      product_stock: productById.product_stock,
+      product_discount: productById.product_discount,
     },
     validate,
     onSubmit: (values) => {
-      updateProduct(values, router.query.id);
+      toast.promise(updateProduct(values, router.query.id), {
+        loading: 'Mohon tunggu...',
+        success: 'Produk berhasil diupdate!',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+      });
+      router.back();
       setProductDataSubmitted(true);
-      console.log(values);
     },
   });
 
@@ -73,10 +78,11 @@ const EditProduct = () => {
       formik.setFieldValue('product_name', productById.product_name);
       formik.setFieldValue('product_price', productById.product_price);
       formik.setFieldValue('product_description', productById.product_description);
-      formik.setFieldValue('stock', productById.stock);
-      formik.setFieldValue('discount', productById.discount);
+      formik.setFieldValue('product_stock', productById.product_stock);
+      formik.setFieldValue('product_discount', productById.product_discount);
     }
   }, [productById]);
+
   return (
     <>
       <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
@@ -159,27 +165,70 @@ const EditProduct = () => {
               <div className='mt-5 md:mt-0 md:col-span-3'>
                 <div className='shadow-lg sm:rounded-md sm:overflow-hidden'>
                   <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
+                    {/* <div className='grid grid-cols-3 gap-6'>
+                      <div className='col-span-3 sm:col-span-3'>
+                        <label htmlFor='product_category_id' className='block text-sm font-semibold text-gray-700'>
+                          Kategori Produk *
+                        </label>
+                        <div className='mt-1 flex rounded-md shadow-sm'>
+                          <div className='relative inline-block w-full text-gray-700'>
+                            <select
+                              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                              placeholder='Regular input'
+                              name='product_category_id'
+                              id='product_category_id'
+                              onChange={formik.handleChange}
+                              value={formik.values.product_category_id}>
+                              <option value={1}>Hidroponik</option>
+                              <option value={2}>Non Hidroponik</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='grid grid-cols-3 gap-6'>
+                      <div className='col-span-3 sm:col-span-3'>
+                        <label htmlFor='product_category_id' className='block text-sm font-semibold text-gray-700'>
+                          Sub Kategori Produk *
+                        </label>
+                        <div className='mt-1 flex rounded-md shadow-sm'>
+                          <div className='relative inline-block w-full text-gray-700'>
+                            <select
+                              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                              placeholder='Regular input'
+                              name='product_sub_category_id'
+                              id='product_sub_category_id'
+                              onChange={formik.handleChange}
+                              value={formik.values.product_sub_category_id}>
+                              <option value={1}>Buah</option>
+                              <option value={2}>Sayuran</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div> */}
                     <div className='grid grid-cols-3 gap-6'>
                       <ProductInput
-                        id='stock'
-                        name='stock'
+                        id='product_stock'
+                        name='product_stock'
                         type='number'
                         label='Stok Produk *'
                         handleChange={formik.handleChange}
-                        value={formik.values.stock}
-                        errors={formik.errors.stock}
+                        value={formik.values.product_stock}
+                        errors={formik.errors.product_stock}
                       />
                     </div>
 
                     <div className='grid grid-cols-3 gap-6'>
                       <ProductInput
-                        id='discount'
-                        name='discount'
+                        id='product_discount'
+                        name='product_discount'
                         type='number'
                         label='Diskon Produk *'
                         handleChange={formik.handleChange}
-                        value={formik.values.discount}
-                        errors={formik.errors.discount}
+                        value={formik.values.product_discount}
+                        errors={formik.errors.product_discount}
                       />
                     </div>
                   </div>

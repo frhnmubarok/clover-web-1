@@ -16,42 +16,43 @@ import AuthButton from '@/components/atoms/AuthButton';
 import TextArea from '@/components/atoms/TextArea';
 import { callRajaOngkirAPI } from '@/config/api';
 import StoreDetails from '@/components/organisms/StoreDetails';
+import toast from 'react-hot-toast';
 
 const token = Cookies.get('token');
 
 const validate = (values) => {
   const errors = {};
 
-  if (!values.profile_name) {
-    errors.profile_name = 'Wajib diisi';
+  if (!values.kyc_name) {
+    errors.kyc_name = 'Wajib diisi';
   }
 
-  if (!values.profile_ktp) {
-    errors.profile_ktp = 'Wajib diisi';
-  } else if (values.profile_ktp.length !== 16) {
-    errors.profile_ktp = 'KTP harus 16 digit';
+  if (!values.kyc_ktp) {
+    errors.kyc_ktp = 'Wajib diisi';
+  } else if (values.kyc_ktp.length !== 16) {
+    errors.kyc_ktp = 'KTP harus 16 digit';
   }
 
-  if (!values.profile_address) {
-    errors.profile_address = 'Wajib diisi';
+  if (!values.kyc_address) {
+    errors.kyc_address = 'Wajib diisi';
   }
 
-  if (!values.profile_city) {
-    errors.profile_city = 'Wajib diisi';
+  if (!values.kyc_city) {
+    errors.kyc_city = 'Wajib diisi';
   }
 
-  if (!values.profile_postal_code) {
-    errors.profile_postal_code = 'Wajib diisi';
-  } else if (values.profile_postal_code.length !== 5) {
-    errors.profile_postal_code = 'Kode pos harus 5 digit';
+  if (!values.kyc_postal_code) {
+    errors.kyc_postal_code = 'Wajib diisi';
+  } else if (values.kyc_postal_code.length !== 5) {
+    errors.kyc_postal_code = 'Kode pos harus 5 digit';
   }
 
-  if (!values.profile_place_of_birth) {
-    errors.profile_place_of_birth = 'Wajib diisi';
+  if (!values.kyc_place_of_birth) {
+    errors.kyc_place_of_birth = 'Wajib diisi';
   }
 
-  if (!values.profile_gender) {
-    errors.profile_gender = 'Wajib diisi';
+  if (!values.kyc_gender) {
+    errors.kyc_gender = 'Wajib diisi';
   }
 
   return errors;
@@ -67,38 +68,42 @@ const RegisterPartner = ({ data }) => {
 
   const formik = useFormik({
     initialValues: {
-      profile_name: '',
-      profile_ktp: '',
-      profile_address: '',
-      profile_city: '',
-      profile_postal_code: '',
-      profile_place_of_birth: '',
-      profile_date_of_birth: '',
-      profile_gender: 'Laki-laki',
+      kyc_name: '',
+      kyc_ktp: '',
+      kyc_address: '',
+      kyc_city: '',
+      kyc_postal_code: '',
+      kyc_place_of_birth: '',
+      kyc_date_of_birth: '',
+      kyc_gender: 'Laki-laki',
     },
     validate,
     onSubmit: (values) => {
-      // registerKYC({ ...values, profile_date_of_birth: startDate.toISOString().split('T')[0] });
+      // registerKYC({ ...values, kyc_date_of_birth: startDate.toISOString().split('T')[0] });
 
-      console.log({ ...values, profile_date_of_birth: startDate.toISOString().split('T')[0] });
+      console.log({ ...values, kyc_date_of_birth: startDate.toISOString().split('T')[0] });
+      const form = new FormData();
+      form.append('kyc_name', values.kyc_name);
+      form.append('kyc_ktp', values.kyc_ktp);
+      form.append('kyc_address', values.kyc_address);
+      form.append('kyc_province', values.kyc_province);
+      form.append('kyc_province_id', values.kyc_province_id);
+      form.append('kyc_city', values.kyc_city);
+      form.append('kyc_city_id', values.kyc_city_id);
+      form.append('kyc_postal_code', values.kyc_postal_code);
+      form.append('kyc_place_of_birth', values.kyc_place_of_birth);
+      form.append('kyc_date_of_birth', startDate.toISOString().split('T')[0]);
+      form.append('kyc_gender', values.kyc_gender);
+      form.append('kyc_self_photo', values.kyc_self_photo);
+      form.append('kyc_ktp_photo', values.kyc_ktp_photo);
+      console.log(form);
+      toast.promise(registerKYC(form), {
+        loading: 'Mohon tunggu...',
+        success: 'Login berhasil !',
+        error: 'Login gagal !',
+      });
       setNextStep(true);
-      const formData = new FormData();
-      formData.append('profile_name', values.profile_name);
-      formData.append('profile_ktp', values.profile_ktp);
-      formData.append('profile_address', values.profile_address);
-      formData.append('profile_province', values.profile_province);
-      formData.append('profile_province_id', values.profile_province_id);
-      formData.append('profile_city', values.profile_city);
-      formData.append('profile_city_id', values.profile_city_id);
-      formData.append('profile_postal_code', values.profile_postal_code);
-      formData.append('profile_place_of_birth', values.profile_place_of_birth);
-      formData.append('profile_date_of_birth', startDate.toISOString().split('T')[0]);
-      formData.append('profile_gender', values.profile_gender);
-      formData.append('self_photo', values.self_photo);
-      formData.append('ktp_photo', values.ktp_photo);
-      console.log(formData);
-      registerKYC(formData);
-      setDataDiri(formData);
+      setDataDiri(form);
     },
   });
 
@@ -133,7 +138,10 @@ const RegisterPartner = ({ data }) => {
   //   }
   // }, 1000);
 
-  const handleOnChange = (ev) => setProvinceId(ev.target.value);
+  const handleOnChange = (ev) => {
+    console.log(ev.target.value);
+    setProvinceId(ev.target.value);
+  };
 
   return (
     <>
@@ -144,60 +152,61 @@ const RegisterPartner = ({ data }) => {
           <div className='flex flex-col items-center justify-center w-full'>
             <ul className='w-full steps bg-transparent'>
               <li className='step step-primary '>Data Diri</li>
-              <li className='step text-gray-400'>Data Toko</li>
+              <li className='step text-gray-400'>Persyaratan Mitra</li>
               <li className='step text-gray-400'>Konfirmasi</li>
             </ul>
           </div>
 
           <form onSubmit={formik.handleSubmit}>
             <Input
-              id='profile_name'
-              name='profile_name'
+              id='kyc_name'
+              name='kyc_name'
               type='text'
               label='Nama Lengkap'
               handleChange={formik.handleChange}
-              value={formik.values.profile_name}
+              value={formik.values.kyc_name}
               placeholder='Masukkan nama lengkap'
-              errors={formik.errors.profile_name}
+              errors={formik.errors.kyc_name}
             />
 
             <Input
-              id='profile_ktp'
-              name='profile_ktp'
+              id='kyc_ktp'
+              name='kyc_ktp'
               type='text'
               label='NIK'
               handleChange={formik.handleChange}
-              value={formik.values.profile_ktp}
+              value={formik.values.kyc_ktp}
               placeholder='Masukkan NIK'
-              errors={formik.errors.profile_ktp}
+              errors={formik.errors.kyc_ktp}
             />
 
             <TextArea
-              id='profile_address'
-              name='profile_address'
+              id='kyc_address'
+              name='kyc_address'
               type='text'
               label='Alamat'
               handleChange={formik.handleChange}
-              value={formik.values.profile_address}
+              value={formik.values.kyc_address}
               placeholder='Masukkan alamat lengkap'
-              errors={formik.errors.profile_address}
+              errors={formik.errors.kyc_address}
             />
 
             <div className='relative mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Provinsi Asal</label>
               <select
-                className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
-                name='profile_province'
-                id='profile_province'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                name='kyc_province'
+                id='kyc_province'
                 onChange={handleOnChange}
-                value={formik.values.profile_province}>
+                // value={formik.values.kyc_province}
+              >
                 {province.map((item) => (
                   <option
                     key={item.province_id}
                     value={item.province_id}
                     onClick={() => {
-                      formik.setFieldValue('profile_province', item.province);
-                      formik.setFieldValue('profile_province_id', item.province_id);
+                      formik.setFieldValue('kyc_province', item.province);
+                      formik.setFieldValue('kyc_province_id', item.province_id);
                     }}>
                     {item.province}
                   </option>
@@ -209,18 +218,18 @@ const RegisterPartner = ({ data }) => {
               <div className='relative mt-2'>
                 <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
                 <select
-                  className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
-                  name='profile_city'
-                  id='profile_city'
+                  className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                  name='kyc_city'
+                  id='kyc_city'
                   onChange={formik.handleChange}
-                  value={formik.values.profile_city}>
+                  value={formik.values.kyc_city}>
                   {city.map((item) => (
                     <option
                       key={item.city_id}
                       value={item.city_name}
                       onClick={() => {
-                        formik.setFieldValue('profile_city', item.city_name);
-                        formik.setFieldValue('profile_city_id', item.city_id);
+                        formik.setFieldValue('kyc_city', item.city_name);
+                        formik.setFieldValue('kyc_city_id', item.city_id);
                       }}>
                       {item.city_name}
                     </option>
@@ -230,41 +239,41 @@ const RegisterPartner = ({ data }) => {
             )}
 
             {/* <Input
-          id='profile_city'
-          name='profile_city'
+          id='kyc_city'
+          name='kyc_city'
           type='text'
           label='Kota Asal'
           handleChange={formik.handleChange}
-          value={formik.values.profile_city}
+          value={formik.values.kyc_city}
           placeholder='Masukkan kota asal'
-          errors={formik.errors.profile_city}
+          errors={formik.errors.kyc_city}
         /> */}
 
             <Input
-              id='profile_postal_code'
-              name='profile_postal_code'
+              id='kyc_postal_code'
+              name='kyc_postal_code'
               type='text'
               label='Kode Pos'
               handleChange={formik.handleChange}
-              value={formik.values.profile_postal_code}
+              value={formik.values.kyc_postal_code}
               placeholder='Masukkan kode pos'
-              errors={formik.errors.profile_postal_code}
+              errors={formik.errors.kyc_postal_code}
             />
 
             <Input
-              id='profile_place_of_birth'
-              name='profile_place_of_birth'
+              id='kyc_place_of_birth'
+              name='kyc_place_of_birth'
               type='text'
               label='Tempat Lahir'
               handleChange={formik.handleChange}
-              value={formik.values.profile_place_of_birth}
+              value={formik.values.kyc_place_of_birth}
               placeholder='Masukkan tempat lahir'
-              errors={formik.errors.profile_place_of_birth}
+              errors={formik.errors.kyc_place_of_birth}
             />
             <div className='space-y-2 mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Tanggal Lahir</label>
               <DatePicker
-                className='w-full text-base px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
                 peekNextMonth
@@ -277,11 +286,11 @@ const RegisterPartner = ({ data }) => {
             <div className='relative mt-2'>
               <label className='text-sm font-medium text-gray-700 tracking-wide'>Jenis Kelamin</label>
               <select
-                className='w-full text-gray-700 text-base bg-white px-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-green-400 shadow-md'
-                name='profile_gender'
-                id='profile_gender'
+                className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                name='kyc_gender'
+                id='kyc_gender'
                 onChange={formik.handleChange}
-                value={formik.values.profile_gender}>
+                value={formik.values.kyc_gender}>
                 <option value={'Laki-laki'} defaultValue={'Laki-laki'}>
                   Laki-laki
                 </option>
@@ -309,11 +318,11 @@ const RegisterPartner = ({ data }) => {
                       <p className='pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600'>Pilih foto</p>
                     </div>
                     <input
-                      id='ktp_photo'
-                      name='ktp_photo'
+                      id='kyc_ktp_photo'
+                      name='kyc_ktp_photo'
                       type='file'
                       className='opacity-0'
-                      onChange={(event) => formik.setFieldValue('ktp_photo', event.currentTarget.files[0])}
+                      onChange={(event) => formik.setFieldValue('kyc_ktp_photo', event.currentTarget.files[0])}
                     />
                   </label>
                 </div>
@@ -340,11 +349,11 @@ const RegisterPartner = ({ data }) => {
                       <p className='pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600'>Pilih foto</p>
                     </div>
                     <input
-                      id='self_photo'
-                      name='self_photo'
+                      id='kyc_self_photo'
+                      name='kyc_self_photo'
                       type='file'
                       className='opacity-0'
-                      onChange={(event) => formik.setFieldValue('self_photo', event.currentTarget.files[0])}
+                      onChange={(event) => formik.setFieldValue('kyc_self_photo', event.currentTarget.files[0])}
                     />
                   </label>
                 </div>
@@ -367,8 +376,6 @@ export const getServerSideProps = async () => {
     path: '/api/province',
     method: 'GET',
   });
-
-  console.log(data);
 
   return {
     props: {

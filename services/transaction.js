@@ -1,7 +1,5 @@
 import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
-
-const token = Cookies.get('token');
 const formData = true;
 
 export async function getProductAPI() {
@@ -45,8 +43,8 @@ export async function updateProductAPI(productData, id) {
   });
 }
 
-export async function deleteProductAPI(id) {
-  const path = `/api/products/${id}`;
+export async function deleteTransactionAPI(id) {
+  const path = `/api/transaction/${id}`;
 
   return callAPI({
     path,

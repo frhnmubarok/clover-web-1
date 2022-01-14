@@ -5,7 +5,7 @@ const Checkbox = ({ id, name, type, label, handleChange, value, placeholder, err
         <input
           id={id}
           name={name}
-          type="checkbox"
+          type='checkbox'
           onChange={handleChange}
           value={value}
           className='form-checkbox h-5 w-5 text-gray-600'

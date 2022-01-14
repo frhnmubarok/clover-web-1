@@ -9,6 +9,8 @@ import { AuthContext } from 'context/AuthContext';
 import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
+import useLoadingToast from '@/hooks/useLoadingToast';
+import toast from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -25,8 +27,6 @@ const validate = (values) => {
 
   if (!values.fullname) {
     errors.fullname = 'Wajib diisi';
-  } else if (values.fullname.length < 8) {
-    errors.fullname = 'Username minimal 8 karakter';
   }
 
   if (!values.password) {
@@ -45,26 +45,30 @@ const validate = (values) => {
 };
 
 const Register = () => {
-  const { userRegister, isLoading } = useContext(AuthContext);
+  const { userRegister } = useContext(AuthContext);
+  const isLoading = useLoadingToast();
 
   const formik = useFormik({
     initialValues: {
       account: '',
       username: '',
-      fullName: '',
+      fullname: '',
       password: '',
       confirmPassword: '',
     },
     validate,
     onSubmit: (values) => {
-      let temp = { password: values.password, username: values.username };
+      let temp = { password: values.password, username: values.username, fullname: values.fullname };
       if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.account)) {
         temp = { ...temp, email: values.account };
       } else {
         temp = { ...temp, handphone: values.account };
       }
-      userRegister(temp);
-
+      toast.promise(userRegister(temp), {
+        loading: 'Mohon tunggu...',
+        success: 'Pendaftaran akun berhasil !',
+        error: 'Register gagal !',
+      });
       console.log(temp);
     },
   });
@@ -126,7 +130,7 @@ const Register = () => {
           placeholder='Masukkan password'
           errors={formik.errors.confirmPassword}
         />
-        <div className='flex items-center content-center justify-between mt-6'>
+        <div className='flex flex-col items-center content-center justify-between mt-6'>
           <AuthButton icon={<MdLogin />} isLoading>
             Daftar
           </AuthButton>

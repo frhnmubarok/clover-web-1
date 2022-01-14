@@ -8,9 +8,13 @@ import {
   getProductAPI,
   getProductByIdAPI,
   updateProductAPI,
+  updateTransactionStatusAPI,
+  getTransactionDetailAPI,
+  getAllTransactionAPI,
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { deleteTransactionAPI } from '@/services/transaction';
 
 export const ProductContext = createContext();
 
@@ -27,11 +31,11 @@ export const ProductProvider = (props) => {
     if (response.error) {
       // const errData = response.message;
       console.log(response);
-      toast.error(response.message);
+      // toast.error(response.message);
     } else {
-      toast.success(response.message);
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
+      router.push('/dashboard/all-products');
     }
     // insertProductAPI(formData)
     //   .then((res) => {
@@ -58,7 +62,7 @@ export const ProductProvider = (props) => {
       console.log(response);
       toast.error(response.message);
     } else {
-      toast.success(response.message);
+      // toast.success(response.message);
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
     }
@@ -120,13 +124,74 @@ export const ProductProvider = (props) => {
     console.log(response);
     if (response.error) {
       const errData = response.message;
-      'store_name' in errData && toast.error('Error Store Name');
-      'store_description' in errData && toast.error('Deskripsi toko harus terdiri dari minimal 20 karakter');
-      'store_image_profile' in errData && toast.error('Error Store Image Profile');
+      toast.error(response.message);
+      // 'store_name' in errData && toast.error('Error Store Name');
+      // 'store_description' in errData && toast.error('Deskripsi toko harus terdiri dari minimal 20 karakter');
+      // 'store_image_profile' in errData && toast.error('Error Store Image Profile');
       console.log(response.error);
     } else {
       toast.success(response.data.message);
       console.log(response.data);
+    }
+  };
+
+  const updateTransactionStatus = async (id, data) => {
+    console.log(id);
+    console.log(data);
+    const response = await updateTransactionStatusAPI(id, data);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Status transaksi berhasil diubah');
+      console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
+    }
+  };
+
+  const getTransactionDetail = async (id) => {
+    const response = await getTransactionDetailAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
+  const getAllTransaction = async (id) => {
+    const response = await getAllTransactionAPI();
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
+  const deleteTransaction = async (id) => {
+    const response = await deleteTransactionAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Transaksi berhasil dihapus');
+      console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
     }
   };
 
@@ -140,6 +205,10 @@ export const ProductProvider = (props) => {
         getProduct,
         getProductById,
         createStore,
+        updateTransactionStatus,
+        getTransactionDetail,
+        getAllTransaction,
+        deleteTransaction,
       }}>
       {props.children}
     </ProductContext.Provider>
