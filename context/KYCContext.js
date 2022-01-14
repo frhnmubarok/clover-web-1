@@ -28,6 +28,7 @@ export const KYCProvider = (props) => {
       // router.push('/forgot-password/reset');
     }
   };
+  
   const reviewKYC = async (formData) => {
     const response = await addReview(formData);
     if (response.error) {

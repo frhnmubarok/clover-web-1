@@ -22,6 +22,7 @@ const progress = new ProgressBar({
 });
 
 if (typeof window !== 'undefined') {
+  require('config/socket')
   progress.start();
   progress.finish();
 }

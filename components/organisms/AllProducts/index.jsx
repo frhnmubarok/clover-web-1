@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext, useRef, Fragment } from 'react'
 import { useFormik } from 'formik';
 import { ProductContext } from '@/context/ProductContext';
 import ListTable from '@/components/molecules/ListTable';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit, MdAdd } from 'react-icons/md';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationIcon } from '@heroicons/react/outline';
 import DeleteModal from '@/components/atoms/DeleteModal';
@@ -13,7 +13,7 @@ import { formatRupiah } from '@/utils/helpers';
 
 const AllProducts = ({ data }) => {
   const { deleteProduct, getProduct } = useContext(ProductContext);
-  const [products, setProducts] = useState(data.data.data);
+  const [products, setProducts] = useState(data.data.products);
   const [productId, setProductId] = useState(null);
   const [deleteSuccessful, setDeleteSuccessful] = useState(false);
   const [open, setOpen] = useState(false);
@@ -114,6 +114,16 @@ const AllProducts = ({ data }) => {
         {/* <h2 className='text-md text-gray-400'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.
           </h2> */}
+        <div className='flex justify-end'>
+          <Link href='/dashboard/add-product'>
+            <a className='flex justify-center items-center font-semibold rounded-md bg-emerald-500 hover:bg-emerald-600 p-2 text-sm text-gray-100 transition-all ease-linear shadow-md'>
+              Tambah Produk
+              <span className='font-semibold text-xl ml-1'>
+                <MdAdd />
+              </span>
+            </a>
+          </Link>
+        </div>
         <ListTable columns={columns} data={products} />
 
         <DeleteModal

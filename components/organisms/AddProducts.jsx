@@ -56,7 +56,7 @@ const AddProducts = () => {
       product_discount: 0,
       product_category_id: 1,
       product_sub_category_id: 1,
-      image: '',
+      product_image: '',
     },
     validate,
     onSubmit: (values) => {
@@ -68,14 +68,13 @@ const AddProducts = () => {
       formData.append('product_discount', values.product_discount);
       formData.append('product_category_id', values.product_category_id);
       formData.append('product_sub_category_id', values.product_sub_category_id);
-      formData.append('image', values.image);
+      formData.append('product_image', values.product_image);
       toast.promise(addProduct(formData), {
         loading: 'Mohon tunggu...',
         success: 'Produk berhasil ditambah!',
         error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
       });
-      router.back();
-      // addProduct(formData);
+
       formik.setFieldValue('product_name', '');
       formik.setFieldValue('product_price', '');
       formik.setFieldValue('product_description', '');
@@ -83,7 +82,7 @@ const AddProducts = () => {
       formik.setFieldValue('product_discount', '');
       formik.setFieldValue('product_category_id', '');
       formik.setFieldValue('product_sub_category_id', '');
-      formik.setFieldValue('image', '');
+      formik.setFieldValue('product_image', '');
       console.log(values);
     },
   });
@@ -188,15 +187,17 @@ const AddProducts = () => {
                           </svg>
                           <div className='flex text-sm text-gray-600'>
                             <label
-                              htmlFor='image'
+                              htmlFor='product_image'
                               className='relative cursor-pointer bg-white rounded-md font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500'>
                               <span>Upload a file</span>
                               <input
-                                id='image'
-                                name='image'
+                                id='product_image'
+                                name='product_image'
                                 type='file'
                                 className='sr-only'
-                                onChange={(event) => formik.setFieldValue('image', event.currentTarget.files[0])}
+                                onChange={(event) =>
+                                  formik.setFieldValue('product_image', event.currentTarget.files[0])
+                                }
                               />
                             </label>
                             <p className='pl-1'>or drag and drop</p>
@@ -276,8 +277,8 @@ const AddProducts = () => {
                               id='product_sub_category_id'
                               onChange={formik.handleChange}
                               value={formik.values.product_sub_category_id}>
-                              <option value={1}>Sayuran</option>
-                              <option value={2}>Buah</option>
+                              <option value={1}>Buah</option>
+                              <option value={2}>Sayuran</option>
                             </select>
                           </div>
                         </div>

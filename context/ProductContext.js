@@ -10,9 +10,11 @@ import {
   updateProductAPI,
   updateTransactionStatusAPI,
   getTransactionDetailAPI,
+  getAllTransactionAPI,
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { deleteTransactionAPI } from '@/services/transaction';
 
 export const ProductContext = createContext();
 
@@ -33,6 +35,7 @@ export const ProductProvider = (props) => {
     } else {
       console.log(response.data.data.id);
       localStorage.setItem('product_id', response.data.data.id);
+      router.push('/dashboard/all-products');
     }
     // insertProductAPI(formData)
     //   .then((res) => {
@@ -143,6 +146,10 @@ export const ProductProvider = (props) => {
     } else {
       toast.success('Status transaksi berhasil diubah');
       console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
     }
   };
 
@@ -159,6 +166,35 @@ export const ProductProvider = (props) => {
     }
   };
 
+  const getAllTransaction = async (id) => {
+    const response = await getAllTransactionAPI();
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
+  const deleteTransaction = async (id) => {
+    const response = await deleteTransactionAPI(id);
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      toast.success('Transaksi berhasil dihapus');
+      console.log(response.data);
+      return {
+        error: false,
+        data: response.data.data,
+      };
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -171,6 +207,8 @@ export const ProductProvider = (props) => {
         createStore,
         updateTransactionStatus,
         getTransactionDetail,
+        getAllTransaction,
+        deleteTransaction,
       }}>
       {props.children}
     </ProductContext.Provider>

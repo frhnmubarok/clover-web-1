@@ -358,6 +358,7 @@ export async function getStaticPaths() {
     path: '/api/products',
     method: 'GET',
   });
+  // console.log(data.data.data);
   const paths = data.data.data.map((item) => ({
     params: { slug: item.product_slug },
   }));
