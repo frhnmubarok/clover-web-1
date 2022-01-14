@@ -60,9 +60,9 @@ export const badgeOrderStatus = (status) => {
     case '2':
       return 'bg-green-500';
     case '3':
-      return 'bg-yellow-500';
+      return 'bg-emerald-500';
     case '4':
-      return 'bg-fuchsia-500';
+      return 'bg-sky-500';
     case '5':
       return 'bg-cyan-500';
     case '6':

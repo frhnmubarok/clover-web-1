@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
-import toast from 'react-hot-toast';
 // import ProductInput from '../atoms/ProductInput';
 import ProductInput from '@/components/atoms/ProductInput';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '@/context/ProductContext';
 import { useRouter } from 'next/router';
-import useLoadingToast from '@/hooks/useLoadingToast';
+import toast from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -43,8 +42,6 @@ const EditProduct = () => {
   const { getProductById, updateProduct } = useContext(ProductContext);
   const [productDataSubmitted, setProductDataSubmitted] = useState(false);
   const [productById, setProductById] = useState({});
-  const isLoading = useLoadingToast();
-  
   const formik = useFormik({
     initialValues: {
       product_name: productById.product_name,
@@ -57,13 +54,11 @@ const EditProduct = () => {
     onSubmit: (values) => {
       toast.promise(updateProduct(values, router.query.id), {
         loading: 'Mohon tunggu...',
-        success: 'Produk berhasil diubah!',
-        error: <b>Gagal login</b>,
+        success: 'Produk berhasil diupdate!',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
       });
-      // updateProduct(values, router.query.id);
-      setProductDataSubmitted(true);
       router.back();
-      console.log(values);
+      setProductDataSubmitted(true);
     },
   });
 
@@ -87,6 +82,7 @@ const EditProduct = () => {
       formik.setFieldValue('product_discount', productById.product_discount);
     }
   }, [productById]);
+
   return (
     <>
       <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
@@ -169,6 +165,49 @@ const EditProduct = () => {
               <div className='mt-5 md:mt-0 md:col-span-3'>
                 <div className='shadow-lg sm:rounded-md sm:overflow-hidden'>
                   <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
+                    {/* <div className='grid grid-cols-3 gap-6'>
+                      <div className='col-span-3 sm:col-span-3'>
+                        <label htmlFor='product_category_id' className='block text-sm font-semibold text-gray-700'>
+                          Kategori Produk *
+                        </label>
+                        <div className='mt-1 flex rounded-md shadow-sm'>
+                          <div className='relative inline-block w-full text-gray-700'>
+                            <select
+                              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                              placeholder='Regular input'
+                              name='product_category_id'
+                              id='product_category_id'
+                              onChange={formik.handleChange}
+                              value={formik.values.product_category_id}>
+                              <option value={1}>Hidroponik</option>
+                              <option value={2}>Non Hidroponik</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='grid grid-cols-3 gap-6'>
+                      <div className='col-span-3 sm:col-span-3'>
+                        <label htmlFor='product_category_id' className='block text-sm font-semibold text-gray-700'>
+                          Sub Kategori Produk *
+                        </label>
+                        <div className='mt-1 flex rounded-md shadow-sm'>
+                          <div className='relative inline-block w-full text-gray-700'>
+                            <select
+                              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                              placeholder='Regular input'
+                              name='product_sub_category_id'
+                              id='product_sub_category_id'
+                              onChange={formik.handleChange}
+                              value={formik.values.product_sub_category_id}>
+                              <option value={1}>Buah</option>
+                              <option value={2}>Sayuran</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div> */}
                     <div className='grid grid-cols-3 gap-6'>
                       <ProductInput
                         id='product_stock'
@@ -195,9 +234,8 @@ const EditProduct = () => {
                   </div>
                   <div className='px-4 py-3 bg-gray-50 text-right sm:px-6'>
                     <button
-                      disabled={isLoading}
                       type='submit'
-                      className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-500 disabled:cursor-not-allowed'>
+                      className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
                       Simpan
                     </button>
                   </div>

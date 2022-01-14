@@ -13,7 +13,7 @@ import { ExclamationIcon } from '@heroicons/react/outline';
 import DeleteModal from '@/components/atoms/DeleteModal';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { badgeOrderStatus, formatRupiah, orderStatus } from '@/utils/helpers';
+import { badgeOrderStatus, orderStatus } from '@/utils/helpers';
 import TransactionDetailModal from '@/components/atoms/TransactionDetailModal';
 import { getAllTransactionAPI } from '@/services/product';
 
@@ -70,7 +70,7 @@ const AllTransactions = ({ data }) => {
     );
   };
 
-  const tableColumn = (body, badge) => {
+  const tableColumn = (body) => {
     const newOrderStatus = parseInt(body);
     return React.useMemo(
       () => [
@@ -89,14 +89,9 @@ const AllTransactions = ({ data }) => {
           Cell: ({ cell: { value } }) => <div className='font-semibold'>{value.fullname}</div>,
         },
         {
-          Header: 'Ongkir',
-          accessor: 'transaction_shipping_cost',
-          Cell: ({ cell: { value } }) => formatRupiah(value),
-        },
-        {
-          Header: 'Total Harga',
-          accessor: 'transaction_total_price',
-          Cell: ({ cell: { value } }) => formatRupiah(value),
+          Header: 'Tanggal Order',
+          accessor: 'created_at',
+          Cell: ({ cell: { value } }) => value.substring(0, 10),
         },
         {
           Header: 'Status Pesanan',
@@ -168,7 +163,9 @@ const AllTransactions = ({ data }) => {
                   </div>
                   {body === '1' && (
                     <div data-tip='Batalkan' className='tooltip'>
-                      <button className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-r-md text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+                      <button
+                        className='text-white bg-red-700 transition-all ease-in-out  hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-r-md text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                        onClick={() => handleUpdateStatus(value, { transaction_order_status: 6 })}>
                         <span className='text-xl'>
                           <MdOutlineClose />
                         </span>
@@ -215,7 +212,7 @@ const AllTransactions = ({ data }) => {
           </Tab.List>
           <Tab.Panels className='mt-2'>
             <Tab.Panel>
-              <ListTable columns={tableColumn('1', 'bg-blue-600')} data={transactionType('1')} />
+              <ListTable columns={tableColumn('1')} data={transactionType('1')} />
             </Tab.Panel>
             <Tab.Panel>
               <ListTable columns={tableColumn('2')} data={transactionType('2')} />
@@ -224,7 +221,7 @@ const AllTransactions = ({ data }) => {
               <ListTable columns={tableColumn('3')} data={transactionType('3')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('4', 'bg-teal-600')} data={transactionType('4')} />
+              <ListTable columns={tableColumn('4')} data={transactionType('4')} />
             </Tab.Panel>
             <Tab.Panel>
               <ListTable columns={tableColumn('5')} data={transactionType('5')} />

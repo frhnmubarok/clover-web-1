@@ -10,6 +10,7 @@ import {
   updateProductAPI,
   updateTransactionStatusAPI,
   getTransactionDetailAPI,
+  getAllTransactionAPI,
 } from 'services/product';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
@@ -164,6 +165,19 @@ export const ProductProvider = (props) => {
     }
   };
 
+  const getAllTransaction = async (id) => {
+    const response = await getAllTransactionAPI();
+    if (response.error) {
+      // const errData = response.message;
+      console.log(response);
+      toast.error(response.message);
+    } else {
+      // toast.success(response.message);
+      // console.log(response.data);
+      return response.data;
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -176,6 +190,7 @@ export const ProductProvider = (props) => {
         createStore,
         updateTransactionStatus,
         getTransactionDetail,
+        getAllTransaction,
       }}>
       {props.children}
     </ProductContext.Provider>
