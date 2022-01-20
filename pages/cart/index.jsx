@@ -8,10 +8,16 @@ import CardProduct from '@/components/molecules/ProductCard';
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
+import { useState } from 'react';
 
 export default function Cart() {
   const { state, dispatch } = useCartContext();
-
+  const [data, setData] = useState({
+    transaction_shipping_cost:10000,
+    store_id:0,
+    items:[]
+  })
+  console.log(state.cart)
   return (
     <>
       <Main className='relative min-h-screen'>
@@ -20,7 +26,7 @@ export default function Cart() {
             <HiOutlineShoppingCart className='w-5 h-5' />
             <span>Keranjang Belanja</span>
           </h3>
-          {Object.keys(state.cart).length > 0 ? (
+          {state.cart.length > 0 ? (
             <div className='pt-4 mt-4 border-t border-gray-200'>
               <div className='grid grid-cols-3 gap-8'>
                 <div className='col-span-2'>
@@ -47,8 +53,8 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className='space-y-3'>
-                    {Object.keys(state.cart).map((i) => {
-                      const { product, store, photos } = state.cart[i];
+                    {state.cart.map((item,i) => {
+                      {/* const { product, store, photos } = state.cart[i]; */}
                       return (
                         <li key={i} className='flex py-6'>
                           <div className='flex items-center h-5'>
@@ -61,8 +67,8 @@ export default function Cart() {
                           </div>
                           <div className='relative flex-shrink-0 w-24 h-24 ml-3 overflow-hidden border border-gray-200 rounded-md'>
                             <Image
-                              src={photos.length > 0 ? photos[0].product_image_path : '/images/products/kol.png'}
-                              alt={product.product_name}
+                              src={item.photos.length > 0 ? item.photos[0].product_image_path : '/images/products/kol.png'}
+                              alt={item.product_name}
                               layout='fill'
                               className='object-cover object-center w-full h-full'
                             />
@@ -72,12 +78,12 @@ export default function Cart() {
                             <div>
                               <div className='flex justify-between text-base font-medium text-gray-900'>
                                 <h3>
-                                  <a href={`/products/${product.product_slug}`}>{product.product_name}</a>
+                                  <a href={`/products/${item.product_slug}`}>{item.product_name}</a>
                                 </h3>
-                                <p className='ml-4'>{formatRupiah(product.product_price)}</p>
+                                <p className='ml-4'>{formatRupiah(item.product_price)}</p>
                               </div>
                               <p className='mt-1 text-sm text-gray-500'>
-                                {product.category.category_name} - {product.sub_category.sub_category_name}
+                                {item.category.category_name} - {item.sub_category.sub_category_name}
                               </p>
                             </div>
                             <div className='flex items-end justify-between flex-1 text-sm'>
