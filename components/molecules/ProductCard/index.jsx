@@ -3,10 +3,26 @@ import Image from 'next/image';
 import Link from '@/components/atoms/Link';
 import { HiStar } from 'react-icons/hi';
 import { MdFavorite, MdAddShoppingCart } from 'react-icons/md';
-import { useCartContext } from '@/context/CartContext';
+import { useEffect, useState } from 'react';
+import callAPI from '@/config/api';
+import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 export default function ProductCard({ product }) {
-  const { dispatch } = useCartContext();
+  const addToCart = (id) => {
+    try {
+      toast.promise(
+        callAPI({ path: '/api/carts', method: 'POST', data: { product_id: id }, token: Cookies.get('token') }),
+        {
+          loading: 'Mohon tunggu...',
+          success: 'Product Berhasil Di Tambahkan Ke Keranjang !',
+          error: 'Product Gagal Di Tambahkan Ke Keranjang !!!',
+        },
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
@@ -29,23 +45,18 @@ export default function ProductCard({ product }) {
               className='block w-full px-3 py-2 text-sm text-center text-white bg-primary-500 rounded-xl'>
               Detail Produk
             </Link>
-            <button
-              type='button'
-              onClick={() =>
-                dispatch({
-                  type: 'ADD_TO_CART',
-                  item: {
-                    product: product,
-                    store: product.store,
-                    category: product.category,
-                    sub_category: product.sub_category,
-                    photos: product.photos,
-                  },
-                })
-              }
-              className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
-              <MdAddShoppingCart className='w-5 h-5' />
-            </button>
+            {Cookies.get('token') ? (
+              <button
+                type='button'
+                onClick={() => addToCart(product.id)}
+                className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
+                <MdAddShoppingCart className='w-5 h-5' />
+              </button>
+            ) : (
+              <Link href='/login' className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
+                <MdAddShoppingCart className='w-5 h-5' />
+              </Link>
+            )}
           </div>
         </div>
       </div>
