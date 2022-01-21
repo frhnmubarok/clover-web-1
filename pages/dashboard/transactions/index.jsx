@@ -58,7 +58,6 @@ const AllProductPage = () => {
     };
     getTransactions().then((res) => {
       setTransactions(res);
-      // console.log(res);
     });
   }, []);
 

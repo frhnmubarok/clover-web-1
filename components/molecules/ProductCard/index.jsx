@@ -7,23 +7,26 @@ import { useEffect, useState } from 'react';
 import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
+import { useCartContext } from '@/context/CartContext';
 
 export default function ProductCard({ product }) {
-
-  
-  
   const addToCart = async (id) => {
-    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...')
+    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
     try {
-      const response  = await callAPI({ path: '/api/carts', method: 'POST', data: { product_id: id }, token: Cookies.get('token') })
+      const response = await callAPI({
+        path: '/api/carts',
+        method: 'POST',
+        data: { product_id: id },
+        token: Cookies.get('token'),
+      });
       if (response.status === 422) {
         toast.error(response.data.message, {
-          id: toastLoading
-        })
+          id: toastLoading,
+        });
       } else {
         toast.success('Product sudah ditambahkan ke keranjang.', {
-          id: toastLoading
-        })
+          id: toastLoading,
+        });
       }
     } catch (error) {
       console.log(error.message);
