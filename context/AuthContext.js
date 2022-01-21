@@ -80,31 +80,19 @@ export const AuthProvider = (props) => {
     if (response.error) {
       toast.error(response.message);
     } else {
-      toast.success(response.data.message);
+      // toast.success(response.data.message);
       localStorage.setItem('userId', response.data.user.id);
     }
   };
 
   const userVerifOTP = async (formData) => {
-    const response = await authVerifOTP(formData);
-    if (response.error) {
-      console.log(response);
-      toast.error(response.message);
+    const { data } = await authVerifOTP(formData);
+    console.log(data);
+    if (!data.valid) {
+      throw new Error('OTP tidak valid');
     } else {
-      toast.success(response.data.message);
-      console.log(response.data);
       router.push('/forgot-password/reset');
     }
-    // authVerifOTP(formData)
-    //   .then((res) => {
-    //     console.log(res);
-    //     toast.success(res.message);
-    //     router.push('/forgot-password/reset');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.response.data.message);
-    //     toast.error(err.response.data.message);
-    //   });
   };
 
   const userConfirmPassword = async (formData) => {
@@ -114,7 +102,7 @@ export const AuthProvider = (props) => {
       toast.error(response.message);
     } else {
       console.log(response.data);
-      toast.success(`${response.data.message}, anda akan segera dialihkan ke halaman login`);
+      toast.success(`Password berhasil diubah, anda akan segera dialihkan ke halaman login`);
       localStorage.removeItem('userId');
       setTimeout(() => {
         router.push('/login');

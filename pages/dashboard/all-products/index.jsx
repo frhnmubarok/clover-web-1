@@ -41,10 +41,6 @@ export const getServerSideProps = async (context) => {
     token,
   });
 
-  console.log(data);
-
-  // console.log('token', token);
-
   return {
     props: {
       data: data,

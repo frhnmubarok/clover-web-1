@@ -16,6 +16,7 @@ import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outl
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
+import axios from 'axios';
 
 const navigation = {
   categories: [
@@ -58,11 +59,43 @@ export default function Navbar() {
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
-  const [productInCart, setProductsInCart] = React.useState({
-    key: '',
-    count: 0,
-  });
-  const { state } = useCartContext();
+  
+  const { state, dispatch } = useCartContext();
+  const [get, setGet] = React.useState(true);
+  const [buff, setBuff] = React.useState(0);
+  if (typeof window !== 'undefined') {
+  
+    if(get && Cookies.get('token') && buff == 0){
+      setBuff(1)
+      setGet(false);
+      axios({
+        method: 'GET',
+        url: 'https://dev-api-clover.herokuapp.com/api/carts',
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('token'),
+        },
+      }).then((data) => {
+        dispatch({
+          type: 'GET_CARTS',
+          payload: data.data.data.carts,
+        });
+        console.log('ok')
+      });
+    }
+
+    if(buff > 0){
+      setTimeout(()=>{
+        setBuff(0)
+      },5000)
+    }else{
+      Echo.channel('Clover-channel').listen('.cart', (e) => {
+        if(buff == 0){
+          setBuff(1)
+          setGet(true)
+        }
+      });
+    }
+  }
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -316,10 +349,10 @@ export default function Navbar() {
                   <Link href='/cart' className={'relative bg-gray-200 p-2 rounded-lg hover:bg-gray-200'}>
                     <div
                       className={classNames(
-                        Object.keys(state.cart).length > 0 ? 'block' : 'hidden',
+                        state.cart.length > 0 ? 'block' : 'hidden',
                         'absolute py-px px-[6px] text-white rounded-md text-xs -top-2 -right-2 bg-sky-500',
                       )}>
-                      {Object.keys(state.cart).length}
+                      {state.cart.length}
                     </div>
                     <ShoppingCartIcon className={'hover:text-sky-500 w-5 h-5'} />
                   </Link>

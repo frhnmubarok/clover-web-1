@@ -8,9 +8,138 @@ import CardProduct from '@/components/molecules/ProductCard';
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
+import { useEffect, useState } from 'react';
+import FullscreenLoading from '@/components/atoms/FullscreenLoading';
 
 export default function Cart() {
   const { state, dispatch } = useCartContext();
+  const [isLoading, setIsLoading] = useState(true);
+  const [checkedProduct, setCheckedProduct] = useState([]);
+  const [isProductChecked, setIsProductChecked] = useState([]);
+  const [data, setData] = useState({
+    transactionShippingCost: 10000,
+    store_id: 0,
+    items: [],
+  });
+  const [transactionShippingCost, setTransactionShippingCost] = useState(10000);
+  const [storeId, setStoreId] = useState(0);
+  const [items, setItems] = useState([]);
+  const [amount, setAmount] = useState([]);
+  const [statusCheck, setStatusCheck] = useState([]);
+
+  const loadingState = () => {
+    if (isLoading) {
+      return (
+        <div className='flex justify-center items-center h-full'>
+          <FullscreenLoading />
+        </div>
+      );
+    } else {
+      return <EmptyCart />;
+    }
+  };
+
+  useEffect(() => {
+    if (state.cart.length > 0) {
+      setIsLoading(false);
+    }
+  }, [state.cart]);
+
+  useEffect(() => {
+    console.log(checkedProduct);
+  }, [checkedProduct]);
+
+  setTimeout(() => {
+    if (amount.length < 1) {
+      let temp = [];
+      let status = [];
+      state.cart.forEach(() => {
+        temp.push(1);
+        status.push(false);
+      });
+      setAmount(temp);
+      setStatusCheck(status);
+    }
+  }, 1000);
+
+  const addData = (i) => {
+    // console.log(data.storeId)
+    if (items.length == 0) {
+      setStoreId(state.cart[i].store_id);
+      setItems([...items, i]);
+    }
+    if (storeId === state.cart[i].store_id) {
+      let status = true;
+      let product = state.cart[i].id;
+      items.forEach((data) => {
+        if (state.cart[data].id === product) {
+          console.log(product, data.id);
+          status = false;
+        }
+      });
+      if (status) {
+        setItems([...items, i]);
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  const removeData = (id) => {
+    let tempData = items.filter((item) => {
+      return item !== id;
+    });
+    console.log(tempData);
+    setItems(tempData);
+  };
+
+  const addAmount = (id) => {
+    let tempData = amount;
+    tempData[id]++;
+    setAmount([...amount, tempData]);
+    console.log(amount);
+  };
+
+  const minAmount = (id) => {
+    let tempData = amount;
+    if (tempData[id] > 0) {
+      tempData[id]--;
+    }
+    setAmount([...amount, tempData]);
+    console.log(amount);
+  };
+
+  const send = () => {
+    console.log(storeId, items);
+    items.forEach((i) => console.log(amount[i]));
+    // console.log(amount)
+    let tempData = [];
+    items.forEach((data, index) => {
+      tempData.push({
+        product_id: state.cart[index].id,
+        amount: amount[index],
+      });
+    });
+    const data = { transaction_shipping_cost: transactionShippingCost, store_id: storeId, items: tempData };
+    console.log(data);
+    dispatch({ type: 'ADD_TRANSACTION', payload: data });
+    console.log(state.cart);
+  };
+
+  const statusTrue = (id) => {
+    let status = statusCheck;
+    status[id] = true;
+    setStatusCheck(status);
+  };
+
+  const statusFalse = (id) => {
+    let status = statusCheck;
+    status[id] = false;
+    setStatusCheck(status);
+  };
+
+  console.log(isProductChecked);
 
   return (
     <>
@@ -20,7 +149,8 @@ export default function Cart() {
             <HiOutlineShoppingCart className='w-5 h-5' />
             <span>Keranjang Belanja</span>
           </h3>
-          {Object.keys(state.cart).length > 0 ? (
+          {isLoading && <FullscreenLoading />}
+          {state.cart.length > 0 ? (
             <div className='pt-4 mt-4 border-t border-gray-200'>
               <div className='grid grid-cols-3 gap-8'>
                 <div className='col-span-2'>
@@ -47,8 +177,10 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className='space-y-3'>
-                    {Object.keys(state.cart).map((i) => {
-                      const { product, store, photos } = state.cart[i];
+                    {state.cart.map((item, i) => {
+                      {
+                        /* const { product, store, photos } = state.cart[i]; */
+                      }
                       return (
                         <li key={i} className='flex py-6'>
                           <div className='flex items-center h-5'>
@@ -57,12 +189,31 @@ export default function Cart() {
                               name='check-all'
                               type='checkbox'
                               className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
+                              onChange={(event) => {
+                                if (event.target.checked === true) {
+                                  dispatch({ type: 'SUM_PRICE', payload: item.product_price * amount[i] });
+                                  setCheckedProduct([...checkedProduct, { ...item, qty: 1 }]);
+                                  if (addData(i) === false) {
+                                    alert('barang sudah ditambahkan');
+                                  }
+                                  setIsProductChecked([...isProductChecked, true]);
+                                  statusTrue(i);
+                                } else {
+                                  dispatch({ type: 'SUB_PRICE', payload: item.product_price * amount[i] });
+                                  setCheckedProduct(checkedProduct.filter((i) => i.id !== item.id));
+                                  removeData(i);
+                                  setIsProductChecked(isProductChecked.filter((i) => i !== true));
+                                  statusFalse(i);
+                                }
+                              }}
                             />
                           </div>
                           <div className='relative flex-shrink-0 w-24 h-24 ml-3 overflow-hidden border border-gray-200 rounded-md'>
                             <Image
-                              src={photos.length > 0 ? photos[0].product_image_path : '/images/products/kol.png'}
-                              alt={product.product_name}
+                              src={
+                                item.photos.length > 0 ? item.photos[0].product_image_path : '/images/products/kol.png'
+                              }
+                              alt={item.product_name}
                               layout='fill'
                               className='object-cover object-center w-full h-full'
                             />
@@ -72,23 +223,43 @@ export default function Cart() {
                             <div>
                               <div className='flex justify-between text-base font-medium text-gray-900'>
                                 <h3>
-                                  <a href={`/products/${product.product_slug}`}>{product.product_name}</a>
+                                  <a href={`/products/${item.product_slug}`}>{item.product_name}</a>
                                 </h3>
-                                <p className='ml-4'>{formatRupiah(product.product_price)}</p>
+                                <p className='ml-4'>{formatRupiah(item.product_price)}</p>
                               </div>
                               <p className='mt-1 text-sm text-gray-500'>
-                                {product.category.category_name} - {product.sub_category.sub_category_name}
+                                {item.category.category_name} - {item.sub_category.sub_category_name}
                               </p>
                             </div>
                             <div className='flex items-end justify-between flex-1 text-sm'>
-                              <p className='text-gray-500'>Jumlah 1</p>
+                              <p className='text-gray-500'>Jumlah</p>
                               <div className='flex items-center space-x-5'>
                                 <div className='flex items-center space-x-2'>
-                                  <button type='button' className='p-1'>
+                                  <button
+                                    type='button'
+                                    className='p-1 disabled:text-gray-400'
+                                    disabled={statusCheck[i] ? false : true}
+                                    onClick={() => {
+                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price });
+                                      if (statusCheck[i]) {
+                                        minAmount(i);
+                                      }
+                                    }}>
                                     <AiOutlineMinusCircle className='w-5 h-5' />
                                   </button>
-                                  <div>1</div>
-                                  <button type='button' className='p-1'>
+                                  {/* <input type='number' className='w-14 text-sm' readOnly /> */}
+                                  <div>{amount[i]}</div>
+                                  <div></div>
+                                  <button
+                                    type='button'
+                                    className='p-1 disabled:text-gray-400'
+                                    disabled={statusCheck[i] ? false : true}
+                                    onClick={() => {
+                                      dispatch({ type: 'SUM_PRICE', payload: item.product_price });
+                                      if (statusCheck[i]) {
+                                        addAmount(i);
+                                      }
+                                    }}>
                                     <AiOutlinePlusCircle className='w-5 h-5' />
                                   </button>
                                 </div>
@@ -123,7 +294,8 @@ export default function Cart() {
                     <div className='pt-4'>
                       <button
                         type='button'
-                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
+                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                        onClick={() => send()}>
                         Beli
                       </button>
                     </div>
@@ -132,7 +304,7 @@ export default function Cart() {
               </div>
             </div>
           ) : (
-            <EmptyCart />
+            loadingState
           )}
         </div>
         <div className='relative max-w-5xl px-4 py-12 mx-auto sm:px-6 lg:px-8'>
