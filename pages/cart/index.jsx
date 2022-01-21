@@ -21,13 +21,17 @@ export default function Cart() {
   const [store_id, setStore_id] = useState(0)
   const [items, setItems] = useState([])
   const [amount, setAmount] = useState([])
+  const [statusCheck, setStatusCheck] = useState([])
   setTimeout(()=>{
-    if(amount.length <= 1){
+    if(amount.length < 1){
 
       let temp = []
+      let status = []
       state.cart.forEach(()=>{
         temp.push(1)
+        status.push(false)
       })
+      setStatusCheck(status)
       setAmount(temp)
     }
 
@@ -75,6 +79,18 @@ export default function Cart() {
     setAmount([...amount,tempData])
     // console.log(amount)
     
+  }
+
+  const statusTrue = (id) =>{
+    let status = statusCheck
+    status[id]=true
+    setStatusCheck(status)
+  }
+
+  const statusFalse = (id) =>{
+    let status = statusCheck
+    status[id]=false
+    setStatusCheck(status)
   }
   const send = () =>{
     console.log(store_id,items)
@@ -142,8 +158,10 @@ export default function Cart() {
                                   if(addData(i) === false){
                                     alert('barang sudah ditambahkan')
                                   }
+                                  statusTrue(i)
                                 }else{
                                   removeData(i)
+                                  statusFalse(i)
                                 }}
                               }
                             />
@@ -174,13 +192,23 @@ export default function Cart() {
                               <div className='flex items-center space-x-5'>
                                 <div className='flex items-center space-x-2'>
                                   <button type='button' className='p-1'>
-                                    <AiOutlineMinusCircle onClick={()=>minAmount(i)} className='w-5 h-5' />
+                                    <AiOutlineMinusCircle onClick={()=>{
+                                      if(statusCheck[i]){
+                                        minAmount(i)
+                                      }
+                                    }} 
+                                    className='w-5 h-5' />
                                   </button>
                                   <div>
                                     {amount[i]}
                                   </div>
                                   <button type='button' className='p-1'>
-                                    <AiOutlinePlusCircle onClick={()=>addAmount(i)} className='w-5 h-5' />
+                                    <AiOutlinePlusCircle onClick={()=>{
+                                      if(statusCheck[i]){
+                                        addAmount(i)
+                                      }
+                                      }} 
+                                    className='w-5 h-5' />
                                   </button>
                                 </div>
                                 <button
