@@ -8,7 +8,7 @@ import CardProduct from '@/components/molecules/ProductCard';
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Cart() {
   const { state, dispatch } = useCartContext();
@@ -17,7 +17,80 @@ export default function Cart() {
     store_id:0,
     items:[]
   })
-  console.log(state.cart)
+  const [transaction_shipping_cost, setTransaction_shipping_cost] = useState(10000)
+  const [store_id, setStore_id] = useState(0)
+  const [items, setItems] = useState([])
+  const [amount, setAmount] = useState([])
+  setTimeout(()=>{
+    if(amount.length <= 1){
+
+      let temp = []
+      state.cart.forEach(()=>{
+        temp.push(1)
+      })
+      setAmount(temp)
+    }
+
+  },1000)
+
+  const addData = (i) =>{
+    // console.log(data.store_id)
+    if(items.length==0){
+      setStore_id(state.cart[i].store_id)
+      setItems([...items,i])
+    }
+    if(store_id===state.cart[i].store_id){
+      let status = true
+      let product = state.cart[i].id
+      items.forEach((data)=>{
+        if(state.cart[data].id === product){
+          console.log(product,data.id)
+          status = false
+        }
+      })
+      if(status){
+        setItems([...items,i])
+        return true
+      }else{
+        return false
+      }
+    }
+  }
+  const removeData = (id)=>{
+    let tempData = items.filter((item)=> {
+      return item !== id
+    })
+    console.log(tempData)
+    setItems(tempData)
+  }
+  const addAmount = (id)=>{
+    let tempData = amount
+    tempData[id]= parseInt(tempData[id])+1
+    setAmount([...amount,tempData])
+    // console.log(amount)
+  }
+  const minAmount = (id)=>{
+    let tempData = amount
+    tempData[id]= parseInt(tempData[id])-1
+    setAmount([...amount,tempData])
+    // console.log(amount)
+    
+  }
+  const send = () =>{
+    console.log(store_id,items)
+    items.forEach((i)=>console.log(amount[i]))
+    // console.log(amount)
+    let tempData = []
+    items.forEach((data,index) => {
+      tempData.push({
+        product_id:state.cart[index].id,
+        amount:amount[index]
+      })
+    });
+    const data = {transaction_shipping_cost,store_id,items:tempData}
+    console.log(data)
+    console.log(state.cart)
+  }
   return (
     <>
       <Main className='relative min-h-screen'>
@@ -55,6 +128,7 @@ export default function Cart() {
                   <div className='space-y-3'>
                     {state.cart.map((item,i) => {
                       {/* const { product, store, photos } = state.cart[i]; */}
+                      {/* item.amount = parseInt(temp[i]) */}
                       return (
                         <li key={i} className='flex py-6'>
                           <div className='flex items-center h-5'>
@@ -63,6 +137,15 @@ export default function Cart() {
                               name='check-all'
                               type='checkbox'
                               className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
+                              onChange={(e)=>{
+                                if(e.target.checked){
+                                  if(addData(i) === false){
+                                    alert('barang sudah ditambahkan')
+                                  }
+                                }else{
+                                  removeData(i)
+                                }}
+                              }
                             />
                           </div>
                           <div className='relative flex-shrink-0 w-24 h-24 ml-3 overflow-hidden border border-gray-200 rounded-md'>
@@ -87,15 +170,17 @@ export default function Cart() {
                               </p>
                             </div>
                             <div className='flex items-end justify-between flex-1 text-sm'>
-                              <p className='text-gray-500'>Jumlah 1</p>
+                              <p className='text-gray-500'>Jumlah </p>
                               <div className='flex items-center space-x-5'>
                                 <div className='flex items-center space-x-2'>
                                   <button type='button' className='p-1'>
-                                    <AiOutlineMinusCircle className='w-5 h-5' />
+                                    <AiOutlineMinusCircle onClick={()=>minAmount(i)} className='w-5 h-5' />
                                   </button>
-                                  <div>1</div>
+                                  <div>
+                                    {amount[i]}
+                                  </div>
                                   <button type='button' className='p-1'>
-                                    <AiOutlinePlusCircle className='w-5 h-5' />
+                                    <AiOutlinePlusCircle onClick={()=>addAmount(i)} className='w-5 h-5' />
                                   </button>
                                 </div>
                                 <button
@@ -129,7 +214,8 @@ export default function Cart() {
                     <div className='pt-4'>
                       <button
                         type='button'
-                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
+                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                        onClick={()=>send()}>
                         Beli
                       </button>
                     </div>

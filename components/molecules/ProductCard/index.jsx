@@ -9,16 +9,22 @@ import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
 export default function ProductCard({ product }) {
-  const addToCart = (id) => {
+
+  
+  
+  const addToCart = async (id) => {
+    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...')
     try {
-      toast.promise(
-        callAPI({ path: '/api/carts', method: 'POST', data: { product_id: id }, token: Cookies.get('token') }),
-        {
-          loading: 'Mohon tunggu...',
-          success: 'Product Berhasil Di Tambahkan Ke Keranjang !',
-          error: 'Product Gagal Di Tambahkan Ke Keranjang !!!',
-        },
-      );
+      const response  = await callAPI({ path: '/api/carts', method: 'POST', data: { product_id: id }, token: Cookies.get('token') })
+      if (response.status === 422) {
+        toast.error(response.data.message, {
+          id: toastLoading
+        })
+      } else {
+        toast.success('Product sudah ditambahkan ke keranjang.', {
+          id: toastLoading
+        })
+      }
     } catch (error) {
       console.log(error.message);
     }
