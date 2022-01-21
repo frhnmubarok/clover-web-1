@@ -81,7 +81,7 @@ export default function Navbar() {
         });
         console.log('ok')
       });
-    };
+    }
 
     if(buff > 0){
       setTimeout(()=>{
