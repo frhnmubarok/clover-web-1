@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/link-passhref */
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
-import { useFormik } from 'formik';
 import { Tab } from '@headlessui/react';
 import { MdCheck, MdOutlineClose } from 'react-icons/md';
 
@@ -25,7 +24,7 @@ const tabName = ['Perlu Konfirmasi', 'Dikonfirmasi', 'Diproses', 'Dikirim', 'Sel
 
 const AllTransactions = ({ data }) => {
   const { updateTransactionStatus, getTransactionDetail, deleteTransaction } = useContext(ProductContext);
-  const [transactions, setTransactions] = useState(data.data);
+  const [transactions, setTransactions] = useState(data);
   const [transactionId, setTransactionId] = useState(null);
   const [transactionDetail, setTransactionDetail] = useState({});
   const [open, setOpen] = useState(false);
@@ -44,6 +43,8 @@ const AllTransactions = ({ data }) => {
       console.log(transactionId);
     }
   }, [transactionId]);
+
+  // console.log(transactions);
 
   const transactionType = (type) => {
     return transactions.filter((item) => item.transaction_order_status === type);

@@ -11,6 +11,7 @@ import { AuthContext } from 'context/AuthContext';
 import Input from '@/components/atoms/Input';
 import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
+import toast from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -36,7 +37,11 @@ const ConfirmOTP = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    userVerifOTP({ otp: otp });
+    toast.promise(userVerifOTP({ otp: otp }), {
+      loading: 'Mohon tunggu...',
+      success: 'OTP Cocok !',
+      error: 'OTP tidak cocok !',
+    });
   };
   return (
     <AuthLayout formImage formLabel='Konfirmasi OTP'>
@@ -70,10 +75,15 @@ const ForgotPassword = () => {
     },
     validate,
     onSubmit: (values) => {
-      if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        userForgotPassword(values);
-      }
-      setEmailSubmitted(true);
+      toast
+        .promise(userForgotPassword(values), {
+          loading: 'Mohon tunggu...',
+          success: 'OTP berhasil dikirim ke email anda !',
+          error: 'Login gagal !',
+        })
+        .then(() => {
+          setEmailSubmitted(true);
+        });
       console.log(values);
     },
   });

@@ -10,6 +10,8 @@ const initialState = {
   cart: [],
   buff: false,
   get: true,
+  totalPrice: 0,
+  checkoutProduct: {},
 };
 
 export const useCartContext = () => {
@@ -28,6 +30,22 @@ const Reducer = (state, action) => {
       return {
         ...state,
         cart: action.payload,
+      };
+    case 'SUM_PRICE':
+      return {
+        ...state,
+        totalPrice: parseInt(state.totalPrice) + parseInt(action.payload),
+      };
+    case 'SUB_PRICE':
+      return {
+        ...state,
+        totalPrice: parseInt(state.totalPrice) - parseInt(action.payload),
+      };
+    case 'ADD_TRANSACTION':
+      console.log(action.payload);
+      return {
+        ...state,
+        checkoutProduct: action.payload,
       };
 
     default:

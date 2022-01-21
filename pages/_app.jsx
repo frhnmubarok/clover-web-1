@@ -1,6 +1,7 @@
 import React from 'react';
 import '../assets/styles/globals.css';
 import { Toaster } from 'react-hot-toast';
+import { SessionProvider } from 'next-auth/react';
 import { AuthProvider } from '@/context/AuthContext';
 import { ProductProvider } from '@/context/ProductContext';
 import { KYCProvider } from '@/context/KYCContext';
@@ -22,7 +23,7 @@ const progress = new ProgressBar({
 });
 
 if (typeof window !== 'undefined') {
-  require('config/socket')
+  require('config/socket');
   progress.start();
   progress.finish();
 }
@@ -34,7 +35,7 @@ Router.events.on('routeChangeComplete', () => {
 });
 Router.events.on('routeChangeError', progress.finish);
 
-const MyApp = ({ Component, pageProps, router }) => {
+const MyApp = ({ Component, pageProps: { session, ...pageProps }, router }) => {
   // useScrollToTop();
   const Layout = Component.layoutProps?.Layout || React.Fragment;
   const layoutProps = Component.layoutProps?.Layout ? { layoutProps: Component.layoutProps } : {};
@@ -43,31 +44,33 @@ const MyApp = ({ Component, pageProps, router }) => {
 
   return (
     <>
-      <AuthProvider>
-        <ProductProvider>
-          <CartProvider>
-            <KYCProvider>
-              <Title suffix='Clover'>{meta.metaTitle || meta.title}</Title>
-              <Head>
-                <meta key='twitter:card' name='twitter:card' content='summary_large_image' />
-                <meta key='twitter:site' name='twitter:site' content='@clover' />
-                <meta key='twitter:description' name='twitter:description' content={description} />
-                <meta key='twitter:image' name='twitter:image' content={`http://localhost:3000${socialCardLarge}`} />
-                <meta key='twitter:creator' name='twitter:creator' content='@clover' />
-                <meta key='og:url' property='og:url' content={`http://localhost:3000${router.pathname}`} />
-                <meta key='og:type' property='og:type' content='article' />
-                <meta key='og:description' property='og:description' content={description} />
-                <meta key='og:image' property='og:image' content={`http://localhost:3000${socialCardLarge}`} />
-              </Head>
-              <Layout {...layoutProps}>
-                <Component {...pageProps} />
-              </Layout>
-              {/* <Toaster /> */}
-              <DismissableToast />
-            </KYCProvider>
-          </CartProvider>
-        </ProductProvider>
-      </AuthProvider>
+      <SessionProvider session={session}>
+        <AuthProvider>
+          <ProductProvider>
+            <CartProvider>
+              <KYCProvider>
+                <Title suffix='Clover'>{meta.metaTitle || meta.title}</Title>
+                <Head>
+                  <meta key='twitter:card' name='twitter:card' content='summary_large_image' />
+                  <meta key='twitter:site' name='twitter:site' content='@clover' />
+                  <meta key='twitter:description' name='twitter:description' content={description} />
+                  <meta key='twitter:image' name='twitter:image' content={`http://localhost:3000${socialCardLarge}`} />
+                  <meta key='twitter:creator' name='twitter:creator' content='@clover' />
+                  <meta key='og:url' property='og:url' content={`http://localhost:3000${router.pathname}`} />
+                  <meta key='og:type' property='og:type' content='article' />
+                  <meta key='og:description' property='og:description' content={description} />
+                  <meta key='og:image' property='og:image' content={`http://localhost:3000${socialCardLarge}`} />
+                </Head>
+                <Layout {...layoutProps}>
+                  <Component {...pageProps} />
+                </Layout>
+                {/* <Toaster /> */}
+                <DismissableToast />
+              </KYCProvider>
+            </CartProvider>
+          </ProductProvider>
+        </AuthProvider>
+      </SessionProvider>
     </>
   );
 };
