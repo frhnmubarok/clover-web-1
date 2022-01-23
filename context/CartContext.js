@@ -12,6 +12,7 @@ const initialState = {
   get: true,
   totalPrice: 0,
   checkoutProduct: {},
+  recommendation: [],
 };
 
 export const useCartContext = () => {
@@ -29,7 +30,8 @@ const Reducer = (state, action) => {
     case 'GET_CARTS':
       return {
         ...state,
-        cart: action.payload,
+        cart: action.payload.carts,
+        recommendation: action.payload.recommendation_by_sub_category
       };
     case 'SUM_PRICE':
       return {

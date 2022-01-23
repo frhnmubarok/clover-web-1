@@ -2,11 +2,12 @@ import Link from '@/components/atoms/Link';
 import Main from '@/components/atoms/Main';
 import AppLayout from '@/components/templates/AppLayout';
 import callAPI from '@/config/api';
-import { useCartContext } from '@/context/CartContext';
 import { classNames, formatRupiah } from '@/utils/helpers';
 import { Dialog, Tab, Transition } from '@headlessui/react';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { Fragment, useState } from 'react';
+import toast from 'react-hot-toast';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { HiChat, HiPlusCircle, HiStar } from 'react-icons/hi';
 import { MdFavorite } from 'react-icons/md';
@@ -14,8 +15,6 @@ import { MdFavorite } from 'react-icons/md';
 export default function ProductDetail({ data }) {
   const { product, category, sub_category, photos, store, reviews } = data.data;
   const [isOpen, setIsOpen] = useState(false);
-
-  const { dispatch } = useCartContext();
 
   function closeModal() {
     setIsOpen(false);
@@ -61,6 +60,28 @@ export default function ProductDetail({ data }) {
       },
     ],
   });
+  const addToCart = async (id) => {
+    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
+    try {
+      const response = await callAPI({
+        path: '/api/carts',
+        method: 'POST',
+        data: { product_id: id },
+        token: Cookies.get('token'),
+      });
+      if (response.status === 422) {
+        toast.error(response.data.message, {
+          id: toastLoading,
+        });
+      } else {
+        toast.success('Product sudah ditambahkan ke keranjang.', {
+          id: toastLoading,
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <>
       <Main className='relative min-h-screen text-gray-700'>
@@ -183,10 +204,7 @@ export default function ProductDetail({ data }) {
                 <button
                   type='button'
                   onClick={() =>
-                    dispatch({
-                      type: 'ADD_TO_CART',
-                      item: { product: { product }, store, category, sub_category, photos },
-                    })
+                    addToCart(product.id)
                   }
                   className='inline-flex items-center justify-center w-full py-2 space-x-2 text-sm text-white duration-150 ease-in-out border border-transparent rounded-lg bg-primary-500 group hover:bg-primary-600 hover:ring-2 hover:ring-offset-2 hover:ring-sky-500'>
                   <HiPlusCircle className='w-5 h-5 text-primary-300 group-hover:text-primary-400' />

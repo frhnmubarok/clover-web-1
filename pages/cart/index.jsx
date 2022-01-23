@@ -4,11 +4,11 @@ import AppLayout from '@/components/templates/AppLayout';
 import Image from 'next/image';
 import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
-import CardProduct from '@/components/molecules/ProductCard';
+import ProductCard from '@/components/molecules/ProductCard';
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -94,7 +94,7 @@ export default function Cart() {
       }
     }
   };
-
+  console.log(state.recommendation)
   const removeData = (id) => {
     let tempData = items.filter((item) => {
       return item !== id;
@@ -334,9 +334,12 @@ export default function Cart() {
             <span>Rekomendasi untuk kamu</span>
           </h3>
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8'>
-            {[1, 2, 3, 4].map((i) => (
-              // <CardProduct key={i} product={} />
-              <div key={i}>Rekomendation </div>
+            {state.recommendation.map((data, idx) => (
+              <Fragment key={idx}>
+                {data.map((item, i) => (
+                  <ProductCard key={i} product={item} />
+                ))}
+              </Fragment>
             ))}
           </div>
         </div>
