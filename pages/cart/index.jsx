@@ -10,6 +10,8 @@ import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
 import { useEffect, useState } from 'react';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function Cart() {
   const { state, dispatch } = useCartContext();
@@ -26,7 +28,15 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [amount, setAmount] = useState([]);
   const [statusCheck, setStatusCheck] = useState([]);
+  const [checkbox, setCheckbox] = useState(false)
 
+  useEffect(()=>{
+    if(items.length>=1){
+      setCheckbox(true)
+    }else{
+      setCheckbox(false)
+    }
+  },[items])
   const loadingState = () => {
     if (isLoading) {
       return (
@@ -63,7 +73,6 @@ export default function Cart() {
   }, 1000);
 
   const addData = (i) => {
-    // console.log(data.storeId)
     if (items.length == 0) {
       setStoreId(state.cart[i].store_id);
       setItems([...items, i]);
@@ -112,20 +121,29 @@ export default function Cart() {
 
   const send = () => {
     console.log(storeId, items);
-    items.forEach((i) => console.log(amount[i]));
-    // console.log(amount)
     let tempData = [];
-    items.forEach((data, index) => {
+    items.forEach((data) => {
       tempData.push({
-        product_id: state.cart[index].id,
-        amount: amount[index],
+        product_id: state.cart[data].id,
+        amount: amount[data],
       });
     });
     const data = { transaction_shipping_cost: transactionShippingCost, store_id: storeId, items: tempData };
     console.log(data);
     dispatch({ type: 'ADD_TRANSACTION', payload: data });
-    console.log(state.cart);
   };
+
+  const removeItem = (id) =>{
+    axios({
+        method: 'DELETE',
+        url: 'https://dev-api-clover.herokuapp.com/api/carts/'+id,
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('token'),
+        },
+      }).then(() => {
+        console.log('ok')
+      });
+  }
 
   const statusTrue = (id) => {
     let status = statusCheck;
@@ -139,7 +157,7 @@ export default function Cart() {
     setStatusCheck(status);
   };
 
-  console.log(isProductChecked);
+  // console.log(isProductChecked);
 
   return (
     <>
@@ -188,6 +206,7 @@ export default function Cart() {
                               id='check-all'
                               name='check-all'
                               type='checkbox'
+                              disabled={checkbox === true && storeId !== item.store_id? true:false}
                               className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
                               onChange={(event) => {
                                 if (event.target.checked === true) {
@@ -266,11 +285,14 @@ export default function Cart() {
                                 <button
                                   type='button'
                                   onClick={() =>
-                                    dispatch({
-                                      type: 'REMOVE_FROM_CART',
-                                      id: product.id,
-                                      price: product.product_price,
-                                    })
+                                    // dispatch({
+                                    //   type: 'REMOVE_FROM_CART',
+                                    //   id: product.id,
+                                    //   price: product.product_price,
+                                    // })
+                                    {
+                                      removeItem(item.id)
+                                    }
                                   }
                                   className='font-medium text-rose-600 hover:text-rose-500'>
                                   <HiOutlineTrash className='w-5 h-5' />
