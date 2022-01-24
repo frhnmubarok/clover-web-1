@@ -71,14 +71,11 @@ const navigation = [
 const DashboardLayout = ({ children, handleLogout }) => {
   const { asPath } = useRouter();
 
-  const [open, setOpen] = useState(true);
-
   return (
     <>
       <div className=''>
         <div className='flex'>
-          <aside
-            className={classNames('flex-none bg-white border border-gray-200 fixed inset-y-0', open && 'w-[250px]')}>
+          <aside className={classNames('flex-none bg-white border border-gray-200 fixed inset-y-0 w-[250px]')}>
             <nav className='px-3 py-4'>
               <div className='relative flex items-center justify-center'>
                 <Link href='/'>
@@ -104,14 +101,11 @@ const DashboardLayout = ({ children, handleLogout }) => {
               </div>
             </nav>
           </aside>
-          <div className={classNames('relative grow', open && 'ml-[250px]')}>
+          <div className={classNames('relative grow ml-[250px]')}>
             <div className='flex flex-col'>
               <nav className='fixed bg-white right-0 left-[250px] border-b border-gray-200'>
                 <div className='flex items-center justify-between h-16 mx-5'>
-                  <button type='button' className='p-2 bg-gray-200 rounded-lg'>
-                    <HiMenu className='w-5 h-5 text-gray-600' />
-                  </button>
-
+                  <div></div>
                   <div className='flex items-center'>
                     <button type='button' className='p-3'>
                       <HiBell className='w-5 h-5 text-gray-500' />
@@ -175,7 +169,7 @@ const DashboardLayout = ({ children, handleLogout }) => {
                   </div>
                 </div>
               </nav>
-              <main className='pt-16 my-4'>{children}</main>
+              <main className='pt-16 my-4 overflow-x-hidden'>{children}</main>
             </div>
           </div>
         </div>
