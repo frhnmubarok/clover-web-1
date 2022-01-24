@@ -59,14 +59,13 @@ export default function Navbar() {
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
-  
+
   const { state, dispatch } = useCartContext();
   const [get, setGet] = React.useState(true);
   const [buff, setBuff] = React.useState(0);
   if (typeof window !== 'undefined') {
-  
-    if(get && Cookies.get('token') && buff == 0){
-      setBuff(1)
+    if (get && Cookies.get('token') && buff == 0) {
+      setBuff(1);
       setGet(false);
       axios({
         method: 'GET',
@@ -79,19 +78,19 @@ export default function Navbar() {
           type: 'GET_CARTS',
           payload: data.data.data,
         });
-        console.log(data)
+        console.log('ok');
       });
     }
 
-    if(buff > 0){
-      setTimeout(()=>{
-        setBuff(0)
-      },5000)
-    }else{
+    if (buff > 0) {
+      setTimeout(() => {
+        setBuff(0);
+      }, 5000);
+    } else {
       Echo.channel('Clover-channel').listen('.cart', (e) => {
-        if(buff == 0){
-          setBuff(1)
-          setGet(true)
+        if (buff == 0) {
+          setBuff(1);
+          setGet(true);
         }
       });
     }
