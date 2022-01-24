@@ -11,7 +11,8 @@ const initialState = {
   buff: false,
   get: true,
   totalPrice: 0,
-  checkoutProduct: {},
+  checkoutProduct: [],
+  store: {},
   recommendation: [],
 };
 
@@ -47,7 +48,8 @@ const Reducer = (state, action) => {
       console.log(action.payload);
       return {
         ...state,
-        checkoutProduct: action.payload,
+        checkoutProduct: action.payload.items,
+        store: action.payload.store
       };
 
     default:

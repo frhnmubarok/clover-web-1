@@ -12,8 +12,10 @@ import { useEffect, useState, Fragment } from 'react';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useRouter}  from 'next/router'
 
 export default function Cart() {
+  const router = useRouter();
   const { state, dispatch } = useCartContext();
   const [isLoading, setIsLoading] = useState(true);
   const [checkedProduct, setCheckedProduct] = useState([]);
@@ -55,9 +57,9 @@ export default function Cart() {
     }
   }, [state.cart]);
 
-  useEffect(() => {
-    console.log(checkedProduct);
-  }, [checkedProduct]);
+  // useEffect(() => {
+  //   console.log(checkedProduct);
+  // }, [checkedProduct]);
 
   setTimeout(() => {
     if (amount.length < 1) {
@@ -82,7 +84,7 @@ export default function Cart() {
       let product = state.cart[i].id;
       items.forEach((data) => {
         if (state.cart[data].id === product) {
-          console.log(product, data.id);
+          // console.log(product, data.id);
           status = false;
         }
       });
@@ -94,12 +96,12 @@ export default function Cart() {
       }
     }
   };
-  console.log(state.recommendation)
+  // console.log(state.recommendation)
   const removeData = (id) => {
     let tempData = items.filter((item) => {
       return item !== id;
     });
-    console.log(tempData);
+    // console.log(tempData);
     setItems(tempData);
   };
 
@@ -107,7 +109,7 @@ export default function Cart() {
     let tempData = amount;
     tempData[id]++;
     setAmount([...amount, tempData]);
-    console.log(amount);
+    // console.log(amount);
   };
 
   const minAmount = (id) => {
@@ -116,21 +118,27 @@ export default function Cart() {
       tempData[id]--;
     }
     setAmount([...amount, tempData]);
-    console.log(amount);
+    // console.log(amount);
   };
 
   const send = () => {
-    console.log(storeId, items);
+    // console.log(storeId, items);
     let tempData = [];
+    let store = {}
     items.forEach((data) => {
       tempData.push({
-        product_id: state.cart[data].id,
+        product: state.cart[data],
         amount: amount[data],
       });
+      store = state.cart[data].store
+      // console.log(state.cart[data])
     });
-    const data = { transaction_shipping_cost: transactionShippingCost, store_id: storeId, items: tempData };
-    console.log(data);
+    const data = { store:store, items: tempData };
+    // console.log(data);
     dispatch({ type: 'ADD_TRANSACTION', payload: data });
+    if(items.length >0){
+      router.push('/cart/checkout');
+    }
   };
 
   const removeItem = (id) =>{

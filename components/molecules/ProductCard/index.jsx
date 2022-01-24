@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
 
 export default function ProductCard({ product }) {
-  console.log(product);
   const addToCart = async (id) => {
     const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
     try {
