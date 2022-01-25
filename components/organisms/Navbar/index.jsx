@@ -291,12 +291,14 @@ export default function Navbar() {
                               </Menu.Item>
                               <Menu.Item>
                                 {({ active }) => (
-                                  <button
-                                    className={`${
-                                      active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
-                                    } group flex items-center w-full px-4 py-2 text-sm`}>
-                                    Pengaturan Akun
-                                  </button>
+                                  <Link href={'/profile/settings'}>
+                                    <a
+                                      className={`${
+                                        active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
+                                      } group flex items-center w-full px-4 py-2 text-sm`}>
+                                      Pengaturan Akun
+                                    </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             </div>
