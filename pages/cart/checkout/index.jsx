@@ -99,13 +99,17 @@ const Checkout = () => {
         destination = data.address_id_city
       }
     })
+    const weight = 0
+    state.checkoutProduct.forEach(data => {
+      weight += data.amount * 500
+    });
     const data = {
       destination,
       origin: state.store.store_id_city,
-      weight: 1000,
+      weight: weight,
       courier: selectedCourier
     }
-    // console.log(data)
+    console.log(data)
     // console.log(state.store)
     if(selectedCourier !== '' && couriers.length > 0){
       axios({
