@@ -48,6 +48,7 @@ export const data = {
 };
 
 const DashboardHomepage = ({ user }) => {
+  console.log(user);
   const { cookies } = useContext(AuthContext);
   useEffect(() => {
     console.log(cookies);
