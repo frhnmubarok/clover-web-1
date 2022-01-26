@@ -1,16 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
 import { HiOutlineUserCircle, HiOutlineKey } from 'react-icons/hi';
 import { GrMapLocation, GrTransaction } from 'react-icons/gr';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 
 import Main from '@/components/atoms/Main';
 import AppLayout from '@/components/templates/AppLayout';
 import { classNames } from '@/utils/helpers';
 import Link from 'next/link';
+import { getUserProfile } from '@/services/user';
+import Image from 'next/image';
 
 const UserSettingsLayout = ({ children }) => {
+  const [userProfile, setUserProfile] = useState({});
+  const userPhoto = useSelector((state) => state.user.user_photo);
+  const userName = useSelector((state) => state.user.user_name);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await getUserProfile();
+      console.log(data.data);
+      return data.data;
+    };
+    const response = async () =>
+      getUser().then((data) => {
+        return data;
+      });
+    response().then((data) => {
+      console.log(data);
+      setUserProfile(data);
+    });
+
+    console.log(userPhoto);
+  }, []);
+
+  console.log(userProfile);
   return (
     <Main className='relative min-h-screen mb-6'>
       <div className='relative px-4 pt-20 mx-auto max-w-7xl sm:px-6 lg:px-8'>
@@ -24,11 +50,33 @@ const UserSettingsLayout = ({ children }) => {
                 <div className='flex items-center'>
                   <div className='avatar placeholder'>
                     <div className='w-12 h-12 rounded-full bg-neutral-focus text-neutral-content'>
-                      <span className='text-lg'>FM</span>
+                      {/* <span className='text-lg'>FM</span> */}
+                      {Object.keys(userProfile).length > 0 && (
+                        <Image
+                          src={userPhoto !== '' ? userPhoto : userProfile.photo}
+                          alt={'user profile'}
+                          width={48}
+                          height={48}
+                          priority={true}
+                          unoptimized={true} // for handle access for bidden
+                          className='object-cover object-center rounded-lg'
+                        />
+                      )}
+                      {/* <Image
+                        src={userProfile.photo}
+                        alt={'user profile'}
+                        width={48}
+                        height={48}
+                        priority={true}
+                        unoptimized={true} // for handle access for bidden
+                        className='object-cover object-center rounded-lg'
+                      /> */}
                     </div>
                   </div>
                   <div className='ml-3'>
-                    <div className='text-sm font-medium leading-5 text-gray-700'>Farhan Mubarok</div>
+                    <div className='text-sm font-medium leading-5 text-gray-700'>
+                      {userName !== '' ? userName : userProfile.fullname}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -13,8 +13,6 @@ import UserSettingsLayout from '@/components/templates/UserSettingsLayout';
 import UserProfile from '@/components/organisms/UserProfile';
 
 const ProfileSettings = () => {
-  const [startDate, setStartDate] = useState(new Date());
-
   return (
     <UserSettingsLayout>
       <UserProfile />

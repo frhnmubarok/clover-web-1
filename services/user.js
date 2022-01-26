@@ -74,6 +74,18 @@ export async function getUserProfile() {
   });
 }
 
+export async function updateUserProfile(userData) {
+  const path = `/api/update-profile`;
+
+  return callAPI({
+    path,
+    method: 'POST',
+    data: userData,
+    token: Cookies.get('token'),
+    formData,
+  });
+}
+
 // const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {
 //   headers: {
 //     Authorization: 'Bearer ' + Cookies.get('token'),
