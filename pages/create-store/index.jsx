@@ -50,7 +50,24 @@ const CreateStore = ({ data }) => {
   const [province, setProvince] = useState(data.data);
   const [provinceId, setProvinceId] = useState(null);
   const [city, setCity] = useState([]);
+  const [long, setLong] = useState('')
+  const [lat, setLat] = useState('')
 
+  if(typeof window !== undefined){
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showPosition(position) {
+      setLat(position.coords.latitude)
+      setLong(position.coords.longitude)
+    }
+    // getLocation()
+  }
   useEffect(() => {
     if (provinceId !== null) {
       async function fetchData() {
@@ -76,16 +93,22 @@ const CreateStore = ({ data }) => {
     },
     validate,
     onSubmit: (values) => {
+      getLocation()
       const formData = new FormData();
       formData.append('store_name', values.store_name);
       formData.append('store_description', values.store_description);
       formData.append('store_image_profile', values.store_image_profile);
       formData.append('store_city', values.store_city);
+      formData.append('store_id_city', values.store_city_id);
       formData.append('store_province', values.store_province);
+      formData.append('store_id_province', values.store_province_id);
       formData.append('store_complete_address', values.store_complete_address);
       formData.append('store_postal_code', values.store_postal_code);
+      formData.append('store_long', long);
+      formData.append('store_lat', lat);
       createStore(formData);
-      console.log(formData);
+      console.log(values);
+      console.log(long,lat)
     },
   });
 
@@ -160,16 +183,17 @@ const CreateStore = ({ data }) => {
           <select
             className='w-full px-4 py-4 text-base text-gray-700 bg-white border border-gray-200 shadow-md rounded-2xl focus:outline-none focus:border-green-400'
             name='store_province'
-            id='store_province'>
+            id='store_province'
+            onChange={(e) => {
+                  formik.setFieldValue('store_province', e.target.value.split(',')[1]);
+                  formik.setFieldValue('store_province_id', e.target.value.split(',')[0]);
+                  setProvinceId( e.target.value.split(',')[0]);
+                }}>
             {province.map((item) => (
               <option
                 key={item.province_id}
-                value={item.province}
-                onClick={() => {
-                  formik.setFieldValue('store_province', item.province);
-                  // formik.setFieldValue('store_province_id', item.province_id);
-                  setProvinceId(item.province_id);
-                }}>
+                value={`${item.province_id},${item.province}`}
+                >
                 {item.province}
               </option>
             ))}
@@ -183,17 +207,24 @@ const CreateStore = ({ data }) => {
               className='w-full px-4 py-4 text-base text-gray-700 bg-white border border-gray-200 shadow-md rounded-2xl focus:outline-none focus:border-green-400'
               name='store_city'
               id='store_city'
-              onChange={formik.handleChange}
-              value={formik.values.store_city}>
+              // onChange={formik.handleChange}
+              // value={formik.values.store_city}
+              onChange={(e) => {
+                  formik.setFieldValue('store_city', e.target.value.split(',')[1]);
+                  formik.setFieldValue('store_city_id', e.target.value.split(',')[0]);
+                }}
+              >
               {city.map((item) => (
                 <option
                   key={item.city_id}
-                  value={item.city_name}
-                  onClick={() => {
-                    formik.setFieldValue('store_city', item.city_name);
-                    // formik.setFieldValue('store_city_id', item.city_id);
-                  }}>
-                  {item.city_name}
+                  value={`${item.city_id},${item.city_name}`}
+                  // onClick={() => {
+                  //   formik.setFieldValue('store_city', item.city_name);
+                  //   formik.setFieldValue('store_city_id', item.city_id);
+                  //   console.log(item)
+                  // }}
+                  >
+                  {item.type} {item.city_name}
                 </option>
               ))}
             </select>
