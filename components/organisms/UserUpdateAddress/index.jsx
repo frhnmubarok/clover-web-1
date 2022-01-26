@@ -59,12 +59,15 @@ const UserUpdateAddress = ({ data }) => {
         const response = await updateUserAddress(router.query.addressId, values);
         return response;
       };
-      toast.promise(submit(), {
-        loading: 'Mohon tunggu...',
-        success: 'Update alamat berhasil !',
-        error: 'Update alamat gagal !',
-      });
-      router.push('/profile/settings/address');
+      toast
+        .promise(submit(), {
+          loading: 'Mohon tunggu...',
+          success: 'Update alamat berhasil !',
+          error: 'Update alamat gagal !',
+        })
+        .then(() => {
+          router.push('/profile/settings/address');
+        });
       console.log(response);
     },
   });

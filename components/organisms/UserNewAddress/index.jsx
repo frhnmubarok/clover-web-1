@@ -47,12 +47,15 @@ const UserNewAddress = ({ data }) => {
         const response = await addUserAddress(values);
         return response;
       };
-      toast.promise(submit(), {
-        loading: 'Mohon tunggu...',
-        success: 'Tambah alamat berhasil !',
-        error: 'Tambah alamat gagal !',
-      });
-      router.push('/profile/settings/address');
+      toast
+        .promise(submit(), {
+          loading: 'Mohon tunggu...',
+          success: 'Tambah alamat berhasil !',
+          error: 'Tambah alamat gagal !',
+        })
+        .then(() => {
+          router.push('/profile/settings/address');
+        });
       console.log(response);
     },
   });
@@ -219,7 +222,7 @@ const UserNewAddress = ({ data }) => {
                               formik.setFieldValue('address_city', item.city_name);
                               formik.setFieldValue('address_id_city', item.city_id);
                             }}>
-                            {item.city_name}
+                            {`${item.type} ${item.city_name}`}
                           </option>
                         ))}
                       </select>

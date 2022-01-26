@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import DatePicker from 'react-datepicker';
-import { HiOutlineKey, HiOutlineSearch, HiCheck } from 'react-icons/hi';
+import { HiCheck } from 'react-icons/hi';
 
 import { deleteUserAddress, getUserAddress } from '@/services/user';
 import { classNames } from '@/utils/helpers';
@@ -56,7 +56,7 @@ const UserAddress = ({ data }) => {
         </Link>
       </div>
       {address.length < 1 ? (
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center space-x-3'>
           <h1 className='py-14 font-semibold text-gray-500 text-2xl'>Belum ada alamat yang terdaftar</h1>
         </div>
       ) : (
@@ -96,8 +96,6 @@ const UserAddress = ({ data }) => {
                               success: 'Berhasil update alamat utama !',
                               error: 'Gagal update alamat utama !',
                             });
-
-                            // setAddress(address.map((item) => (item.address_primary = false)));
                           }}
                           className='block w-28 py-2 text-xs font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
                           Pilih
