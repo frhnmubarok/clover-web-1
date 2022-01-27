@@ -47,7 +47,7 @@ const DashboardLayout = ({ children, handleLogout, user }) => {
       <div className=''>
         <div className='flex'>
           <aside
-            className={classNames('flex-none h-screen bg-white border border-gray-200 fixed z-50 inset-y-0 w-[250px]')}>
+            className={classNames('flex-none h-screen bg-white border border-gray-200 fixed z-10 inset-y-0 w-[250px]')}>
             <nav className='h-full px-2 py-4'>
               <div className='flex flex-col justify-between h-full'>
                 <div>
@@ -88,7 +88,7 @@ const DashboardLayout = ({ children, handleLogout, user }) => {
           </aside>
           <div className={classNames('relative grow ml-[250px] overflow-x-hidden')}>
             <div className='flex flex-col'>
-              <nav className='fixed bg-white right-0 z-50 left-[250px] border-b border-gray-200'>
+              <nav className='fixed bg-white right-0 z-10 left-[250px] border-b border-gray-200'>
                 <div className='flex items-center justify-between h-16 mx-5'>
                   <div></div>
                   <div className='flex items-center'>
