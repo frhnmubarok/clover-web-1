@@ -29,20 +29,19 @@ const userNavigation = [
 const Dashboard = () => {
   const { setLoginStatus, loginStatus, userLogout } = useContext(AuthContext);
   const [userData, setUserData] = useState({
-    username: '',
+    fullname: '',
   });
 
   useEffect(() => {
     console.log(loginStatus);
-    setUserData({ username: localStorage.getItem('username') });
+    setUserData({ fullname: localStorage.getItem('fullname') });
   }, [loginStatus]);
 
   if (typeof window !== 'undefined') {
-    Echo.channel('Clover-channel')
-		.listen('.dashboard', (e) => {
-			console.log('ok')
+    Echo.channel('Clover-channel').listen('.dashboard', (e) => {
+      console.log('ok');
       // alert(e)
-		});
+    });
     // console.log('tes')
   }
 
@@ -57,8 +56,8 @@ const Dashboard = () => {
 
   return (
     <>
-      <DashboardLayout handleLogout={handleLogout}>
-        <DashboardHomepage user={userData.username} />
+      <DashboardLayout user={userData.fullname} handleLogout={handleLogout}>
+        <DashboardHomepage user={userData.fullname} />
       </DashboardLayout>
     </>
   );
