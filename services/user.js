@@ -85,6 +85,15 @@ export async function updateUserProfile(userData) {
     formData,
   });
 }
+export async function resendEmailVerification() {
+  const path = `/api/resend-email`;
+
+  return callAPI({
+    path,
+    method: 'POST',
+    token: Cookies.get('token'),
+  });
+}
 
 // const result = await axios.post(`${API_ENDPOINT}/add-image/${id}`, productData, {
 //   headers: {

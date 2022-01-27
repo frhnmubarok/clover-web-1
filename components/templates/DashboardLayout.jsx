@@ -156,7 +156,7 @@ const DashboardLayout = ({ children, handleLogout, user }) => {
                   </div>
                 </div>
               </nav>
-              <main className='pt-16 my-4 overflow-hidden'>{children}</main>
+              <main className='pt-16 my-4'>{children}</main>
             </div>
           </div>
         </div>

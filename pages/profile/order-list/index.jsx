@@ -27,6 +27,7 @@ const OrderList = () => {
   const [open, setOpen] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const cancelButtonRef = useRef(null);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     const get = async () => {
@@ -40,8 +41,6 @@ const OrderList = () => {
       console.log(transactionId);
     }
   }, [transactionId]);
-
-  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -13,6 +13,8 @@ import {
 } from 'services/auth';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { setUserIsLoggedIn, setUserIsVerified } from '@/features/user/userSlice';
 
 export const AuthContext = createContext();
 
@@ -21,6 +23,7 @@ export const AuthProvider = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [cookies, setCookies] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (Cookies.get('token') !== undefined) {
@@ -49,7 +52,7 @@ export const AuthProvider = (props) => {
     // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authLogin(formData);
     if (!response.error) {
-      const { id, fullname, email, role } = response.data.data;
+      const { id, fullname, email, role, email_verified_at } = response.data.data;
       console.log(response.data);
       setCookies(response.data.token);
       Cookies.set('token', response.data.token, { expires: 30 });
@@ -58,6 +61,8 @@ export const AuthProvider = (props) => {
       localStorage.setItem('fullname', fullname);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
+      dispatch(setUserIsVerified(email_verified_at ? true : false));
+      dispatch(setUserIsLoggedIn(true));
       setLoginStatus(true);
       router.push('/');
     }
@@ -133,6 +138,7 @@ export const AuthProvider = (props) => {
       Cookies.remove('token');
       setLoginStatus(false);
       router.push('/');
+      dispatch(setUserIsLoggedIn(false));
     }
   };
 

@@ -106,14 +106,16 @@ const UserSettingsLayout = ({ children }) => {
                   <span className='pl-2 mx-2 text-sm font-medium text-gray-700'>Daftar Alamat</span>
                 </a>
               </Link>
-              <Link href={'/profile/order-list'}>
-                <a className='flex items-center justify-start w-full h-12 p-2 px-2 text-gray-800 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:text-white'>
-                  <span className='text-xl text-left text-gray-700'>
-                    <GrTransaction />
-                  </span>
-                  <span className='pl-2 mx-2 text-sm font-medium text-gray-700'>Daftar Transaksi</span>
-                </a>
-              </Link>
+              {userProfile.email_verified_at && (
+                <Link href={'/profile/order-list'}>
+                  <a className='flex items-center justify-start w-full h-12 p-2 px-2 text-gray-800 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:text-white'>
+                    <span className='text-xl text-left text-gray-700'>
+                      <GrTransaction />
+                    </span>
+                    <span className='pl-2 mx-2 text-sm font-medium text-gray-700'>Daftar Transaksi</span>
+                  </a>
+                </Link>
+              )}
             </div>
           </div>
           <div className='col-span-3'>

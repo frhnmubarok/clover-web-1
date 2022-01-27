@@ -11,6 +11,8 @@ import {
 } from 'react-icons/hi';
 import { BiStore } from 'react-icons/bi';
 import { MdOutlineTouchApp } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import { AuthContext } from '@/context/AuthContext';
 
@@ -20,10 +22,10 @@ import logo from '@/assets/images/logo-clover.png';
 
 import { classNames, formatRupiah } from '@/utils/helpers';
 import { ExternalLinkIcon, ShoppingCartIcon, SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
-import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
 import axios from 'axios';
+import { getUserProfile, resendEmailVerification } from '@/services/user';
 
 const navigation = {
   categories: [
@@ -63,7 +65,9 @@ const navigation = {
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
+  const [userProfile, setUserProfile] = React.useState({});
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
+  const userIsVerified = useSelector((state) => state.user.user_isVerified);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
   const [hasRole, setHasRole] = React.useState(null);
@@ -71,6 +75,7 @@ export default function Navbar() {
   const { state, dispatch } = useCartContext();
   const [get, setGet] = React.useState(true);
   const [buff, setBuff] = React.useState(0);
+
   if (typeof window !== 'undefined') {
     if (get && Cookies.get('token') && buff == 0) {
       setBuff(1);
@@ -111,6 +116,19 @@ export default function Navbar() {
       setUserLoggedIn(localStorage.getItem('fullname'));
       setHasRole(localStorage.getItem('role'));
     }
+    const getUser = async () => {
+      const { data } = await getUserProfile();
+      // console.log(data.data);
+      return data.data;
+    };
+    const response = async () =>
+      getUser().then((data) => {
+        return data;
+      });
+    response().then((data) => {
+      console.log(data);
+      setUserProfile(data);
+    });
   }, []);
 
   React.useEffect(() => {
@@ -118,6 +136,11 @@ export default function Navbar() {
       //
     }
   }, [state.cart]);
+
+  const handleResendEmail = async () => {
+    const response = await resendEmailVerification();
+    return response;
+  };
 
   const handleLogout = () => {
     toast.promise(userLogout(), {
@@ -375,30 +398,39 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
-        <div className='fixed inset-x-0 z-40 bg-rose-600 top-16'>
-          <div className='container px-3 py-2'>
-            <div className='flex flex-wrap items-center justify-between'>
-              <div className='flex items-center flex-1 w-0'>
-                <span className='flex p-2 rounded-lg bg-rose-800'>
-                  <HiOutlineExclamation className='w-6 h-6 text-white' aria-hidden='true' />
-                </span>
-                <p className='ml-3 font-medium text-white truncate'>
-                  <span className='md:hidden'>Cek email mu untuk verifikasi akun!</span>
-                  <span className='hidden md:inline'>
-                    Akun mu belum terverikasi! Tolong cek emailmu untuk melakukan verikasi.
+        {!userProfile.email_verified_at && Cookies.get('token') !== undefined && (
+          <div className='fixed inset-x-0 z-10 bg-rose-600 top-16'>
+            <div className='container px-3 py-2'>
+              <div className='flex flex-wrap items-center justify-between'>
+                <div className='flex items-center flex-1 w-0'>
+                  <span className='flex p-2 rounded-lg bg-rose-800'>
+                    <HiOutlineExclamation className='w-6 h-6 text-white' aria-hidden='true' />
                   </span>
-                </p>
-              </div>
-              <div className='flex-shrink-0 order-3 w-full mt-2 sm:order-2 sm:mt-0 sm:w-auto'>
-                <button
-                  type='button'
-                  className='flex items-center justify-center px-4 py-2 text-sm font-medium bg-white border border-transparent rounded-md shadow-sm text-rose-600 hover:bg-rose-50'>
-                  Kirim ulang email verifikasi
-                </button>
+                  <p className='ml-3 font-medium text-white truncate'>
+                    <span className='md:hidden'>Cek email mu untuk verifikasi akun!</span>
+                    <span className='hidden md:inline'>
+                      Akun mu belum terverikasi! Tolong cek emailmu untuk melakukan verikasi.
+                    </span>
+                  </p>
+                </div>
+                <div className='flex-shrink-0 order-3 w-full mt-2 sm:order-2 sm:mt-0 sm:w-auto'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      toast.promise(handleResendEmail(), {
+                        success: 'Email berhasil dikirim!',
+                        error: 'Email gagal dikirim!',
+                        loading: 'Mengirim email...',
+                      });
+                    }}
+                    className='flex items-center justify-center px-4 py-2 text-sm font-medium bg-white border border-transparent rounded-md shadow-sm text-rose-600 hover:bg-rose-50'>
+                    Kirim ulang email verifikasi
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </header>
     </div>
   );

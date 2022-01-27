@@ -109,7 +109,7 @@ const AllProducts = ({ data }) => {
 
   return (
     <>
-      <div className='h-screen px-4 pb-24 md:px-6'>
+      <div className='min-h-screen px-4 pb-24 md:px-6'>
         <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Daftar Produk</h1>
         {/* <h2 className='text-gray-400 text-md'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.

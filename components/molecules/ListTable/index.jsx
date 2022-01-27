@@ -71,14 +71,14 @@ const ListTable = ({ columns, data }) => {
           </div>
         </div>
       </div>
-      {/* <Box textAlign='center'>
-        <chakra.span mr={2}>
+      <div className='flex justify-center items-center mt-4'>
+        <span className='mr-2'>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>
-        </chakra.span>
-        <IconButton
+        </span>
+        {/* <IconButton
           colorScheme='gray'
           aria-label='edit-button'
           size='md'
@@ -86,8 +86,20 @@ const ListTable = ({ columns, data }) => {
           mr={2}
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-        />
-        <IconButton
+        /> */}
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className='flex justify-center mr-2 items-center w-8 h-8 text-center py-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-75'>
+          <MdNavigateBefore />
+        </button>
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className='flex justify-center items-center w-8 h-8 text-center py-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-75'>
+          <MdNavigateNext />
+        </button>
+        {/* <IconButton
           colorScheme='gray'
           aria-label='edit-button'
           size='md'
@@ -95,8 +107,8 @@ const ListTable = ({ columns, data }) => {
           mr={2}
           onClick={() => nextPage()}
           disabled={!canNextPage}
-        />
-      </Box> */}
+        /> */}
+      </div>
     </>
   );
 };
