@@ -16,13 +16,14 @@ const UserProfile = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [userData, setUserData] = useState({});
   const dispatch = useDispatch();
+  const userName = useSelector((state) => state.user.user_name);
 
   const formik = useFormik({
     initialValues: {
       fullname: userData.fullname,
       email: userData.email,
       handphone: userData.handphone,
-      gender: userData.gender,
+      gender: userData.gender || 'laki-laki',
     },
     onSubmit: async (values) => {
       // const { data } = await addUserAddress(values);
@@ -67,9 +68,13 @@ const UserProfile = () => {
       return data.data;
     };
     getUser().then((data) => {
+      console.log(data);
       setStartDate(data.born_date !== null ? new Date(data.born_date) : new Date());
+      if (data.photo !== null) {
+        dispatch(setUserProfilePhoto(data.photo));
+      }
       setUserData(data);
-      dispatch(setUserProfilePhoto(data.photo));
+      // dispatch(setUserProfilePhoto(data.photo));
       dispatch(setUserProfileName(data.fullname));
     });
   }, []);
@@ -83,6 +88,16 @@ const UserProfile = () => {
       formik.setFieldValue('gender', userData.gender);
     }
   }, [userData]);
+
+  const defaultPhoto = () => {
+    const initalName = [];
+    const name = userName;
+    const split = name.split(' ');
+    split.map((item) => initalName.push(item.charAt(0)));
+    return initalName.join('');
+  };
+
+  console.log(defaultPhoto());
 
   if (Object.keys(userData).length === 0) return <FullscreenLoading />;
 
@@ -98,17 +113,24 @@ const UserProfile = () => {
               {/* <div className='flex justify-center items-center bg-neutral-focus text-neutral-content rounded-lg w-auto h-56'>
                 <span className='text-4xl'>FM</span>
               </div> */}
-              <div className='flex justify-center items-center rounded-lg w-auto h-56'>
-                <Image
-                  src={userData.photo}
-                  alt={'user profile'}
-                  width={210}
-                  height={210}
-                  priority={true}
-                  unoptimized={true} // for handle access for bidden
-                  className='object-cover object-center rounded-lg'
-                />
-              </div>
+              {userData.photo !== null ? (
+                <div className='flex justify-center items-center rounded-lg w-auto h-56'>
+                  <Image
+                    src={userData.photo}
+                    alt={'user profile'}
+                    width={210}
+                    height={210}
+                    priority={true}
+                    unoptimized={true} // for handle access for bidden
+                    className='object-cover object-center rounded-lg'
+                  />
+                </div>
+              ) : (
+                <div className='flex justify-center items-center bg-neutral-focus text-neutral-content rounded-lg w-auto h-56'>
+                  <span className='text-4xl'>{defaultPhoto()}</span>
+                </div>
+              )}
+
               <div className='mt-4'>
                 <label className='flex justify-center items-center cursor-pointer w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
                   Upload Foto

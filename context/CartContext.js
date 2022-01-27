@@ -15,6 +15,7 @@ const initialState = {
   store: {},
   recommendation: [],
   isLoading: false,
+  amount: []
 };
 
 export const useCartContext = () => {
@@ -61,6 +62,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case 'SET_AMOUNT':
+      return {
+        ...state,
+        amount: action.payload,
       };
     default:
       console.log('Awokwokwkwok');

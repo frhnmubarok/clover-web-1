@@ -36,6 +36,14 @@ const UserSettingsLayout = ({ children }) => {
     console.log(userPhoto);
   }, []);
 
+  const defaultPhoto = () => {
+    const initalName = [];
+    const name = userName;
+    const split = name.split(' ');
+    split.map((item) => initalName.push(item.charAt(0)));
+    return initalName.join('');
+  };
+
   console.log(userProfile);
   return (
     <Main className='relative min-h-screen mb-6'>
@@ -51,7 +59,7 @@ const UserSettingsLayout = ({ children }) => {
                   <div className='avatar placeholder'>
                     <div className='w-12 h-12 rounded-full bg-neutral-focus text-neutral-content'>
                       {/* <span className='text-lg'>FM</span> */}
-                      {Object.keys(userProfile).length > 0 && (
+                      {Object.keys(userProfile).length > 0 && userProfile.photo !== null ? (
                         <Image
                           src={userPhoto !== '' ? userPhoto : userProfile.photo}
                           alt={'user profile'}
@@ -61,6 +69,8 @@ const UserSettingsLayout = ({ children }) => {
                           unoptimized={true} // for handle access for bidden
                           className='object-cover object-center rounded-lg'
                         />
+                      ) : (
+                        <span className='text-lg'>{defaultPhoto()}</span>
                       )}
                       {/* <Image
                         src={userProfile.photo}

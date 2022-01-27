@@ -18,7 +18,7 @@ const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };
 
-const tabName = ['Perlu Dibayar', 'Dikemas', 'Dikirim', 'Selesai', 'Dibatalkan', 'Refund'];
+const tabName = ['Perlu Dibayar', 'Dikonfirmasi', 'Dikemas', 'Dikirim', 'Selesai', 'Dibatalkan', 'Refund'];
 
 const OrderList = () => {
   const { updateTransactionStatus, getTransactionDetail, deleteTransaction } = useContext(ProductContext);
@@ -160,19 +160,22 @@ const OrderList = () => {
               <ListTable columns={tableColumn('1')} data={filterData(false, '1')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('2')} data={filterData(true, '3')} />
+              <ListTable columns={tableColumn('2')} data={filterData(true, '2')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('3')} data={filterData(true, '4')} />
+              <ListTable columns={tableColumn('3')} data={filterData(true, '3')} />
             </Tab.Panel>
             <Tab.Panel>
               <ListTable columns={tableColumn('4')} data={filterData(true, '4')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('5')} data={filterData(true, '6')} />
+              <ListTable columns={tableColumn('5')} data={filterData(true, '4')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('6')} data={filterData(false, '7')} />
+              <ListTable columns={tableColumn('6')} data={filterData(true, '6')} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <ListTable columns={tableColumn('7')} data={filterData(false, '7')} />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
