@@ -51,6 +51,7 @@ const OrderList = () => {
         token: Cookies.get('token'),
       });
       setTransactions(data.data);
+      console.log(data);
     };
     fetchData();
   }, []);

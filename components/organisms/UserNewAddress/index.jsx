@@ -43,6 +43,7 @@ const UserNewAddress = ({ data }) => {
     validate,
     onSubmit: async (values) => {
       // const { data } = await addUserAddress(values);
+      console.log(values);
       const submit = async () => {
         const response = await addUserAddress(values);
         return response;
@@ -95,7 +96,7 @@ const UserNewAddress = ({ data }) => {
             </div>
             <div className='col-span-3'>
               <div className='shadow-sm sm:rounded-md sm:overflow-hidden'>
-                <div className='bg-white space-y-6'>
+                <div className='space-y-6 bg-white'>
                   <div className='grid grid-cols-3 gap-6'>
                     <ProductInput
                       id='address_fullname'
@@ -145,7 +146,7 @@ const UserNewAddress = ({ data }) => {
                         id='product_description'
                         name='product_description'
                         rows={3}
-                        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md'
+                        className='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                         onChange={formik.handleChange}
                         value={formik.values.product_description}
                       />
@@ -168,7 +169,7 @@ const UserNewAddress = ({ data }) => {
             </div>
             <div className='col-span-3'>
               <div className='shadow-sm sm:rounded-md sm:overflow-hidden'>
-                <div className='bg-white space-y-6'>
+                <div className='space-y-6 bg-white'>
                   <div className='grid grid-cols-3 gap-6'>
                     <ProductInput
                       id='address_street_name'
@@ -183,7 +184,7 @@ const UserNewAddress = ({ data }) => {
                   </div>
 
                   <div className='relative mt-2'>
-                    <label className='text-sm font-semibold text-gray-700 tracking-wide'>Provinsi *</label>
+                    <label className='text-sm font-semibold tracking-wide text-gray-700'>Provinsi *</label>
                     <select
                       className='w-full text-sm duration-200 ease-in-out border border-gray-300 rounded-md'
                       name='address_province'
@@ -207,7 +208,7 @@ const UserNewAddress = ({ data }) => {
 
                   {provinceId && (
                     <div className='relative mt-2'>
-                      <label className='text-sm font-semibold text-gray-700 tracking-wide'>Kota</label>
+                      <label className='text-sm font-semibold tracking-wide text-gray-700'>Kota</label>
                       <select
                         className='w-full text-sm duration-200 ease-in-out border border-gray-300 rounded-md'
                         name='address_city'
@@ -264,7 +265,7 @@ const UserNewAddress = ({ data }) => {
                         id='product_description'
                         name='product_description'
                         rows={3}
-                        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md'
+                        className='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                         onChange={formik.handleChange}
                         value={formik.values.product_description}
                       />
@@ -279,7 +280,7 @@ const UserNewAddress = ({ data }) => {
         <div className='flex justify-end'>
           <button
             type='submit'
-            className='block mt-4 w-32 py-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
+            className='block w-32 py-2 mt-4 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
             Simpan
           </button>
         </div>

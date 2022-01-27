@@ -1,7 +1,14 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { Dialog, Menu, Popover, Transition } from '@headlessui/react';
-import { HiChevronDown, HiChevronUp, HiOutlineBell, HiOutlineMenuAlt1, HiSearch } from 'react-icons/hi';
+import {
+  HiChevronDown,
+  HiChevronUp,
+  HiOutlineBell,
+  HiOutlineExclamation,
+  HiOutlineMenuAlt1,
+  HiSearch,
+} from 'react-icons/hi';
 import { BiStore } from 'react-icons/bi';
 import { MdOutlineTouchApp } from 'react-icons/md';
 
@@ -12,7 +19,7 @@ import Mobile from './Mobile';
 import logo from '@/assets/images/logo-clover.png';
 
 import { classNames, formatRupiah } from '@/utils/helpers';
-import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
+import { ExternalLinkIcon, ShoppingCartIcon, SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
@@ -368,6 +375,30 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
+        <div className='fixed inset-x-0 z-40 bg-rose-600 top-16'>
+          <div className='container px-3 py-2'>
+            <div className='flex flex-wrap items-center justify-between'>
+              <div className='flex items-center flex-1 w-0'>
+                <span className='flex p-2 rounded-lg bg-rose-800'>
+                  <HiOutlineExclamation className='w-6 h-6 text-white' aria-hidden='true' />
+                </span>
+                <p className='ml-3 font-medium text-white truncate'>
+                  <span className='md:hidden'>Cek email mu untuk verifikasi akun!</span>
+                  <span className='hidden md:inline'>
+                    Akun mu belum terverikasi! Tolong cek emailmu untuk melakukan verikasi.
+                  </span>
+                </p>
+              </div>
+              <div className='flex-shrink-0 order-3 w-full mt-2 sm:order-2 sm:mt-0 sm:w-auto'>
+                <button
+                  type='button'
+                  className='flex items-center justify-center px-4 py-2 text-sm font-medium bg-white border border-transparent rounded-md shadow-sm text-rose-600 hover:bg-rose-50'>
+                  Kirim ulang email verifikasi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
     </div>
   );
