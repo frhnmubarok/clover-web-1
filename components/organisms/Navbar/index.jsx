@@ -59,6 +59,7 @@ export default function Navbar() {
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
+  const [hasRole, setHasRole] = React.useState(null);
 
   const { state, dispatch } = useCartContext();
   const [get, setGet] = React.useState(true);
@@ -99,6 +100,7 @@ export default function Navbar() {
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       setUserLoggedIn(localStorage.getItem('fullname'));
+      setHasRole(localStorage.getItem('role'));
     }
   }, []);
 
@@ -291,12 +293,14 @@ export default function Navbar() {
                               </Menu.Item>
                               <Menu.Item>
                                 {({ active }) => (
-                                  <button
-                                    className={`${
-                                      active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
-                                    } group flex items-center w-full px-4 py-2 text-sm`}>
-                                    Pengaturan Akun
-                                  </button>
+                                  <Link href={'/profile/settings'}>
+                                    <a
+                                      className={`${
+                                        active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
+                                      } group flex items-center w-full px-4 py-2 text-sm`}>
+                                      Pengaturan Akun
+                                    </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             </div>
@@ -316,9 +320,11 @@ export default function Navbar() {
                           </Menu.Items>
                         </Transition>
                       </Menu>
-                      <Link href='/dashboard' className='p-2'>
-                        <BiStore className='w-5 h-5' />
-                      </Link>
+                      {hasRole !== 'User' && hasRole !== null && (
+                        <Link href='/dashboard' className='p-2'>
+                          <BiStore className='w-5 h-5' />
+                        </Link>
+                      )}
                       <button type='button' className='relative p-2'>
                         <div className='absolute right-[10px]'>
                           <span className='relative flex w-2 h-2'>

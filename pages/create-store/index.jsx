@@ -89,7 +89,6 @@ const CreateStore = ({ data }) => {
       store_city: '',
       store_complete_address: '',
       store_postal_code: '',
-
     },
     validate,
     onSubmit: (values) => {

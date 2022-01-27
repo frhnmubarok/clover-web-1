@@ -1,4 +1,4 @@
-import { HiBell, HiChevronDown, HiMenu } from 'react-icons/hi';
+import { HiBell, HiChevronDown, HiLogout, HiMenu } from 'react-icons/hi';
 import logo from '@/assets/images/logo-clover.png';
 import Image from 'next/image';
 import Link from '../atoms/Link';
@@ -14,7 +14,7 @@ const navigation = [
     current: true,
     icon: (
       <svg
-        className='w-5 h-5 text-gray-700'
+        className='w-5 h-5 text-primary-500'
         width='20'
         height='20'
         fill='currentColor'
@@ -30,7 +30,7 @@ const navigation = [
     current: false,
     icon: (
       <svg
-        className='w-5 h-5 text-gray-700'
+        className='w-5 h-5 text-primary-500'
         width='20'
         height='20'
         fill='currentColor'
@@ -56,7 +56,7 @@ const navigation = [
     current: false,
     icon: (
       <svg
-        className='w-5 h-5 text-gray-700'
+        className='w-5 h-5 text-primary-500'
         width='20'
         height='20'
         fill='currentColor'
@@ -68,58 +68,66 @@ const navigation = [
   },
 ];
 
-const DashboardLayout = ({ children, handleLogout }) => {
+const DashboardLayout = ({ children, handleLogout, user }) => {
   const { asPath } = useRouter();
-
-  const [open, setOpen] = useState(true);
 
   return (
     <>
       <div className=''>
         <div className='flex'>
           <aside
-            className={classNames('flex-none bg-white border border-gray-200 fixed inset-y-0', open && 'w-[250px]')}>
-            <nav className='px-3 py-4'>
-              <div className='relative flex items-center justify-center'>
-                <Link href='/'>
-                  <Image src={logo} alt='Logo' width={150} height={52} />
-                </Link>
-              </div>
-              <div className='py-2 pt-5'>
-                <ul className='flex flex-col'>
-                  {navigation.map((item, idx) => (
-                    <li key={idx} className='pb-2'>
-                      <Link
-                        href={item.href}
-                        className={classNames(
-                          'flex items-center px-3 py-2 space-x-3 text-gray-700 rounded-lg hover:bg-gray-200',
-                          asPath === item.href && 'bg-gray-200',
-                        )}>
-                        {item.icon}
-                        <span className='text-sm'>{item.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            className={classNames('flex-none h-screen bg-white border border-gray-200 fixed z-50 inset-y-0 w-[250px]')}>
+            <nav className='h-full px-2 py-4'>
+              <div className='flex flex-col justify-between h-full'>
+                <div>
+                  <div className='relative flex items-center justify-center'>
+                    <Link href='/'>
+                      <Image src={logo} alt='Logo' width={150} height={52} />
+                    </Link>
+                  </div>
+                  <div className='py-2 pt-5'>
+                    <ul className='flex flex-col'>
+                      {navigation.map((item, idx) => (
+                        <li key={idx} className='pb-2'>
+                          <Link
+                            href={item.href}
+                            className={classNames(
+                              'flex items-center px-3 py-2 space-x-3 rounded-lg hover:bg-gray-200 font-semibold',
+                              asPath === item.href ? 'bg-primary-100/75 text-gray-700' : 'text-gray-500',
+                            )}>
+                            {item.icon}
+                            <span className='text-sm'>{item.name}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    type='button'
+                    onClick={() => handleLogout()}
+                    className='flex items-center justify-center w-full py-2 space-x-2 text-sm font-semibold text-white rounded-lg bg-rose-400'>
+                    <HiLogout className='w-5 h-5' />
+                    <span>Logout</span>
+                  </button>
+                </div>
               </div>
             </nav>
           </aside>
-          <div className={classNames('relative grow', open && 'ml-[250px]')}>
+          <div className={classNames('relative grow ml-[250px] overflow-x-hidden')}>
             <div className='flex flex-col'>
-              <nav className='fixed bg-white right-0 left-[250px] border-b border-gray-200'>
+              <nav className='fixed bg-white right-0 z-50 left-[250px] border-b border-gray-200'>
                 <div className='flex items-center justify-between h-16 mx-5'>
-                  <button type='button' className='p-2 bg-gray-200 rounded-lg'>
-                    <HiMenu className='w-5 h-5 text-gray-600' />
-                  </button>
-
+                  <div></div>
                   <div className='flex items-center'>
                     <button type='button' className='p-3'>
                       <HiBell className='w-5 h-5 text-gray-500' />
                     </button>
                     <Menu as='div' className='relative inline-block text-left'>
                       <div>
-                        <Menu.Button className='flex items-center px-4 py-2 text-sm bg-gray-200 rounded-lg'>
-                          User Profile
+                        <Menu.Button className='flex items-center px-4 py-2 text-sm rounded-lg'>
+                          {user}
                           <HiChevronDown
                             className='w-5 h-5 ml-2 -mr-1 text-gray-700 hover:text-gray-800'
                             aria-hidden='true'
@@ -138,22 +146,24 @@ const DashboardLayout = ({ children, handleLogout }) => {
                           <div className='py-1'>
                             <Menu.Item>
                               {({ active }) => (
-                                <button
+                                <Link
+                                  href='/profile/settings'
                                   className={`${
                                     active ? 'bg-gray-200 text-gray-700' : 'text-gray-800'
                                   } group flex items-center w-full py-2 px-3 text-sm`}>
                                   Profile
-                                </button>
+                                </Link>
                               )}
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <button
+                                <Link
+                                  href='/profile/settings'
                                   className={`${
                                     active ? 'bg-gray-200 text-gray-700' : 'text-gray-800'
                                   } group flex items-center w-full py-2 px-3 text-sm`}>
                                   Profile Settings
-                                </button>
+                                </Link>
                               )}
                             </Menu.Item>
                             <Menu.Item>
@@ -175,7 +185,7 @@ const DashboardLayout = ({ children, handleLogout }) => {
                   </div>
                 </div>
               </nav>
-              <main className='pt-16 my-4'>{children}</main>
+              <main className='pt-16 my-4 overflow-hidden'>{children}</main>
             </div>
           </div>
         </div>

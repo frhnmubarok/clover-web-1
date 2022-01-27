@@ -9,6 +9,8 @@ import CartProvider from '@/context/CartContext';
 import ProgressBar from '@badrap/bar-of-progress';
 import Router from 'next/router';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
+import { store } from '@/app/store';
 
 import Title from '@/components/atoms/Title';
 import socialCardLarge from '@/public/images/social-card-large.png';
@@ -44,7 +46,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps }, router }) => {
 
   return (
     <>
-      <SessionProvider session={session}>
+      <Provider store={store}>
         <AuthProvider>
           <ProductProvider>
             <CartProvider>
@@ -70,7 +72,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps }, router }) => {
             </CartProvider>
           </ProductProvider>
         </AuthProvider>
-      </SessionProvider>
+      </Provider>
     </>
   );
 };

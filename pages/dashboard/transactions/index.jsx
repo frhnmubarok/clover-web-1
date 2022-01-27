@@ -66,6 +66,7 @@ const AllProductPage = () => {
       setBuff(e.event);
     });
   }
+
   return (
     <DashboardLayout handleLogout={handleLogout}>
       {transactions !== null ? <AllTransactions data={transactions} /> : <FullscreenLoading />}

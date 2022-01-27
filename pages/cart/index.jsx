@@ -6,6 +6,7 @@ import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import ProductCard from '@/components/molecules/ProductCard';
 
+
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
 import { useEffect, useState, Fragment } from 'react';
@@ -30,15 +31,16 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [amount, setAmount] = useState([]);
   const [statusCheck, setStatusCheck] = useState([]);
-  const [checkbox, setCheckbox] = useState(false)
+  const [checkbox, setCheckbox] = useState(false);
 
-  useEffect(()=>{
-    if(items.length>=1){
-      setCheckbox(true)
-    }else{
-      setCheckbox(false)
+  useEffect(() => {
+    if (items.length >= 1) {
+      setCheckbox(true);
+    } else {
+      setCheckbox(false);
     }
-  },[items])
+  }, [items]);
+
   const loadingState = () => {
     if (isLoading) {
       return (
@@ -114,7 +116,7 @@ export default function Cart() {
 
   const minAmount = (id) => {
     let tempData = amount;
-    if (tempData[id] > 0) {
+    if (tempData[id] > 0 && state.totalPrice > 0) {
       tempData[id]--;
     }
     setAmount([...amount, tempData]);
@@ -165,6 +167,25 @@ export default function Cart() {
     setStatusCheck(status);
   };
 
+
+  /*const removeItemFromCart = (id) => {
+    const response = axios({
+      method: 'delete',
+      url: `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/carts/${id}`,
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+
+    toast.promise(response, {
+      loading: 'Mohon tunggu...',
+      success: 'Produk berhasil dihapus dari keranjang !',
+      error: 'Produk gagal dihapus dari keranjang !',
+    });
+  };*/
+
   // console.log(isProductChecked);
 
   return (
@@ -214,7 +235,7 @@ export default function Cart() {
                               id='check-all'
                               name='check-all'
                               type='checkbox'
-                              disabled={checkbox === true && storeId !== item.store_id? true:false}
+                              disabled={checkbox === true && storeId !== item.store_id ? true : false}
                               className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
                               onChange={(event) => {
                                 if (event.target.checked === true) {
@@ -259,7 +280,7 @@ export default function Cart() {
                               </p>
                             </div>
                             <div className='flex items-end justify-between flex-1 text-sm'>
-                              <p className='text-gray-500'>Jumlah</p>
+                              <p className='text-gray-500'>{item.store.store_name}</p>
                               <div className='flex items-center space-x-5'>
                                 <div className='flex items-center space-x-2'>
                                   <button
@@ -267,7 +288,7 @@ export default function Cart() {
                                     className='p-1 disabled:text-gray-400'
                                     disabled={statusCheck[i] ? false : true}
                                     onClick={() => {
-                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price });
+                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price * amount[i] });
                                       if (statusCheck[i]) {
                                         minAmount(i);
                                       }
@@ -301,6 +322,7 @@ export default function Cart() {
                                     {
                                       removeItem(item.id)
                                     }
+
                                   }
                                   className='font-medium text-rose-600 hover:text-rose-500'>
                                   <HiOutlineTrash className='w-5 h-5' />
