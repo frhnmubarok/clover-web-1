@@ -398,7 +398,7 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
-        {!userProfile.email_verified_at && Cookies.get('token') !== undefined && (
+        {userProfile?.email_verified_at === null && Cookies.get('token') !== undefined && (
           <div className='fixed inset-x-0 z-10 bg-rose-600 top-16'>
             <div className='container px-3 py-2'>
               <div className='flex flex-wrap items-center justify-between'>
