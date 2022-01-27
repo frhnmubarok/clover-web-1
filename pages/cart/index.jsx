@@ -6,14 +6,14 @@ import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import ProductCard from '@/components/molecules/ProductCard';
 
-
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
 import { useEffect, useState, Fragment } from 'react';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter}  from 'next/router'
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 export default function Cart() {
   const router = useRouter();
@@ -32,6 +32,10 @@ export default function Cart() {
   const [amount, setAmount] = useState([]);
   const [statusCheck, setStatusCheck] = useState([]);
   const [checkbox, setCheckbox] = useState(false);
+
+  useEffect(() => {
+    dispatch({ type: 'RESET_PRICE' });
+  }, []);
 
   useEffect(() => {
     if (items.length >= 1) {
@@ -126,34 +130,40 @@ export default function Cart() {
   const send = () => {
     // console.log(storeId, items);
     let tempData = [];
-    let store = {}
+    let store = {};
     items.forEach((data) => {
       tempData.push({
         product: state.cart[data],
         amount: amount[data],
       });
-      store = state.cart[data].store
+      store = state.cart[data].store;
       // console.log(state.cart[data])
     });
-    const data = { store:store, items: tempData };
+    const data = { store: store, items: tempData };
     // console.log(data);
     dispatch({ type: 'ADD_TRANSACTION', payload: data });
-    if(items.length >0){
+    if (items.length > 0) {
       router.push('/cart/checkout');
     }
   };
 
-  const removeItem = (id) =>{
-    axios({
-        method: 'DELETE',
-        url: 'https://dev-api-clover.herokuapp.com/api/carts/'+id,
-        headers: {
-          Authorization: 'Bearer ' + Cookies.get('token'),
-        },
-      }).then(() => {
-        console.log('ok')
-      });
-  }
+  const removeItem = (id) => {
+    const response = axios({
+      method: 'DELETE',
+      url: 'https://dev-api-clover.herokuapp.com/api/carts/' + id,
+      headers: {
+        Authorization: 'Bearer ' + Cookies.get('token'),
+      },
+    }).then(() => {
+      console.log('ok');
+    });
+
+    toast.promise(response, {
+      loading: 'Mohon tunggu...',
+      success: 'Produk berhasil dihapus dari keranjang !',
+      error: 'Produk gagal dihapus dari keranjang !',
+    });
+  };
 
   const statusTrue = (id) => {
     let status = statusCheck;
@@ -166,7 +176,6 @@ export default function Cart() {
     status[id] = false;
     setStatusCheck(status);
   };
-
 
   /*const removeItemFromCart = (id) => {
     const response = axios({
@@ -288,7 +297,10 @@ export default function Cart() {
                                     className='p-1 disabled:text-gray-400'
                                     disabled={statusCheck[i] ? false : true}
                                     onClick={() => {
-                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price * amount[i] });
+                                      if (amount[i] > 0) {
+                                        dispatch({ type: 'SUB_PRICE', payload: item.product_price });
+                                      }
+
                                       if (statusCheck[i]) {
                                         minAmount(i);
                                       }
@@ -320,9 +332,8 @@ export default function Cart() {
                                     //   price: product.product_price,
                                     // })
                                     {
-                                      removeItem(item.id)
+                                      removeItem(item.id);
                                     }
-
                                   }
                                   className='font-medium text-rose-600 hover:text-rose-500'>
                                   <HiOutlineTrash className='w-5 h-5' />
@@ -346,8 +357,10 @@ export default function Cart() {
                     <div className='pt-4'>
                       <button
                         type='button'
-                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                        disabled={state.totalPrice === 0 ? true : false}
+                        className='block w-full py-2 text-sm text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-600 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-75 disabled:cursor-not-allowed'
                         onClick={() => send()}>
+                        {' '}
                         Beli
                       </button>
                     </div>

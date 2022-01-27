@@ -52,12 +52,16 @@ const EditProduct = () => {
     },
     validate,
     onSubmit: (values) => {
-      toast.promise(updateProduct(values, router.query.id), {
-        loading: 'Mohon tunggu...',
-        success: 'Produk berhasil diupdate!',
-        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
-      });
-      router.back();
+      toast
+        .promise(updateProduct(values, router.query.id), {
+          loading: 'Mohon tunggu...',
+          success: 'Produk berhasil diupdate!',
+          error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+        })
+        .then(() => {
+          router.back();
+        });
+
       setProductDataSubmitted(true);
     },
   });

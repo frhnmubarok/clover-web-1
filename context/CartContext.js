@@ -32,7 +32,7 @@ const Reducer = (state, action) => {
       return {
         ...state,
         cart: action.payload.carts,
-        recommendation: action.payload.recommendation_by_sub_category
+        recommendation: action.payload.recommendation_by_sub_category,
       };
     case 'SUM_PRICE':
       return {
@@ -44,12 +44,17 @@ const Reducer = (state, action) => {
         ...state,
         totalPrice: parseInt(state.totalPrice) - parseInt(action.payload),
       };
+    case 'RESET_PRICE':
+      return {
+        ...state,
+        totalPrice: 0,
+      };
     case 'ADD_TRANSACTION':
       console.log(action.payload);
       return {
         ...state,
         checkoutProduct: action.payload.items,
-        store: action.payload.store
+        store: action.payload.store,
       };
     default:
       console.log('Awokwokwkwok');

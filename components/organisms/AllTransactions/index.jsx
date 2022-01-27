@@ -185,7 +185,7 @@ const AllTransactions = ({ data }) => {
               )}
               {body == 2 && updateButton(value, newOrderStatus, 'Proses')}
               {body == 3 && updateButton(value, newOrderStatus, 'Kirim')}
-              {body == 4 && updateButton(value, newOrderStatus, 'Batal')}
+              {/* {body == 4 && updateButton(value, newOrderStatus, 'Batal')} */}
               {body == 6 && (
                 <div data-tip='Proses Pesanan' className='tooltip'>
                   <button
@@ -205,7 +205,7 @@ const AllTransactions = ({ data }) => {
 
   return (
     <>
-      <div className='h-screen px-4 pb-24 overflow-auto md:px-6'>
+      <div className='h-screen px-4 pb-24 overflow-hidden md:px-6'>
         <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Daftar Transaksi</h1>
         {/* <h2 className='text-gray-400 text-md'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.
