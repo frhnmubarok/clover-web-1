@@ -15,6 +15,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { setUserIsLoggedIn, setUserIsVerified } from '@/features/user/userSlice';
+import { useCartContext } from './CartContext';
 
 export const AuthContext = createContext();
 
@@ -22,6 +23,7 @@ export const AuthProvider = (props) => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cookies, setCookies] = useState(null);
+
   const router = useRouter();
   const dispatch = useDispatch();
 

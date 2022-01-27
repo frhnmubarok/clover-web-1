@@ -7,6 +7,7 @@ import Image from 'next/image';
 import DashboardLayout from '@/components/templates/DashboardLayout';
 import DashboardHomepage from '@/components/organisms/DashboardHomepage';
 import toast from 'react-hot-toast';
+import { useCartContext } from '@/context/CartContext';
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
@@ -28,6 +29,8 @@ const userNavigation = [
 
 const Dashboard = () => {
   const { setLoginStatus, loginStatus, userLogout } = useContext(AuthContext);
+  const { state, dispatch } = useCartContext();
+
   const [userData, setUserData] = useState({
     fullname: '',
   });
@@ -46,12 +49,16 @@ const Dashboard = () => {
   }
 
   const handleLogout = () => {
-    toast.promise(userLogout(), {
-      loading: 'Mohon tunggu...',
-      success: 'Berhasil Logout !',
-      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
-    });
-    setLoginStatus(false);
+    toast
+      .promise(userLogout(), {
+        loading: 'Mohon tunggu...',
+        success: 'Berhasil Logout !',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+      })
+      .then(() => {
+        setLoginStatus(false);
+        dispatch({ type: 'RESET_STATE' });
+      });
   };
 
   return (

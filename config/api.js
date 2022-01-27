@@ -29,8 +29,14 @@ async function callAPI({ path, method, data, token, formData }) {
     data,
     headers,
   }).catch((err) => err.response);
+  console.log(response);
 
-  return response;
+  if (response.status === 401) {
+    Cookies.remove('token');
+    window.location.href = '/login';
+  } else {
+    return response;
+  }
 
   // if (response.status > 300) {
   //   const res = {
