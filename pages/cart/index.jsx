@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import CardProduct from '@/components/molecules/ProductCard';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
@@ -26,6 +29,15 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [amount, setAmount] = useState([]);
   const [statusCheck, setStatusCheck] = useState([]);
+  const [checkbox, setCheckbox] = useState(false);
+
+  useEffect(() => {
+    if (items.length >= 1) {
+      setCheckbox(true);
+    } else {
+      setCheckbox(false);
+    }
+  }, [items]);
 
   const loadingState = () => {
     if (isLoading) {
@@ -103,7 +115,7 @@ export default function Cart() {
 
   const minAmount = (id) => {
     let tempData = amount;
-    if (tempData[id] > 0) {
+    if (tempData[id] > 0 && state.totalPrice > 0) {
       tempData[id]--;
     }
     setAmount([...amount, tempData]);
@@ -117,8 +129,8 @@ export default function Cart() {
     let tempData = [];
     items.forEach((data, index) => {
       tempData.push({
-        product_id: state.cart[index].id,
-        amount: amount[index],
+        product_id: state.cart[data].id,
+        amount: amount[data],
       });
     });
     const data = { transaction_shipping_cost: transactionShippingCost, store_id: storeId, items: tempData };
@@ -139,7 +151,24 @@ export default function Cart() {
     setStatusCheck(status);
   };
 
-  console.log(isProductChecked);
+  const removeItemFromCart = (id) => {
+    const response = axios({
+      method: 'delete',
+      url: `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/carts/${id}`,
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+
+    toast.promise(response, {
+      loading: 'Mohon tunggu...',
+      success: 'Produk berhasil dihapus dari keranjang !',
+      error: 'Produk gagal dihapus dari keranjang !',
+    });
+  };
+  // console.log(isProductChecked);
 
   return (
     <>
@@ -188,6 +217,7 @@ export default function Cart() {
                               id='check-all'
                               name='check-all'
                               type='checkbox'
+                              disabled={checkbox === true && storeId !== item.store_id ? true : false}
                               className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
                               onChange={(event) => {
                                 if (event.target.checked === true) {
@@ -232,7 +262,7 @@ export default function Cart() {
                               </p>
                             </div>
                             <div className='flex items-end justify-between flex-1 text-sm'>
-                              <p className='text-gray-500'>Jumlah</p>
+                              <p className='text-gray-500'>{item.store.store_name}</p>
                               <div className='flex items-center space-x-5'>
                                 <div className='flex items-center space-x-2'>
                                   <button
@@ -240,7 +270,7 @@ export default function Cart() {
                                     className='p-1 disabled:text-gray-400'
                                     disabled={statusCheck[i] ? false : true}
                                     onClick={() => {
-                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price });
+                                      dispatch({ type: 'SUB_PRICE', payload: item.product_price * amount[i] });
                                       if (statusCheck[i]) {
                                         minAmount(i);
                                       }
@@ -266,11 +296,12 @@ export default function Cart() {
                                 <button
                                   type='button'
                                   onClick={() =>
-                                    dispatch({
-                                      type: 'REMOVE_FROM_CART',
-                                      id: product.id,
-                                      price: product.product_price,
-                                    })
+                                    // dispatch({
+                                    //   type: 'REMOVE_FROM_CART',
+                                    //   id: product.id,
+                                    //   price: product.product_price,
+                                    // })
+                                    removeItemFromCart(item.id)
                                   }
                                   className='font-medium text-rose-600 hover:text-rose-500'>
                                   <HiOutlineTrash className='w-5 h-5' />

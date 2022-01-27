@@ -6,12 +6,6 @@ import { MdCheck, MdOutlineClose } from 'react-icons/md';
 
 import { ProductContext } from '@/context/ProductContext';
 import ListTable from '@/components/molecules/ListTable';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationIcon } from '@heroicons/react/outline';
-import DeleteModal from '@/components/atoms/DeleteModal';
-import toast from 'react-hot-toast';
-import Link from 'next/link';
 import { badgeOrderStatus, orderStatus } from '@/utils/helpers';
 import TransactionDetailModal from '@/components/atoms/TransactionDetailModal';
 import { getAllTransactionAPI } from '@/services/product';
@@ -211,7 +205,7 @@ const AllTransactions = ({ data }) => {
 
   return (
     <>
-      <div className='h-screen px-4 pb-24 md:px-6'>
+      <div className='h-screen px-4 pb-24 overflow-auto md:px-6'>
         <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Daftar Transaksi</h1>
         {/* <h2 className='text-gray-400 text-md'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.

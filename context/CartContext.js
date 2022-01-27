@@ -47,7 +47,6 @@ const Reducer = (state, action) => {
         ...state,
         checkoutProduct: action.payload,
       };
-
     default:
       console.log('Awokwokwkwok');
   }

@@ -150,10 +150,10 @@ const RegisterPartner = ({ data }) => {
       ) : (
         <AuthLayout formImage formLabel='Pendaftaran Mitra'>
           <div className='flex flex-col items-center justify-center w-full'>
-            <ul className='w-full steps bg-transparent'>
+            <ul className='w-full bg-transparent steps'>
               <li className='step step-primary '>Data Diri</li>
-              <li className='step text-gray-400'>Persyaratan Mitra</li>
-              <li className='step text-gray-400'>Konfirmasi</li>
+              <li className='text-gray-400 step'>Persyaratan Mitra</li>
+              <li className='text-gray-400 step'>Konfirmasi</li>
             </ul>
           </div>
 
@@ -192,7 +192,7 @@ const RegisterPartner = ({ data }) => {
             />
 
             <div className='relative mt-2'>
-              <label className='text-sm font-medium text-gray-700 tracking-wide'>Provinsi Asal</label>
+              <label className='text-sm font-medium tracking-wide text-gray-700'>Provinsi Asal</label>
               <select
                 className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 name='kyc_province'
@@ -216,7 +216,7 @@ const RegisterPartner = ({ data }) => {
 
             {provinceId && (
               <div className='relative mt-2'>
-                <label className='text-sm font-medium text-gray-700 tracking-wide'>Kota Asal</label>
+                <label className='text-sm font-medium tracking-wide text-gray-700'>Kota Asal</label>
                 <select
                   className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                   name='kyc_city'
@@ -231,7 +231,7 @@ const RegisterPartner = ({ data }) => {
                         formik.setFieldValue('kyc_city', item.city_name);
                         formik.setFieldValue('kyc_city_id', item.city_id);
                       }}>
-                      {item.city_name}
+                      {`${item.type} ${item.city_name}`}
                     </option>
                   ))}
                 </select>
@@ -270,8 +270,8 @@ const RegisterPartner = ({ data }) => {
               placeholder='Masukkan tempat lahir'
               errors={formik.errors.kyc_place_of_birth}
             />
-            <div className='space-y-2 mt-2'>
-              <label className='text-sm font-medium text-gray-700 tracking-wide'>Tanggal Lahir</label>
+            <div className='mt-2 space-y-2'>
+              <label className='text-sm font-medium tracking-wide text-gray-700'>Tanggal Lahir</label>
               <DatePicker
                 className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 selected={startDate}
@@ -284,7 +284,7 @@ const RegisterPartner = ({ data }) => {
             </div>
 
             <div className='relative mt-2'>
-              <label className='text-sm font-medium text-gray-700 tracking-wide'>Jenis Kelamin</label>
+              <label className='text-sm font-medium tracking-wide text-gray-700'>Jenis Kelamin</label>
               <select
                 className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 name='kyc_gender'
@@ -299,7 +299,7 @@ const RegisterPartner = ({ data }) => {
             </div>
 
             <div className='my-4'>
-              <label className='text-sm font-medium text-gray-700 tracking-wide'>Foto/Scan KTP</label>
+              <label className='text-sm font-medium tracking-wide text-gray-700'>Foto/Scan KTP</label>
               <div className='m-4'>
                 <div className='flex items-center justify-center w-full'>
                   <label className='flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300'>
@@ -330,7 +330,7 @@ const RegisterPartner = ({ data }) => {
             </div>
 
             <div className='my-4'>
-              <label className='text-sm font-medium text-gray-700 tracking-wide'>Foto Selfie</label>
+              <label className='text-sm font-medium tracking-wide text-gray-700'>Foto Selfie</label>
               <div className='m-4'>
                 <div className='flex items-center justify-center w-full'>
                   <label className='flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300'>
@@ -359,7 +359,7 @@ const RegisterPartner = ({ data }) => {
                 </div>
               </div>
             </div>
-            <div className='mt-6 flex justify-between content-center items-center'>
+            <div className='flex items-center content-center justify-between mt-6'>
               <AuthButton icon={<MdLogin />} isLoading>
                 Daftar
               </AuthButton>
