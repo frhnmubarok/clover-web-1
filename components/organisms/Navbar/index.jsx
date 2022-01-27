@@ -77,7 +77,7 @@ export default function Navbar() {
       }).then((data) => {
         dispatch({
           type: 'GET_CARTS',
-          payload: data.data.data.carts,
+          payload: data.data.data,
         });
         console.log('ok');
       });

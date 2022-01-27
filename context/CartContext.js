@@ -11,7 +11,9 @@ const initialState = {
   buff: false,
   get: true,
   totalPrice: 0,
-  checkoutProduct: {},
+  checkoutProduct: [],
+  store: {},
+  recommendation: [],
 };
 
 export const useCartContext = () => {
@@ -29,7 +31,8 @@ const Reducer = (state, action) => {
     case 'GET_CARTS':
       return {
         ...state,
-        cart: action.payload,
+        cart: action.payload.carts,
+        recommendation: action.payload.recommendation_by_sub_category
       };
     case 'SUM_PRICE':
       return {
@@ -45,7 +48,8 @@ const Reducer = (state, action) => {
       console.log(action.payload);
       return {
         ...state,
-        checkoutProduct: action.payload,
+        checkoutProduct: action.payload.items,
+        store: action.payload.store
       };
     default:
       console.log('Awokwokwkwok');

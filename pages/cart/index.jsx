@@ -4,17 +4,19 @@ import AppLayout from '@/components/templates/AppLayout';
 import Image from 'next/image';
 import { HiOutlineShoppingCart, HiOutlineTrash } from 'react-icons/hi';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
-import CardProduct from '@/components/molecules/ProductCard';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import toast from 'react-hot-toast';
+import ProductCard from '@/components/molecules/ProductCard';
+
 
 import { formatRupiah } from '@/utils/helpers';
 import { useCartContext } from '@/context/CartContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useRouter}  from 'next/router'
 
 export default function Cart() {
+  const router = useRouter();
   const { state, dispatch } = useCartContext();
   const [isLoading, setIsLoading] = useState(true);
   const [checkedProduct, setCheckedProduct] = useState([]);
@@ -57,9 +59,9 @@ export default function Cart() {
     }
   }, [state.cart]);
 
-  useEffect(() => {
-    console.log(checkedProduct);
-  }, [checkedProduct]);
+  // useEffect(() => {
+  //   console.log(checkedProduct);
+  // }, [checkedProduct]);
 
   setTimeout(() => {
     if (amount.length < 1) {
@@ -75,7 +77,6 @@ export default function Cart() {
   }, 1000);
 
   const addData = (i) => {
-    // console.log(data.storeId)
     if (items.length == 0) {
       setStoreId(state.cart[i].store_id);
       setItems([...items, i]);
@@ -85,7 +86,7 @@ export default function Cart() {
       let product = state.cart[i].id;
       items.forEach((data) => {
         if (state.cart[data].id === product) {
-          console.log(product, data.id);
+          // console.log(product, data.id);
           status = false;
         }
       });
@@ -97,12 +98,12 @@ export default function Cart() {
       }
     }
   };
-
+  // console.log(state.recommendation)
   const removeData = (id) => {
     let tempData = items.filter((item) => {
       return item !== id;
     });
-    console.log(tempData);
+    // console.log(tempData);
     setItems(tempData);
   };
 
@@ -110,7 +111,7 @@ export default function Cart() {
     let tempData = amount;
     tempData[id]++;
     setAmount([...amount, tempData]);
-    console.log(amount);
+    // console.log(amount);
   };
 
   const minAmount = (id) => {
@@ -119,25 +120,40 @@ export default function Cart() {
       tempData[id]--;
     }
     setAmount([...amount, tempData]);
-    console.log(amount);
+    // console.log(amount);
   };
 
   const send = () => {
-    console.log(storeId, items);
-    items.forEach((i) => console.log(amount[i]));
-    // console.log(amount)
+    // console.log(storeId, items);
     let tempData = [];
-    items.forEach((data, index) => {
+    let store = {}
+    items.forEach((data) => {
       tempData.push({
-        product_id: state.cart[data].id,
+        product: state.cart[data],
         amount: amount[data],
       });
+      store = state.cart[data].store
+      // console.log(state.cart[data])
     });
-    const data = { transaction_shipping_cost: transactionShippingCost, store_id: storeId, items: tempData };
-    console.log(data);
+    const data = { store:store, items: tempData };
+    // console.log(data);
     dispatch({ type: 'ADD_TRANSACTION', payload: data });
-    console.log(state.cart);
+    if(items.length >0){
+      router.push('/cart/checkout');
+    }
   };
+
+  const removeItem = (id) =>{
+    axios({
+        method: 'DELETE',
+        url: 'https://dev-api-clover.herokuapp.com/api/carts/'+id,
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('token'),
+        },
+      }).then(() => {
+        console.log('ok')
+      });
+  }
 
   const statusTrue = (id) => {
     let status = statusCheck;
@@ -151,7 +167,8 @@ export default function Cart() {
     setStatusCheck(status);
   };
 
-  const removeItemFromCart = (id) => {
+
+  /*const removeItemFromCart = (id) => {
     const response = axios({
       method: 'delete',
       url: `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/carts/${id}`,
@@ -167,7 +184,8 @@ export default function Cart() {
       success: 'Produk berhasil dihapus dari keranjang !',
       error: 'Produk gagal dihapus dari keranjang !',
     });
-  };
+  };*/
+
   // console.log(isProductChecked);
 
   return (
@@ -301,7 +319,10 @@ export default function Cart() {
                                     //   id: product.id,
                                     //   price: product.product_price,
                                     // })
-                                    removeItemFromCart(item.id)
+                                    {
+                                      removeItem(item.id)
+                                    }
+
                                   }
                                   className='font-medium text-rose-600 hover:text-rose-500'>
                                   <HiOutlineTrash className='w-5 h-5' />
@@ -343,9 +364,12 @@ export default function Cart() {
             <span>Rekomendasi untuk kamu</span>
           </h3>
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8'>
-            {[1, 2, 3, 4].map((i) => (
-              // <CardProduct key={i} product={} />
-              <div key={i}>Rekomendation </div>
+            {state.recommendation.map((data, idx) => (
+              <Fragment key={idx}>
+                {data.map((item, i) => (
+                  <ProductCard key={i} product={item} />
+                ))}
+              </Fragment>
             ))}
           </div>
         </div>
