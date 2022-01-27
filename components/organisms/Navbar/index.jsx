@@ -158,7 +158,7 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <header className='relative'>
-        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-30 bg-white backdrop-blur-sm'>
+        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-10 bg-white backdrop-blur-sm'>
           <div className='border-b border-gray-200'>
             <div className='container flex items-center h-16'>
               <button type='button' onClick={() => setOpen(true)} className='text-gray-700 rounded-lg lg:hidden'>

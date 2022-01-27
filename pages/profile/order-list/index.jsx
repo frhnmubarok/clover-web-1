@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
 import { Tab } from '@headlessui/react';
 import { MdCheck, MdOutlineClose } from 'react-icons/md';
+import Link from '@/components/atoms/Link';
 
 import { ProductContext } from '@/context/ProductContext';
 import ListTable from '@/components/molecules/ListTable';
@@ -13,12 +14,22 @@ import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
 import UserSettingsLayout from '@/components/templates/UserSettingsLayout';
 import AppLayout from '@/components/templates/AppLayout';
+import toast from 'react-hot-toast';
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };
 
-const tabName = ['Perlu Dibayar', 'Dikonfirmasi', 'Dikemas', 'Dikirim', 'Selesai', 'Dibatalkan', 'Refund'];
+const tabName = [
+  'Perlu Dibayar',
+  'Sudah Dibayar',
+  'Dikonfirmasi',
+  'Dikemas',
+  'Dikirim',
+  'Selesai',
+  'Dibatalkan',
+  'Refund',
+];
 
 const OrderList = () => {
   const { updateTransactionStatus, getTransactionDetail, deleteTransaction } = useContext(ProductContext);
@@ -42,28 +53,29 @@ const OrderList = () => {
     }
   }, [transactionId]);
 
+  const fetchData = async () => {
+    const { data } = await callAPI({
+      path: '/api/transaction-user',
+      method: 'GET',
+      token: Cookies.get('token'),
+    });
+    setTransactions(data.data);
+    return data;
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await callAPI({
-        path: '/api/transaction-user',
-        method: 'GET',
-        token: Cookies.get('token'),
-      });
-      setTransactions(data.data);
-      console.log(data);
-    };
     fetchData();
   }, []);
 
   // console.log(transactions);
 
-  const transactionType = (type) => {
-    return transactions.filter((item) => item.transaction_order_status === type);
-  };
+  // const transactionType = (type) => {
+  //   return transactions.filter((item) => item.transaction_order_status === type);
+  // };
 
-  const isPaid = (value) => {
-    return transactions.filter((item) => item.transaction_is_paid === value);
-  };
+  // const isPaid = (value) => {
+  //   return transactions.filter((item) => item.transaction_is_paid === value);
+  // };
 
   const filterData = (isPaid, transactionType) => {
     return transactions.filter(
@@ -71,7 +83,19 @@ const OrderList = () => {
     );
   };
 
-  const tableColumn = (body) => {
+  const handleDone = async (id) => {
+    const response = await updateTransactionStatus(id, {
+      transaction_order_status: '5',
+    });
+
+    const newTransaction = await fetchData();
+    // console.info(newTransaction.data);
+    setTransactions(newTransaction.data);
+
+    return response;
+  };
+
+  const tableColumn = (body, paidStatus) => {
     const newOrderStatus = parseInt(body);
     return React.useMemo(
       () => [
@@ -83,11 +107,6 @@ const OrderList = () => {
           },
           disableSortBy: true,
           disableFilters: true,
-        },
-        {
-          Header: 'Pembeli',
-          accessor: 'user',
-          Cell: ({ cell: { value } }) => <div className='font-semibold'>{value.fullname}</div>,
         },
         {
           Header: 'Tanggal Order',
@@ -125,6 +144,32 @@ const OrderList = () => {
             </button>
           ),
         },
+        {
+          Header: 'Action',
+          disableSortBy: true,
+          disableFilters: true,
+          Cell: ({ row }) => {
+            return (
+              <>
+                {body === '1' && paidStatus === 'unpaid' && (
+                  <Link
+                    href={row.original.transaction_payment_url}
+                    className='inline-flex items-center justify-center px-2 py-1 text-sm text-white rounded-lg bg-primary-500'>
+                    Bayar
+                  </Link>
+                )}
+                {body === '4' && (
+                  <button
+                    type='button'
+                    onClick={() => handleDone(row.original.id)}
+                    className='inline-flex items-center justify-center px-2 py-1 text-sm text-white rounded-lg bg-primary-500'>
+                    Barang sudah diterima
+                  </button>
+                )}
+              </>
+            );
+          },
+        },
       ],
       [],
     );
@@ -157,7 +202,10 @@ const OrderList = () => {
           </Tab.List>
           <Tab.Panels className='mt-2'>
             <Tab.Panel>
-              <ListTable columns={tableColumn('1')} data={filterData(false, '1')} />
+              <ListTable columns={tableColumn('1', 'unpaid')} data={filterData(false, '1')} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <ListTable columns={tableColumn('1')} data={filterData(true, '1')} />
             </Tab.Panel>
             <Tab.Panel>
               <ListTable columns={tableColumn('2')} data={filterData(true, '2')} />
@@ -169,7 +217,7 @@ const OrderList = () => {
               <ListTable columns={tableColumn('4')} data={filterData(true, '4')} />
             </Tab.Panel>
             <Tab.Panel>
-              <ListTable columns={tableColumn('5')} data={filterData(true, '4')} />
+              <ListTable columns={tableColumn('5')} data={filterData(true, '5')} />
             </Tab.Panel>
             <Tab.Panel>
               <ListTable columns={tableColumn('6')} data={filterData(true, '6')} />
