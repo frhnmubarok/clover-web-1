@@ -37,13 +37,13 @@ const Dashboard = () => {
     setUserData({ fullname: localStorage.getItem('fullname') });
   }, [loginStatus]);
 
-  if (typeof window !== 'undefined') {
-    Echo.channel('Clover-channel').listen('.dashboard', (e) => {
-      console.log('ok');
-      // alert(e)
-    });
+  // if (typeof window !== 'undefined') {
+  //   Echo.channel('Clover-channel').listen('.dashboard', (e) => {
+  //     console.log('ok');
+  //     // alert(e)
+  //   });
     // console.log('tes')
-  }
+  // }
 
   const handleLogout = () => {
     toast.promise(userLogout(), {

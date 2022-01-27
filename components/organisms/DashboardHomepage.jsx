@@ -68,6 +68,7 @@ const DashboardHomepage = ({ user }) => {
       setProducts(data.data.data.products)
       setTransactions(data.data.data.transactions)
       setStore(data.data.data.store)
+      localStorage.setItem('storeId', data.data.data.store.id)
     });
   }, []);
   console.log(store)

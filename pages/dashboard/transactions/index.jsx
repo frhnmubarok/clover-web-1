@@ -12,6 +12,7 @@ import AllProducts from '@/components/organisms/AllProducts';
 import callAPI from '@/config/api';
 import toast from 'react-hot-toast';
 import FullscreenLoading from '@/components/atoms/FullscreenLoading';
+import axios from 'axios';
 
 const token = Cookies.get('token');
 
@@ -36,18 +37,12 @@ const AllProductPage = () => {
   };
 
   useEffect(() => {
-    const socket = async () => {
-      const response = await callAPI({
-        path: '/api/transaction',
-        method: 'GET',
-        token,
-      });
-      setTransactions(response.data.data);
-      console.log(response.data.data);
-      alert(buff);
-      setBuff('');
+    const socket = () => {
+      window.location.reload();
+      console.log(buff);
     };
-    if (buff !== '') socket();
+    console.log(buff, localStorage.getItem('store_id'));
+    if (buff == localStorage.getItem('storeId')) socket();
   }, [buff]);
 
   useEffect(() => {
@@ -63,7 +58,7 @@ const AllProductPage = () => {
 
   if (typeof window !== 'undefined') {
     Echo.channel('Clover-channel').listen('.dashboard', (e) => {
-      setBuff(e.event);
+      setBuff(e.store);
     });
   }
 
