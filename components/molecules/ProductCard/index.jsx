@@ -8,8 +8,37 @@ import callAPI from '@/config/api';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
+import { BiMap } from 'react-icons/bi';
 
 export default function ProductCard({ product }) {
+  const [long, setLong] = useState('');
+  const [lat, setLat] = useState('');
+  const distance = (long1, lat1, long2, lat2) => {
+    let d1 = Math.abs(long1 - long2) * 111.319;
+    let d2 = Math.abs(lat1 - lat2) * 110.574;
+    return Math.sqrt(d1 * d1 + d2 * d2);
+  };
+  if (typeof window !== 'undefined') {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLong(position.coords.longitude);
+        setLat(position.coords.latitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }
+  const star = () => {
+    let tmp = 0;
+    product.review_products.forEach((data) => {
+      tmp += data.review_score;
+    });
+    tmp = tmp / product.review_products.length;
+    return +(Math.round(tmp + 'e+1') + 'e-1');
+  };
+  console.log(product);
   const addToCart = async (id) => {
     const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
     try {
@@ -82,11 +111,18 @@ export default function ProductCard({ product }) {
           <div className='flex items-center justify-start w-full space-x-3'>
             <div className='flex items-center justify-start space-x-1'>
               <HiStar className='w-4 h-4 text-yellow-300' />
-              <span className='text-sm'>5</span>
+              <span className='text-sm'>{star() >= 0 ? star() : '0'}</span>
             </div>
             <span className='w-px h-4 bg-gray-500' aria-hidden='true' />
             <p className='text-sm'>Terjual {product.product_sold}</p>
           </div>
+          <p className='inline-flex items-baseline space-x-2 text-sm'>
+            <span>{product.store.store_city}</span>{' '}
+            <span>
+              <BiMap />
+            </span>{' '}
+            <span>{parseInt(distance(long, lat, product.store.store_long, product.store.store_lat))} KM</span>
+          </p>
         </div>
       </div>
     </div>

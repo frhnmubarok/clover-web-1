@@ -15,14 +15,14 @@ import { MdFavorite } from 'react-icons/md';
 export default function ProductDetail({ data }) {
   const { product, category, sub_category, photos, store, reviews } = data.data;
   const [isOpen, setIsOpen] = useState(false);
-  const star = () =>{
-    let tmp = 0
-    reviews.forEach((data)=>{
-      tmp+=data.review_score
-    })
-    tmp = tmp/reviews.length
-    return +(Math.round(tmp + "e+1")  + "e-1");
-  }
+  const star = () => {
+    let tmp = 0;
+    reviews.forEach((data) => {
+      tmp += data.review_score;
+    });
+    tmp = tmp / reviews.length;
+    return +(Math.round(tmp + 'e+1') + 'e-1');
+  };
   function closeModal() {
     setIsOpen(false);
   }
@@ -131,7 +131,7 @@ export default function ProductDetail({ data }) {
                 <div className='flex items-center py-2 space-x-3 '>
                   <h3>Terjual {product.product_sold}</h3>
                   <span>|</span>
-                  <HiStar className='w-5 h-5 text-yellow-300' /> {star()}
+                  <HiStar className='w-5 h-5 text-yellow-300' /> {star() >= 0 ? star() : '0'}
                 </div>
                 <div className='text-3xl font-semibold'>{formatRupiah(product.product_price)}</div>
               </div>
@@ -199,18 +199,14 @@ export default function ProductDetail({ data }) {
                     </Link>
                   </div>
                 </div>
-                <div className='pt-4'>
-                  {store.store_description}
-                </div>
+                <div className='pt-4'>{store.store_description}</div>
               </div>
             </div>
             <div className='col-span-3'>
               <div className='flex flex-col space-y-5'>
                 <button
                   type='button'
-                  onClick={() =>
-                    addToCart(product.id)
-                  }
+                  onClick={() => addToCart(product.id)}
                   className='inline-flex items-center justify-center w-full py-2 space-x-2 text-sm text-white duration-150 ease-in-out border border-transparent rounded-lg bg-primary-500 group hover:bg-primary-600 hover:ring-2 hover:ring-offset-2 hover:ring-sky-500'>
                   <HiPlusCircle className='w-5 h-5 text-primary-300 group-hover:text-primary-400' />
                   <span>Keranjang</span>
@@ -251,13 +247,13 @@ export default function ProductDetail({ data }) {
             </div>
             <div className='inline-flex flex-col items-center justify-center'>
               <div className='flex items-end py-3'>
-                <span className='text-[90px] leading-[60px]'>{star() >=0 ? star() : '0'}</span>
+                <span className='text-[90px] leading-[60px]'>{star() >= 0 ? star() : '0'}</span>
                 <span>/5</span>
               </div>
               <div className='flex items-center'>
                 {[1, 2, 3, 4, 5].map((i) => {
-                  if(i<=star()){
-                    return(<HiStar key={i} className='w-6 h-6 text-yellow-300' />)
+                  if (i <= star()) {
+                    return <HiStar key={i} className='w-6 h-6 text-yellow-300' />;
                   }
                 })}
               </div>
@@ -273,10 +269,10 @@ export default function ProductDetail({ data }) {
                       <div className='flex items-center space-x-4'>
                         <div className='relative h-[48px] overflow-hidden rounded-full aspect-square '>
                           <Image
-                            src={data.user.photo === '' ? 
-                              'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60'
-                              :
-                              data.user.photo
+                            src={
+                              data.user.photo === ''
+                                ? 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60'
+                                : data.user.photo
                             }
                             alt='Photo Store'
                             layout='fill'
@@ -291,20 +287,17 @@ export default function ProductDetail({ data }) {
                       <div className='flex items-center space-x-4'>
                         <div className='flex items-center'>
                           {[1, 2, 3, 4, 5].map((i) => {
-                            if(i<=data.review_score ){
-                              return (<HiStar key={i} className='w-6 h-6 text-yellow-300' />)
+                            if (i <= data.review_score) {
+                              return <HiStar key={i} className='w-6 h-6 text-yellow-300' />;
                             }
-                          }
-                          )}
+                          })}
                         </div>
                         {/* <button type='button' className='px-4 py-2 text-xs text-white rounded-lg bg-rose-500'>
                           Laporkan
                         </button> */}
                       </div>
                     </div>
-                    <div>
-                      {data.review_comment}
-                    </div>
+                    <div>{data.review_comment}</div>
                   </div>
                 ))}
               </div>
