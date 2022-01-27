@@ -68,6 +68,7 @@ export default function Navbar() {
     if (get && Cookies.get('token') && buff == 0) {
       setBuff(1);
       setGet(false);
+      dispatch({ type: 'LOADING', payload: true });
       axios({
         method: 'GET',
         url: 'https://dev-api-clover.herokuapp.com/api/carts',
@@ -79,6 +80,7 @@ export default function Navbar() {
           type: 'GET_CARTS',
           payload: data.data.data,
         });
+        dispatch({ type: 'LOADING', payload: false });
         console.log('ok');
       });
     }

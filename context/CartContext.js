@@ -14,6 +14,7 @@ const initialState = {
   checkoutProduct: [],
   store: {},
   recommendation: [],
+  isLoading: false,
 };
 
 export const useCartContext = () => {
@@ -55,6 +56,11 @@ const Reducer = (state, action) => {
         ...state,
         checkoutProduct: action.payload.items,
         store: action.payload.store,
+      };
+    case 'LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
       console.log('Awokwokwkwok');
