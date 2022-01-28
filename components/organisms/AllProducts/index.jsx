@@ -84,19 +84,19 @@ const AllProducts = ({ data }) => {
         Cell: ({ value }) => (
           <div className='flex'>
             <Link href={`edit-product/${value}`}>
-              <button className='py-2 px-2 rounded inline-flex items-center'>
-                <span className='text-blue-500 hover:text-blue-700 transition-all ease-in-out text-2xl'>
+              <button className='inline-flex items-center px-2 py-2 rounded'>
+                <span className='text-2xl text-blue-500 transition-all ease-in-out hover:text-blue-700'>
                   <MdEdit />
                 </span>
               </button>
             </Link>
             <button
-              className='py-2 px-2 rounded inline-flex items-center'
+              className='inline-flex items-center px-2 py-2 rounded'
               onClick={() => {
                 setOpen(!open);
                 setProductId(value);
               }}>
-              <span className='text-red-500 hover:text-red-700 transition-all ease-in-out text-2xl'>
+              <span className='text-2xl text-red-500 transition-all ease-in-out hover:text-red-700'>
                 <MdDelete />
               </span>
             </button>
@@ -109,16 +109,16 @@ const AllProducts = ({ data }) => {
 
   return (
     <>
-      <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
+      <div className='min-h-screen px-4 pb-24 md:px-6'>
         <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Daftar Produk</h1>
-        {/* <h2 className='text-md text-gray-400'>
+        {/* <h2 className='text-gray-400 text-md'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.
           </h2> */}
         <div className='flex justify-end'>
           <Link href='/dashboard/add-product'>
-            <a className='flex justify-center items-center font-semibold rounded-md bg-emerald-500 hover:bg-emerald-600 p-2 text-sm text-gray-100 transition-all ease-linear shadow-md'>
+            <a className='flex items-center justify-center p-2 text-sm font-semibold text-gray-100 transition-all ease-linear rounded-md shadow-md bg-emerald-500 hover:bg-emerald-600'>
               Tambah Produk
-              <span className='font-semibold text-xl ml-1'>
+              <span className='ml-1 text-xl font-semibold'>
                 <MdAdd />
               </span>
             </a>

@@ -1,9 +1,18 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { Dialog, Menu, Popover, Transition } from '@headlessui/react';
-import { HiChevronDown, HiChevronUp, HiOutlineBell, HiOutlineMenuAlt1, HiSearch } from 'react-icons/hi';
+import {
+  HiChevronDown,
+  HiChevronUp,
+  HiOutlineBell,
+  HiOutlineExclamation,
+  HiOutlineMenuAlt1,
+  HiSearch,
+} from 'react-icons/hi';
 import { BiStore } from 'react-icons/bi';
 import { MdOutlineTouchApp } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import { AuthContext } from '@/context/AuthContext';
 
@@ -12,10 +21,11 @@ import Mobile from './Mobile';
 import logo from '@/assets/images/logo-clover.png';
 
 import { classNames, formatRupiah } from '@/utils/helpers';
-import { ExternalLinkIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
-import Cookies from 'js-cookie';
+import { ExternalLinkIcon, ShoppingCartIcon, SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
 import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
+import axios from 'axios';
+import { getUserProfile, resendEmailVerification } from '@/services/user';
 
 const navigation = {
   categories: [
@@ -55,18 +65,72 @@ const navigation = {
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
+  const [userProfile, setUserProfile] = React.useState({});
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
+  const userIsVerified = useSelector((state) => state.user.user_isVerified);
+  const [hideBanner, setHideBanner] = React.useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
-  const [productInCart, setProductsInCart] = React.useState({
-    key: '',
-    count: 0,
-  });
-  const { state } = useCartContext();
+  const [hasRole, setHasRole] = React.useState(null);
+
+  const { state, dispatch } = useCartContext();
+  const [get, setGet] = React.useState(true);
+  const [buff, setBuff] = React.useState(0);
+
+  if (typeof window !== 'undefined') {
+    if (get && Cookies.get('token') && buff == 0) {
+      setBuff(1);
+      setGet(false);
+      dispatch({ type: 'LOADING', payload: true });
+      axios({
+        method: 'GET',
+        url: 'https://dev-api-clover.herokuapp.com/api/carts',
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('token'),
+        },
+      }).then((data) => {
+        dispatch({
+          type: 'GET_CARTS',
+          payload: data.data.data,
+        });
+        dispatch({ type: 'LOADING', payload: false });
+        console.log('ok');
+      });
+    }
+
+    if (buff > 0) {
+      setTimeout(() => {
+        setBuff(0);
+      }, 5000);
+    } else {
+      Echo.channel('Clover-channel').listen('.cart', (e) => {
+        if (buff == 0) {
+          setBuff(1);
+          setGet(true);
+        }
+      });
+    }
+  }
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      setUserLoggedIn(JSON.parse(localStorage.getItem('fullname')));
+      setUserLoggedIn(localStorage.getItem('fullname'));
+      setHasRole(localStorage.getItem('role'));
+    }
+    if (Cookies.get('token') !== undefined) {
+      const getUser = async () => {
+        const { data } = await getUserProfile();
+        // console.log(data.data);
+        return data.data;
+      };
+      const response = async () =>
+        getUser().then((data) => {
+          return data;
+        });
+      response().then((data) => {
+        console.log(data);
+        setUserProfile(data);
+      });
     }
   }, []);
 
@@ -76,13 +140,22 @@ export default function Navbar() {
     }
   }, [state.cart]);
 
+  const handleResendEmail = async () => {
+    const response = await resendEmailVerification();
+    return response;
+  };
+
   const handleLogout = () => {
-    toast.promise(userLogout(), {
-      loading: 'Mohon tunggu...',
-      success: 'Berhasil Logout !',
-      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
-    });
-    setLoginStatus(false);
+    toast
+      .promise(userLogout(), {
+        loading: 'Mohon tunggu...',
+        success: 'Berhasil Logout !',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+      })
+      .then(() => {
+        setLoginStatus(false);
+        dispatch({ type: 'RESET_STATE' });
+      });
   };
 
   return (
@@ -92,7 +165,7 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <header className='relative'>
-        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-30 bg-white backdrop-blur-sm'>
+        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-20 bg-white backdrop-blur-sm'>
           <div className='border-b border-gray-200'>
             <div className='container flex items-center h-16'>
               <button type='button' onClick={() => setOpen(true)} className='text-gray-700 rounded-lg lg:hidden'>
@@ -259,12 +332,14 @@ export default function Navbar() {
                               </Menu.Item>
                               <Menu.Item>
                                 {({ active }) => (
-                                  <button
-                                    className={`${
-                                      active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
-                                    } group flex items-center w-full px-4 py-2 text-sm`}>
-                                    Pengaturan Akun
-                                  </button>
+                                  <Link href={'/profile/settings'}>
+                                    <a
+                                      className={`${
+                                        active ? 'bg-primary-500/80 text-white' : 'text-gray-900'
+                                      } group flex items-center w-full px-4 py-2 text-sm`}>
+                                      Pengaturan Akun
+                                    </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             </div>
@@ -284,9 +359,11 @@ export default function Navbar() {
                           </Menu.Items>
                         </Transition>
                       </Menu>
-                      <Link href='/dashboard' className='p-2'>
-                        <BiStore className='w-5 h-5' />
-                      </Link>
+                      {hasRole !== 'User' && hasRole !== null && (
+                        <Link href='/dashboard' className='p-2'>
+                          <BiStore className='w-5 h-5' />
+                        </Link>
+                      )}
                       <button type='button' className='relative p-2'>
                         <div className='absolute right-[10px]'>
                           <span className='relative flex w-2 h-2'>
@@ -316,10 +393,10 @@ export default function Navbar() {
                   <Link href='/cart' className={'relative bg-gray-200 p-2 rounded-lg hover:bg-gray-200'}>
                     <div
                       className={classNames(
-                        Object.keys(state.cart).length > 0 ? 'block' : 'hidden',
+                        state.cart.length > 0 ? 'block' : 'hidden',
                         'absolute py-px px-[6px] text-white rounded-md text-xs -top-2 -right-2 bg-sky-500',
                       )}>
-                      {Object.keys(state.cart).length}
+                      {state.cart.length}
                     </div>
                     <ShoppingCartIcon className={'hover:text-sky-500 w-5 h-5'} />
                   </Link>
@@ -328,6 +405,50 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
+        {userProfile?.email_verified_at === null && Cookies.get('token') !== undefined && (
+          <div className={classNames('fixed inset-x-0 z-10 bg-rose-600 top-16', hideBanner && 'hidden')}>
+            <div className='container px-3 py-2'>
+              <div className='flex flex-wrap items-center justify-between'>
+                <div className='flex items-center flex-1 w-0'>
+                  <span className='flex p-2 rounded-lg bg-rose-800'>
+                    <HiOutlineExclamation className='w-6 h-6 text-white' aria-hidden='true' />
+                  </span>
+                  <p className='ml-3 font-medium text-white truncate'>
+                    <span className='md:hidden'>Cek email mu untuk verifikasi akun!</span>
+                    <span className='hidden md:inline'>
+                      Akun mu belum terverifikasi! Tolong cek email kamu untuk melakukan verikasi.
+                    </span>
+                  </p>
+                </div>
+                <div className='flex-shrink-0 order-3 w-full mt-2 sm:order-2 sm:mt-0 sm:w-auto'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      toast.promise(handleResendEmail(), {
+                        success: 'Email berhasil dikirim!',
+                        error: 'Email gagal dikirim!',
+                        loading: 'Mengirim email...',
+                      });
+                    }}
+                    className='flex items-center justify-center px-4 py-2 text-sm font-medium bg-white border border-transparent rounded-md shadow-sm text-rose-600 hover:bg-rose-50'>
+                    Kirim ulang email verifikasi
+                  </button>
+                </div>
+                <div className='order-2 flex-shrink-0 sm:order-3 sm:ml-3'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      setHideBanner(true);
+                    }}
+                    className='-mr-1 flex p-2 rounded-md hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2'>
+                    <span className='sr-only'>Dismiss</span>
+                    <XIcon className='h-6 w-6 text-white' aria-hidden='true' />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
     </div>
   );

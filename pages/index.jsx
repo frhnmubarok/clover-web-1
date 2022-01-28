@@ -6,8 +6,10 @@ import Slider from '@/components/molecules/Slider';
 import AppLayout from '@/components/templates/AppLayout';
 import callAPI from '@/config/api';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { HiArrowRight, HiOutlineExternalLink, HiOutlinePlay } from 'react-icons/hi';
+import Cookies from 'js-cookie';
+import { AuthContext } from '@/context/AuthContext';
 
 const images = [
   'https://images.unsplash.com/photo-1474440692490-2e83ae13ba29?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
@@ -35,10 +37,12 @@ const JoinAndWatchButton = () => {
   );
 };
 export default function Home({ data }) {
+  const { setLoginStatus } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [more, setMore] = useState(1);
   const [products, setProducts] = useState([]);
   const [nextPage, setNextPage] = useState(null);
+  const token = Cookies.get('token');
 
   useEffect(() => {
     if (data !== null) {
@@ -46,6 +50,12 @@ export default function Home({ data }) {
       setNextPage(data.data.next_page_url);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (token) {
+      setLoginStatus(true);
+    }
+  }, []);
 
   const loadMore = async () => {
     setLoading(true);

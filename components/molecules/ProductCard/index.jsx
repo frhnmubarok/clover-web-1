@@ -3,10 +3,64 @@ import Image from 'next/image';
 import Link from '@/components/atoms/Link';
 import { HiStar } from 'react-icons/hi';
 import { MdFavorite, MdAddShoppingCart } from 'react-icons/md';
+import { useEffect, useState } from 'react';
+import callAPI from '@/config/api';
+import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 import { useCartContext } from '@/context/CartContext';
+import { BiMap } from 'react-icons/bi';
 
 export default function ProductCard({ product }) {
-  const { dispatch } = useCartContext();
+  const [long, setLong] = useState('');
+  const [lat, setLat] = useState('');
+  const distance = (long1, lat1, long2, lat2) => {
+    let d1 = Math.abs(long1 - long2) * 111.319;
+    let d2 = Math.abs(lat1 - lat2) * 110.574;
+    return Math.sqrt(d1 * d1 + d2 * d2);
+  };
+  if (typeof window !== 'undefined') {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLong(position.coords.longitude);
+        setLat(position.coords.latitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }
+  const star = () => {
+    let tmp = 0;
+    product.review_products.forEach((data) => {
+      tmp += data.review_score;
+    });
+    tmp = tmp / product.review_products.length;
+    return +(Math.round(tmp + 'e+1') + 'e-1');
+  };
+  // console.log(product);
+  const addToCart = async (id) => {
+    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
+    try {
+      const response = await callAPI({
+        path: '/api/carts',
+        method: 'POST',
+        data: { product_id: id },
+        token: Cookies.get('token'),
+      });
+      if (response.status === 422) {
+        toast.error(response.data.message, {
+          id: toastLoading,
+        });
+      } else {
+        toast.success('Product sudah ditambahkan ke keranjang.', {
+          id: toastLoading,
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
@@ -29,23 +83,18 @@ export default function ProductCard({ product }) {
               className='block w-full px-3 py-2 text-sm text-center text-white bg-primary-500 rounded-xl'>
               Detail Produk
             </Link>
-            <button
-              type='button'
-              onClick={() =>
-                dispatch({
-                  type: 'ADD_TO_CART',
-                  item: {
-                    product: product,
-                    store: product.store,
-                    category: product.category,
-                    sub_category: product.sub_category,
-                    photos: product.photos,
-                  },
-                })
-              }
-              className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
-              <MdAddShoppingCart className='w-5 h-5' />
-            </button>
+            {Cookies.get('token') ? (
+              <button
+                type='button'
+                onClick={() => addToCart(product.id)}
+                className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
+                <MdAddShoppingCart className='w-5 h-5' />
+              </button>
+            ) : (
+              <Link href='/login' className='p-2 text-sm text-white bg-primary-500 rounded-xl'>
+                <MdAddShoppingCart className='w-5 h-5' />
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -62,11 +111,18 @@ export default function ProductCard({ product }) {
           <div className='flex items-center justify-start w-full space-x-3'>
             <div className='flex items-center justify-start space-x-1'>
               <HiStar className='w-4 h-4 text-yellow-300' />
-              <span className='text-sm'>5</span>
+              <span className='text-sm'>{star() >= 0 ? star() : '0'}</span>
             </div>
             <span className='w-px h-4 bg-gray-500' aria-hidden='true' />
             <p className='text-sm'>Terjual {product.product_sold}</p>
           </div>
+          <p className='inline-flex items-baseline space-x-2 text-sm'>
+            <span>{product.store.store_city}</span>{' '}
+            <span>
+              <BiMap />
+            </span>{' '}
+            <span>{parseInt(distance(long, lat, product.store.store_long, product.store.store_lat))} KM</span>
+          </p>
         </div>
       </div>
     </div>

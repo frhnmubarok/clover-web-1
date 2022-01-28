@@ -6,4 +6,5 @@ export const middleware = (req, res) => {
   console.log(token);
 
   if (!token) return NextResponse.redirect('/login');
+  if (role !== 'User' || !role) return NextResponse.redirect('/');
 };

@@ -13,6 +13,9 @@ import {
 } from 'services/auth';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { setUserIsLoggedIn, setUserIsVerified } from '@/features/user/userSlice';
+import { useCartContext } from './CartContext';
 
 export const AuthContext = createContext();
 
@@ -20,7 +23,9 @@ export const AuthProvider = (props) => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cookies, setCookies] = useState(null);
+
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (Cookies.get('token') !== undefined) {
@@ -32,15 +37,16 @@ export const AuthProvider = (props) => {
   const userRegister = async (formData) => {
     // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authRegister(formData);
-    if (response.error) {
-      const errData = response.message;
-      console.log(response);
+    if (response.status === 400) {
+      const errData = response.data.message;
+      console.log(errData);
       'handphone' in errData && toast.error('No. Handphone sudah digunakan');
       'email' in errData && toast.error('Email sudah digunakan');
       'username' in errData && toast.error('Username sudah digunakan');
+      throw new Error(errData);
     } else {
       console.log(response);
-      router.push('/register/success');
+      // router.push('/register/success');
       setIsLoading(false);
     }
   };
@@ -49,15 +55,17 @@ export const AuthProvider = (props) => {
     // await axios.get(`https://dev-api-clover.herokuapp.com/sanctum/csrf-cookie`);
     const response = await authLogin(formData);
     if (!response.error) {
-      const { id, fullname, email, role } = response.data.data;
+      const { id, fullname, email, role, email_verified_at } = response.data.data;
       console.log(response.data);
       setCookies(response.data.token);
       Cookies.set('token', response.data.token, { expires: 30 });
-      Cookies.set('role', role.role);
+      Cookies.set('role', role.role, { expires: 30 });
       localStorage.setItem('id', id);
       localStorage.setItem('fullname', fullname);
       localStorage.setItem('email', email);
       localStorage.setItem('role', role.role);
+      dispatch(setUserIsVerified(email_verified_at ? true : false));
+      dispatch(setUserIsLoggedIn(true));
       setLoginStatus(true);
       router.push('/');
     }
@@ -80,31 +88,19 @@ export const AuthProvider = (props) => {
     if (response.error) {
       toast.error(response.message);
     } else {
-      toast.success(response.data.message);
+      // toast.success(response.data.message);
       localStorage.setItem('userId', response.data.user.id);
     }
   };
 
   const userVerifOTP = async (formData) => {
-    const response = await authVerifOTP(formData);
-    if (response.error) {
-      console.log(response);
-      toast.error(response.message);
+    const { data } = await authVerifOTP(formData);
+    console.log(data);
+    if (!data.valid) {
+      throw new Error('OTP tidak valid');
     } else {
-      toast.success(response.data.message);
-      console.log(response.data);
       router.push('/forgot-password/reset');
     }
-    // authVerifOTP(formData)
-    //   .then((res) => {
-    //     console.log(res);
-    //     toast.success(res.message);
-    //     router.push('/forgot-password/reset');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.response.data.message);
-    //     toast.error(err.response.data.message);
-    //   });
   };
 
   const userConfirmPassword = async (formData) => {
@@ -114,7 +110,7 @@ export const AuthProvider = (props) => {
       toast.error(response.message);
     } else {
       console.log(response.data);
-      toast.success(`${response.data.message}, anda akan segera dialihkan ke halaman login`);
+      toast.success(`Password berhasil diubah, anda akan segera dialihkan ke halaman login`);
       localStorage.removeItem('userId');
       setTimeout(() => {
         router.push('/login');
@@ -145,6 +141,7 @@ export const AuthProvider = (props) => {
       Cookies.remove('token');
       setLoginStatus(false);
       router.push('/');
+      dispatch(setUserIsLoggedIn(false));
     }
   };
 

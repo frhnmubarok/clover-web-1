@@ -13,14 +13,14 @@ async function callAPI({ path, method, data, token, formData }) {
         Authorization: 'Bearer ' + token,
         // 'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Origin': '*',
-        Origin: 'https://clover-web.vercel.app',
+        Origin: 'http://localhost:3000',
       }
     : {
         'Content-Type': `${formData ? 'multipart/form-data' : 'application/json'}`,
         Accept: `${formData ? 'multipart/form-data' : 'application/json'}`,
         // 'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Origin': '*',
-        Origin: 'https://clover-web.vercel.app',
+        Origin: 'http://localhost:3000',
       };
 
   const response = await axios({
@@ -29,8 +29,14 @@ async function callAPI({ path, method, data, token, formData }) {
     data,
     headers,
   }).catch((err) => err.response);
+  console.log(response);
 
-  return response;
+  if (response.status === 401) {
+    Cookies.remove('token');
+    window.location.href = '/login';
+  } else {
+    return response;
+  }
 
   // if (response.status > 300) {
   //   const res = {

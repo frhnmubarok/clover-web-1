@@ -1,18 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/link-passhref */
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
-import { useFormik } from 'formik';
 import { Tab } from '@headlessui/react';
 import { MdCheck, MdOutlineClose } from 'react-icons/md';
 
 import { ProductContext } from '@/context/ProductContext';
 import ListTable from '@/components/molecules/ListTable';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationIcon } from '@heroicons/react/outline';
-import DeleteModal from '@/components/atoms/DeleteModal';
-import toast from 'react-hot-toast';
-import Link from 'next/link';
 import { badgeOrderStatus, orderStatus } from '@/utils/helpers';
 import TransactionDetailModal from '@/components/atoms/TransactionDetailModal';
 import { getAllTransactionAPI } from '@/services/product';
@@ -25,7 +18,7 @@ const tabName = ['Perlu Konfirmasi', 'Dikonfirmasi', 'Diproses', 'Dikirim', 'Sel
 
 const AllTransactions = ({ data }) => {
   const { updateTransactionStatus, getTransactionDetail, deleteTransaction } = useContext(ProductContext);
-  const [transactions, setTransactions] = useState(data.data);
+  const [transactions, setTransactions] = useState(data);
   const [transactionId, setTransactionId] = useState(null);
   const [transactionDetail, setTransactionDetail] = useState({});
   const [open, setOpen] = useState(false);
@@ -44,6 +37,8 @@ const AllTransactions = ({ data }) => {
       console.log(transactionId);
     }
   }, [transactionId]);
+
+  // console.log(transactions);
 
   const transactionType = (type) => {
     return transactions.filter((item) => item.transaction_order_status === type);
@@ -105,6 +100,7 @@ const AllTransactions = ({ data }) => {
         {
           Header: 'Tanggal Order',
           accessor: 'created_at',
+          sortDescFirst: true,
           Cell: ({ cell: { value } }) => value.substring(0, 10),
         },
         {
@@ -143,7 +139,7 @@ const AllTransactions = ({ data }) => {
           disableFilters: true,
           Cell: ({ value }) => (
             <button
-              className='rounded-lg px-2 py-1 text-white text-sm bg-cyan-700 '
+              className='px-2 py-1 text-sm text-white rounded-lg bg-cyan-700 '
               onClick={() => {
                 setOpen(!open);
                 setTransactionId(value);
@@ -190,7 +186,7 @@ const AllTransactions = ({ data }) => {
               )}
               {body == 2 && updateButton(value, newOrderStatus, 'Proses')}
               {body == 3 && updateButton(value, newOrderStatus, 'Kirim')}
-              {body == 4 && updateButton(value, newOrderStatus, 'Batal')}
+              {/* {body == 4 && updateButton(value, newOrderStatus, 'Batal')} */}
               {body == 6 && (
                 <div data-tip='Proses Pesanan' className='tooltip'>
                   <button
@@ -210,9 +206,9 @@ const AllTransactions = ({ data }) => {
 
   return (
     <>
-      <div className='overflow-auto h-screen pb-24 px-4 md:px-6'>
+      <div className='min-h-screen px-4 pb-24 md:px-6'>
         <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>Daftar Transaksi</h1>
-        {/* <h2 className='text-md text-gray-400'>
+        {/* <h2 className='text-gray-400 text-md'>
             Here&#x27;s what&#x27;s happening with your ambassador account today.
           </h2> */}
         <Tab.Group>

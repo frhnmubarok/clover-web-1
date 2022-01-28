@@ -1,4 +1,16 @@
-const ProductInput = ({ id, name, type, label, handleChange, value, placeholder, errors, prefix, suffix }) => {
+const ProductInput = ({
+  id,
+  name,
+  type,
+  label,
+  handleChange,
+  value,
+  placeholder,
+  errors,
+  prefix,
+  suffix,
+  required,
+}) => {
   return (
     <div className='col-span-3 sm:col-span-3'>
       <label htmlFor={name} className='block text-sm text-gray-700 font-semibold'>
@@ -16,6 +28,8 @@ const ProductInput = ({ id, name, type, label, handleChange, value, placeholder,
           id={id}
           onChange={handleChange}
           value={value}
+          required={required}
+          placeholder={placeholder}
           className={`focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full ${
             prefix ? 'rounded-none rounded-r-md' : 'rounded-md'
           } ${suffix ? 'rounded-none rounded-l-md' : 'rounded-md'} sm:text-sm border-gray-300`}

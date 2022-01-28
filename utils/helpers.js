@@ -53,6 +53,7 @@ export const orderStatus = (status) => {
   }
 };
 
+
 export const badgeOrderStatus = (status) => {
   switch (status) {
     case '1':
@@ -64,7 +65,7 @@ export const badgeOrderStatus = (status) => {
     case '4':
       return 'bg-sky-500';
     case '5':
-      return 'bg-cyan-500';
+      return 'bg-purple-500';
     case '6':
       return 'bg-red-500';
     case '7':
