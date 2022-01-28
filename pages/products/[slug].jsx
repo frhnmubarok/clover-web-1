@@ -374,22 +374,7 @@ ProductDetail.layoutProps = {
   },
 };
 
-export async function getStaticPaths() {
-  const { data } = await callAPI({
-    path: '/api/products',
-    method: 'GET',
-  });
-  // console.log(data.data.data);
-  const paths = data.data.data.map((item) => ({
-    params: { slug: item.product_slug },
-  }));
-
-  console.info(paths);
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
+export const getServerSideProps = async ({ params }) => {
   const { data } = await callAPI({
     path: '/api/products/' + params.slug,
     method: 'GET',
@@ -400,4 +385,4 @@ export async function getStaticProps({ params }) {
       data,
     },
   };
-}
+};
