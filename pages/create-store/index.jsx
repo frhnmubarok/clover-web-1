@@ -15,6 +15,8 @@ import AuthLayout from '@/components/templates/AuthLayout';
 import AuthButton from '@/components/atoms/AuthButton';
 import TextArea from '@/components/atoms/TextArea';
 import { callRajaOngkirAPI } from '@/config/api';
+import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 const validate = (values) => {
   const errors = {};
@@ -50,21 +52,21 @@ const CreateStore = ({ data }) => {
   const [province, setProvince] = useState(data.data);
   const [provinceId, setProvinceId] = useState(null);
   const [city, setCity] = useState([]);
-  const [long, setLong] = useState('')
-  const [lat, setLat] = useState('')
+  const [long, setLong] = useState('');
+  const [lat, setLat] = useState('');
 
-  if(typeof window !== undefined){
+  if (typeof window !== undefined) {
     function getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
       } else {
-        console.log("Geolocation is not supported by this browser.");
+        console.log('Geolocation is not supported by this browser.');
       }
     }
 
     function showPosition(position) {
-      setLat(position.coords.latitude)
-      setLong(position.coords.longitude)
+      setLat(position.coords.latitude);
+      setLong(position.coords.longitude);
     }
     // getLocation()
   }
@@ -92,7 +94,7 @@ const CreateStore = ({ data }) => {
     },
     validate,
     onSubmit: (values) => {
-      getLocation()
+      getLocation();
       const formData = new FormData();
       formData.append('store_name', values.store_name);
       formData.append('store_description', values.store_description);
@@ -105,9 +107,17 @@ const CreateStore = ({ data }) => {
       formData.append('store_postal_code', values.store_postal_code);
       formData.append('store_long', long);
       formData.append('store_lat', lat);
-      createStore(formData);
-      console.log(values);
-      console.log(long,lat)
+      toast
+        .promise(createStore(formData), {
+          loading: 'Membuat Toko ...',
+          success: 'Berhasil membuat toko',
+          error: 'Gagal membuat toko',
+        })
+        .then(() => {
+          Cookies.remove('token');
+          Cookies.remove('role');
+          window.location.href = '/';
+        });
     },
   });
 
@@ -184,15 +194,12 @@ const CreateStore = ({ data }) => {
             name='store_province'
             id='store_province'
             onChange={(e) => {
-                  formik.setFieldValue('store_province', e.target.value.split(',')[1]);
-                  formik.setFieldValue('store_province_id', e.target.value.split(',')[0]);
-                  setProvinceId( e.target.value.split(',')[0]);
-                }}>
+              formik.setFieldValue('store_province', e.target.value.split(',')[1]);
+              formik.setFieldValue('store_province_id', e.target.value.split(',')[0]);
+              setProvinceId(e.target.value.split(',')[0]);
+            }}>
             {province.map((item) => (
-              <option
-                key={item.province_id}
-                value={`${item.province_id},${item.province}`}
-                >
+              <option key={item.province_id} value={`${item.province_id},${item.province}`}>
                 {item.province}
               </option>
             ))}
@@ -209,10 +216,9 @@ const CreateStore = ({ data }) => {
               // onChange={formik.handleChange}
               // value={formik.values.store_city}
               onChange={(e) => {
-                  formik.setFieldValue('store_city', e.target.value.split(',')[1]);
-                  formik.setFieldValue('store_city_id', e.target.value.split(',')[0]);
-                }}
-              >
+                formik.setFieldValue('store_city', e.target.value.split(',')[1]);
+                formik.setFieldValue('store_city_id', e.target.value.split(',')[0]);
+              }}>
               {city.map((item) => (
                 <option
                   key={item.city_id}
@@ -222,7 +228,7 @@ const CreateStore = ({ data }) => {
                   //   formik.setFieldValue('store_city_id', item.city_id);
                   //   console.log(item)
                   // }}
-                  >
+                >
                   {item.type} {item.city_name}
                 </option>
               ))}

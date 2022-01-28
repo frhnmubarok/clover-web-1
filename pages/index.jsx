@@ -21,12 +21,24 @@ const images = [
 const JoinAndWatchButton = () => {
   return (
     <div className='grid order-4 w-full grid-cols-1 gap-3 py-5 text-center sm:flex sm:gap-0 sm:space-x-6'>
-      <Link
-        href='/register-partner'
-        className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-500 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
-        <HiOutlineExternalLink className='w-5 h-5' />
-        <span>Mulai Menjadi Mitra</span>
-      </Link>
+      {Cookies.get('role') === 'User' ? (
+        <Link
+          href='/register-partner'
+          className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-500 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
+          <HiOutlineExternalLink className='w-5 h-5' />
+          <span>Mulai Menjadi Mitra</span>
+        </Link>
+      ) : Cookies.get('role') === 'Seller' || Cookies.get('role') === 'Admin' || !Cookies.get('role') ? (
+        ''
+      ) : (
+        <Link
+          href='/create-store'
+          className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-white duration-200 ease-in-out rounded-lg bg-primary-500 hover:bg-primary-500 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
+          <HiOutlineExternalLink className='w-5 h-5' />
+          <span>Buat Toko</span>
+        </Link>
+      )}
+
       <button
         type='button'
         className='inline-flex items-center justify-center px-4 py-3 space-x-2 text-sm font-semibold text-gray-700 duration-200 ease-in-out bg-white border rounded-lg boder-gray-400 hover:bg-gray-200 hover:ring-2 hover:ring-sky-500 hover:ring-offset-2 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
