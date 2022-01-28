@@ -199,8 +199,7 @@ const RegisterPartner = ({ data }) => {
                 name='kyc_province'
                 id='kyc_province'
                 onChange={handleOnChange}
-                // value={formik.values.kyc_province}
-              >
+                value={formik.values.kyc_province}>
                 {province.map((item) => (
                   <option
                     key={item.province_id}
