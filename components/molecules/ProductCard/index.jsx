@@ -38,7 +38,7 @@ export default function ProductCard({ product }) {
     tmp = tmp / product.review_products.length;
     return +(Math.round(tmp + 'e+1') + 'e-1');
   };
-  console.log(product);
+  // console.log(product);
   const addToCart = async (id) => {
     const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
     try {

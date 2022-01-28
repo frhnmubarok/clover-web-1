@@ -100,6 +100,7 @@ const AllTransactions = ({ data }) => {
         {
           Header: 'Tanggal Order',
           accessor: 'created_at',
+          sortDescFirst: true,
           Cell: ({ cell: { value } }) => value.substring(0, 10),
         },
         {

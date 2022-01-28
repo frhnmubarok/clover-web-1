@@ -21,7 +21,6 @@ const UserSettingsLayout = ({ children }) => {
   useEffect(() => {
     const getUser = async () => {
       const { data } = await getUserProfile();
-      console.log(data.data);
       return data.data;
     };
     const response = async () =>
@@ -29,11 +28,8 @@ const UserSettingsLayout = ({ children }) => {
         return data;
       });
     response().then((data) => {
-      console.log(data);
       setUserProfile(data);
     });
-
-    console.log(userPhoto);
   }, []);
 
   const defaultPhoto = () => {
@@ -44,7 +40,6 @@ const UserSettingsLayout = ({ children }) => {
     return initalName.join('');
   };
 
-  console.log(userProfile);
   return (
     <Main className='relative min-h-screen mb-6'>
       <div className='relative px-4 pt-20 mx-auto max-w-7xl sm:px-6 lg:px-8'>

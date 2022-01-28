@@ -15,7 +15,22 @@ const ListTable = ({ columns, data }) => {
     pageOptions,
     state,
     prepareRow,
-  } = useTable({ columns, data }, useSortBy, usePagination);
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy: [
+          {
+            id: 'created_at',
+            desc: true,
+          },
+        ],
+      },
+    },
+    useSortBy,
+    usePagination,
+  );
   const { pageIndex } = state;
   return (
     <>

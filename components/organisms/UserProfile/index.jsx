@@ -30,7 +30,7 @@ const UserProfile = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullname: userData.fullname,
+      fullname: userData.fullname || userData.username,
       email: userData.email,
       handphone: userData.handphone,
       gender: userData.gender || 'laki laki',
@@ -85,14 +85,14 @@ const UserProfile = () => {
       }
       setUserData(data);
       // dispatch(setUserProfilePhoto(data.photo));
-      dispatch(setUserProfileName(data.fullname));
+      dispatch(setUserProfileName(data.fullname || data.username));
     });
   }, []);
   // dispatch(setUserPhoto('https://i.pinimg.com/originals/d1/c1/a0/d1c1a0f49391979e6d74eeaef267161b.jpg'));
 
   useEffect(() => {
     if (userData !== {}) {
-      formik.setFieldValue('fullname', userData.fullname);
+      formik.setFieldValue('fullname', userData.fullname || userData.username);
       formik.setFieldValue('email', userData.email);
       formik.setFieldValue('handphone', userData.handphone);
       formik.setFieldValue('gender', userData.gender);

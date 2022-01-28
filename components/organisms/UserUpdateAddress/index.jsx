@@ -102,7 +102,9 @@ const UserUpdateAddress = ({ data }) => {
       formik.setFieldValue('address_fullname', addressById.address_fullname);
       formik.setFieldValue('address_phone_number', addressById.address_phone_number);
       formik.setFieldValue('address_province', addressById.address_province);
+      formik.setFieldValue('address_id_province', addressById.address_id_province);
       formik.setFieldValue('address_city', addressById.address_city);
+      formik.setFieldValue('address_id_city', addressById.address_id_city);
       formik.setFieldValue('address_districts', addressById.address_districts);
       formik.setFieldValue('address_mark_as', addressById.address_mark_as);
       formik.setFieldValue('address_street_name', addressById.address_street_name);

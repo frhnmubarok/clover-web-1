@@ -20,7 +20,7 @@ const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as='div'
-          className='fixed z-10 inset-0 overflow-y-auto'
+          className='fixed z-30 inset-0 overflow-y-auto'
           initialFocus={cancelButtonRef}
           onClose={setOpen}>
           <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
@@ -64,6 +64,12 @@ const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
                             <dt className='text-sm font-medium text-gray-500'>Nama Pembeli</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>{data.user.fullname}</dd>
                           </div>
+                          <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                            <dt className='text-sm font-medium text-gray-500'>No Handphone</dt>
+                            <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                              {data.address?.address_phone_number}
+                            </dd>
+                          </div>
                           <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                             <dt className='text-sm font-medium text-gray-500'>Tanggal Pembelian</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -102,6 +108,12 @@ const TransactionDetailModal = ({ open, setOpen, cancelButtonRef, data }) => {
                             <dt className='text-sm font-medium text-gray-500'>Ongkos Kirim</dt>
                             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                               {formatRupiah(data.transaction_shipping_cost)}
+                            </dd>
+                          </div>
+                          <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                            <dt className='text-sm font-medium text-gray-500'>Alamat</dt>
+                            <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                              {`${data.address?.address_street_name} Kec. ${data.address?.address_districts} ${data.address?.address_city} ${data.address?.address_postal_code}, ${data.address?.address_province}`}
                             </dd>
                           </div>
                           {/* <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
