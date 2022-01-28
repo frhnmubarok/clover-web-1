@@ -80,10 +80,10 @@ const Register = () => {
           id='account'
           name='account'
           type='text'
-          label='Email / No. Handphone'
+          label='Email'
           handleChange={formik.handleChange}
           value={formik.values.account}
-          placeholder='Masukkan Email / No. Handphone kamu'
+          placeholder='Masukkan Email kamu'
           errors={formik.errors.account}
         />
 
