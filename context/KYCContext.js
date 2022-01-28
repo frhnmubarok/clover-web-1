@@ -19,16 +19,27 @@ export const KYCProvider = (props) => {
 
   const registerKYC = async (formData) => {
     const response = await addKYC(formData);
-    if (response.error) {
-      console.log(response);
-      toast.error(response.message);
+    console.log(response);
+    if (response.status === 400) {
+      const errData = response.data.message;
+      // 'kyc_ktp' in errData &&
+      //   toast.error('Nomor KTP Sudah terdaftar, Harap menggunakan Nomor KTP yang belum terdaftar');
+      toast.error(
+        (errData?.kyc_ktp && 'Nomor KTP Sudah terdaftar, Harap menggunakan Nomor KTP yang belum terdaftar') || errData,
+      );
+      throw new Error(errData);
     } else {
-      toast.success(response.data.message);
-      console.log(response.data);
-      // router.push('/forgot-password/reset');
+      return response;
     }
+    // if (response.error) {
+    //   console.log(response);
+    //   toast.error(response.message);
+    //   throw new Error(response.message);
+    // } else {
+    //   console.log(response.data);
+    // }
   };
-  
+
   const reviewKYC = async (formData) => {
     const response = await addReview(formData);
     if (response.error) {

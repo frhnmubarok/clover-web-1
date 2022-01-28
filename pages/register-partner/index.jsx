@@ -97,13 +97,15 @@ const RegisterPartner = ({ data }) => {
       form.append('kyc_self_photo', values.kyc_self_photo);
       form.append('kyc_ktp_photo', values.kyc_ktp_photo);
       console.log(form);
-      toast.promise(registerKYC(form), {
-        loading: 'Mohon tunggu...',
-        success: 'Login berhasil !',
-        error: 'Login gagal !',
-      });
-      setNextStep(true);
-      setDataDiri(form);
+      registerKYC(form)
+        .then(() => {
+          setNextStep(true);
+          setDataDiri(form);
+        })
+        .catch((err) => {
+          // toast.error(err);
+          console.log(err);
+        });
     },
   });
 
@@ -153,7 +155,6 @@ const RegisterPartner = ({ data }) => {
             <ul className='w-full bg-transparent steps'>
               <li className='step step-primary '>Data Diri</li>
               <li className='text-gray-400 step'>Persyaratan Mitra</li>
-              <li className='text-gray-400 step'>Konfirmasi</li>
             </ul>
           </div>
 
