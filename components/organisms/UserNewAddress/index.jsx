@@ -189,17 +189,13 @@ const UserNewAddress = ({ data }) => {
                       className='w-full text-sm duration-200 ease-in-out border border-gray-300 rounded-md'
                       name='address_province'
                       id='address_province'
-                      onChange={handleOnChange}
-                      // value={formik.values.address_province}
-                    >
+                      onChange={(e) => {
+                        formik.setFieldValue('address_province', e.target.value.split(',')[1]);
+                        formik.setFieldValue('address_id_province', e.target.value.split(',')[0]);
+                        setProvinceId(e.target.value.split(',')[0]);
+                      }}>
                       {province.map((item) => (
-                        <option
-                          key={item.province_id}
-                          value={item.province_id}
-                          onClick={() => {
-                            formik.setFieldValue('address_province', item.province);
-                            formik.setFieldValue('address_id_province', item.province_id);
-                          }}>
+                        <option key={item.province_id} value={`${item.province_id},${item.province}`}>
                           {item.province}
                         </option>
                       ))}
@@ -213,17 +209,16 @@ const UserNewAddress = ({ data }) => {
                         className='w-full text-sm duration-200 ease-in-out border border-gray-300 rounded-md'
                         name='address_city'
                         id='address_city'
-                        onChange={formik.handleChange}
-                        value={formik.values.address_city}>
+                        onChange={(e) => {
+                          formik.setFieldValue('address_city', e.target.value.split(',')[1]);
+                          formik.setFieldValue('address_id_city', e.target.value.split(',')[0]);
+                        }}>
                         {city.map((item) => (
                           <option
                             key={item.city_id}
-                            value={item.city_name}
-                            onClick={() => {
-                              formik.setFieldValue('address_city', item.city_name);
-                              formik.setFieldValue('address_id_city', item.city_id);
-                            }}>
-                            {`${item.type} ${item.city_name}`}
+                            value={`${item.city_id},${item.city_name}`}
+                          >
+                            {item.type} {item.city_name}
                           </option>
                         ))}
                       </select>

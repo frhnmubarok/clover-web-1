@@ -226,11 +226,6 @@ const RegisterPartner = ({ data }) => {
                     <option
                       key={item.city_id}
                       value={`${item.city_id},${item.city_name}`}
-                      // onClick={() => {
-                      //   formik.setFieldValue('store_city', item.city_name);
-                      //   formik.setFieldValue('store_city_id', item.city_id);
-                      //   console.log(item)
-                      // }}
                     >
                       {item.type} {item.city_name}
                     </option>
