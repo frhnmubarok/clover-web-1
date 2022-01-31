@@ -11,8 +11,10 @@ import toast from 'react-hot-toast';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { HiChat, HiPlusCircle, HiStar } from 'react-icons/hi';
 import { MdFavorite } from 'react-icons/md';
+import { useRouter } from 'next/router';
 
 export default function ProductDetail({ data }) {
+  const router = useRouter();
   const { product, category, sub_category, photos, store, reviews } = data.data;
   const [isOpen, setIsOpen] = useState(false);
   const star = () => {
@@ -30,6 +32,35 @@ export default function ProductDetail({ data }) {
   function openModal() {
     setIsOpen(true);
   }
+  const addToCheckout = async () => {
+    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
+    try {
+      const response = await callAPI({
+        path: '/api/carts',
+        method: 'POST',
+        data: { product_id: product.id },
+        token: Cookies.get('token'),
+      });
+      if (response.status === 400) {
+        toast.error(response.data.message, {
+          id: toastLoading,
+        });
+        setTimeout(() => {
+          router.push('/cart');
+        }, 1000);
+      } else {
+        toast.success('silakan lengkapi jumlah pesanan anda dihalaman selanjutnya', {
+          id: toastLoading,
+        });
+        setTimeout(() => {
+          router.push('/cart');
+        }, 4000);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
 
   let [categories] = useState({
     Detail: [
@@ -211,12 +242,12 @@ export default function ProductDetail({ data }) {
                   <HiPlusCircle className='w-5 h-5 text-primary-300 group-hover:text-primary-400' />
                   <span>Keranjang</span>
                 </button>
-                {/* <button
+                <button
                   type='button'
                   onClick={() => setIsOpen(true)}
                   className='inline-flex items-center justify-center w-full py-2 text-sm font-semibold text-gray-700 duration-150 ease-in-out bg-white border-2 border-gray-300 rounded-lg group hover:ring-2 hover:ring-offset-2 hover:ring-sky-500'>
                   Beli Sekarang
-                </button> */}
+                </button>
                 <div className='flex items-center justify-between'>
                   <button
                     type='button'
@@ -338,16 +369,16 @@ export default function ProductDetail({ data }) {
                     </Dialog.Title>
                     <div className='mt-2'>
                       <p className='text-sm text-gray-500'>
-                        Your payment has been successfully submitted. We’ve sent you an email with all of the details of
-                        your order.
+                        Produk akan ditambahkan, silakan lengkapi jumlah dan alamat pengiriman anda dihalaman selanjutnya.
                       </p>
                     </div>
 
                     <div className='flex mt-4 space-x-2'>
                       <button
                         type='button'
-                        className='inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md text-primary-900 bg-primary-100 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500'>
-                        Checkout!
+                        className='inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md text-primary-900 bg-primary-100 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500'
+                        onClick={()=>addToCheckout()}>
+                        Beli Sekarang
                       </button>
                       <button
                         type='button'
