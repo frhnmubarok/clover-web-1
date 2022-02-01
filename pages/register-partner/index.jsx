@@ -96,14 +96,16 @@ const RegisterPartner = ({ data }) => {
       form.append('kyc_gender', values.kyc_gender);
       form.append('kyc_self_photo', values.kyc_self_photo);
       form.append('kyc_ktp_photo', values.kyc_ktp_photo);
-      console.log(form);
-      toast.promise(registerKYC(form), {
-        loading: 'Mohon tunggu...',
-        success: 'Login berhasil !',
-        error: 'Login gagal !',
-      });
-      setNextStep(true);
-      setDataDiri(form);
+      console.log(values);
+      registerKYC(form)
+        .then(() => {
+          setNextStep(true);
+          setDataDiri(form);
+        })
+        .catch((err) => {
+          // toast.error(err);
+          console.log(err);
+        });
     },
   });
 
@@ -153,7 +155,6 @@ const RegisterPartner = ({ data }) => {
             <ul className='w-full bg-transparent steps'>
               <li className='step step-primary '>Data Diri</li>
               <li className='text-gray-400 step'>Persyaratan Mitra</li>
-              <li className='text-gray-400 step'>Konfirmasi</li>
             </ul>
           </div>
 
@@ -197,17 +198,13 @@ const RegisterPartner = ({ data }) => {
                 className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                 name='kyc_province'
                 id='kyc_province'
-                onChange={handleOnChange}
-                // value={formik.values.kyc_province}
-              >
+                onChange={(e) => {
+                  formik.setFieldValue('kyc_province', e.target.value.split(',')[1]);
+                  formik.setFieldValue('kyc_province_id', e.target.value.split(',')[0]);
+                  setProvinceId(e.target.value.split(',')[0]);
+                }}>
                 {province.map((item) => (
-                  <option
-                    key={item.province_id}
-                    value={item.province_id}
-                    onClick={() => {
-                      formik.setFieldValue('kyc_province', item.province);
-                      formik.setFieldValue('kyc_province_id', item.province_id);
-                    }}>
+                  <option key={item.province_id} value={`${item.province_id},${item.province}`}>
                     {item.province}
                   </option>
                 ))}
@@ -221,17 +218,21 @@ const RegisterPartner = ({ data }) => {
                   className='w-full px-4 py-3 text-base duration-200 ease-in-out border border-gray-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
                   name='kyc_city'
                   id='kyc_city'
-                  onChange={formik.handleChange}
-                  value={formik.values.kyc_city}>
+                  onChange={(e) => {
+                    formik.setFieldValue('kyc_city', e.target.value.split(',')[1]);
+                    formik.setFieldValue('kyc_city_id', e.target.value.split(',')[0]);
+                  }}>
                   {city.map((item) => (
                     <option
                       key={item.city_id}
-                      value={item.city_name}
-                      onClick={() => {
-                        formik.setFieldValue('kyc_city', item.city_name);
-                        formik.setFieldValue('kyc_city_id', item.city_id);
-                      }}>
-                      {`${item.type} ${item.city_name}`}
+                      value={`${item.city_id},${item.city_name}`}
+                      // onClick={() => {
+                      //   formik.setFieldValue('store_city', item.city_name);
+                      //   formik.setFieldValue('store_city_id', item.city_id);
+                      //   console.log(item)
+                      // }}
+                    >
+                      {item.type} {item.city_name}
                     </option>
                   ))}
                 </select>

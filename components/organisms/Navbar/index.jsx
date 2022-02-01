@@ -68,6 +68,7 @@ export default function Navbar() {
   const [userProfile, setUserProfile] = React.useState({});
   const { loginStatus, userLogout, setLoginStatus } = React.useContext(AuthContext);
   const userIsVerified = useSelector((state) => state.user.user_isVerified);
+  const [hideBanner, setHideBanner] = React.useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(null);
   const [hasRole, setHasRole] = React.useState(null);
@@ -116,19 +117,21 @@ export default function Navbar() {
       setUserLoggedIn(localStorage.getItem('fullname'));
       setHasRole(localStorage.getItem('role'));
     }
-    const getUser = async () => {
-      const { data } = await getUserProfile();
-      // console.log(data.data);
-      return data.data;
-    };
-    const response = async () =>
-      getUser().then((data) => {
-        return data;
+    if (Cookies.get('token') !== undefined) {
+      const getUser = async () => {
+        const { data } = await getUserProfile();
+        // console.log(data.data);
+        return data.data;
+      };
+      const response = async () =>
+        getUser().then((data) => {
+          return data;
+        });
+      response().then((data) => {
+        console.log(data);
+        setUserProfile(data);
       });
-    response().then((data) => {
-      console.log(data);
-      setUserProfile(data);
-    });
+    }
   }, []);
 
   React.useEffect(() => {
@@ -143,12 +146,16 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    toast.promise(userLogout(), {
-      loading: 'Mohon tunggu...',
-      success: 'Berhasil Logout !',
-      error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
-    });
-    setLoginStatus(false);
+    toast
+      .promise(userLogout(), {
+        loading: 'Mohon tunggu...',
+        success: 'Berhasil Logout !',
+        error: <b>Mohon maaf, telah terjadi kesalahan. Mohon coba lagi.</b>,
+      })
+      .then(() => {
+        setLoginStatus(false);
+        dispatch({ type: 'RESET_STATE' });
+      });
   };
 
   return (
@@ -158,7 +165,7 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <header className='relative'>
-        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-10 bg-white backdrop-blur-sm'>
+        <nav aria-label='Top' className='fixed inset-x-0 top-0 z-20 bg-white backdrop-blur-sm'>
           <div className='border-b border-gray-200'>
             <div className='container flex items-center h-16'>
               <button type='button' onClick={() => setOpen(true)} className='text-gray-700 rounded-lg lg:hidden'>
@@ -399,7 +406,7 @@ export default function Navbar() {
           </div>
         </nav>
         {userProfile?.email_verified_at === null && Cookies.get('token') !== undefined && (
-          <div className='fixed inset-x-0 z-10 bg-rose-600 top-16'>
+          <div className={classNames('fixed inset-x-0 z-10 bg-rose-600 top-16', hideBanner && 'hidden')}>
             <div className='container px-3 py-2'>
               <div className='flex flex-wrap items-center justify-between'>
                 <div className='flex items-center flex-1 w-0'>
@@ -409,7 +416,7 @@ export default function Navbar() {
                   <p className='ml-3 font-medium text-white truncate'>
                     <span className='md:hidden'>Cek email mu untuk verifikasi akun!</span>
                     <span className='hidden md:inline'>
-                      Akun mu belum terverikasi! Tolong cek emailmu untuk melakukan verikasi.
+                      Akun mu belum terverifikasi! Tolong cek email kamu untuk melakukan verikasi.
                     </span>
                   </p>
                 </div>
@@ -425,6 +432,17 @@ export default function Navbar() {
                     }}
                     className='flex items-center justify-center px-4 py-2 text-sm font-medium bg-white border border-transparent rounded-md shadow-sm text-rose-600 hover:bg-rose-50'>
                     Kirim ulang email verifikasi
+                  </button>
+                </div>
+                <div className='order-2 flex-shrink-0 sm:order-3 sm:ml-3'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      setHideBanner(true);
+                    }}
+                    className='-mr-1 flex p-2 rounded-md hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2'>
+                    <span className='sr-only'>Dismiss</span>
+                    <XIcon className='h-6 w-6 text-white' aria-hidden='true' />
                   </button>
                 </div>
               </div>

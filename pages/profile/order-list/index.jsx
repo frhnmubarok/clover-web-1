@@ -64,6 +64,14 @@ const OrderList = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await callAPI({
+        path: '/api/transaction-user',
+        method: 'GET',
+        token: Cookies.get('token'),
+      });
+      setTransactions(data.data);
+    };
     fetchData();
   }, []);
 

@@ -12,6 +12,16 @@ import FullscreenLoading from '@/components/atoms/FullscreenLoading';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 
+const validate = (values) => {
+  const errors = {};
+
+  if (!values.gender) {
+    errors.gender = 'Wajib diisi';
+  }
+
+  return errors;
+};
+
 const UserProfile = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [userData, setUserData] = useState({});
@@ -20,16 +30,16 @@ const UserProfile = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullname: userData.fullname,
+      fullname: userData.fullname || userData.username,
       email: userData.email,
       handphone: userData.handphone,
-      gender: userData.gender || 'laki-laki',
+      gender: userData.gender || 'laki laki',
     },
     onSubmit: async (values) => {
       // const { data } = await addUserAddress(values);
       const formData = new FormData();
       formData.append('fullname', values.fullname);
-      formData.append('gender', values.gender);
+      formData.append('gender', values.gender === null ? 'laki laki' : values.gender);
       formData.append('born_date', startDate.toISOString().split('T')[0]);
       if (values.photo !== undefined) {
         formData.append('photo', values.photo);
@@ -75,14 +85,14 @@ const UserProfile = () => {
       }
       setUserData(data);
       // dispatch(setUserProfilePhoto(data.photo));
-      dispatch(setUserProfileName(data.fullname));
+      dispatch(setUserProfileName(data.fullname || data.username));
     });
   }, []);
   // dispatch(setUserPhoto('https://i.pinimg.com/originals/d1/c1/a0/d1c1a0f49391979e6d74eeaef267161b.jpg'));
 
   useEffect(() => {
     if (userData !== {}) {
-      formik.setFieldValue('fullname', userData.fullname);
+      formik.setFieldValue('fullname', userData.fullname || userData.username);
       formik.setFieldValue('email', userData.email);
       formik.setFieldValue('handphone', userData.handphone);
       formik.setFieldValue('gender', userData.gender);
@@ -216,7 +226,8 @@ const UserProfile = () => {
                       name='gender'
                       id='gender'
                       onChange={formik.handleChange}
-                      value={formik.values.gender}>
+                      defaultValue={'laki laki'}
+                      value={formik.values.gender || 'laki laki'}>
                       <option defaultValue={'laki laki'} value={'laki laki'}>
                         Laki-laki
                       </option>

@@ -65,10 +65,10 @@ const Login = () => {
           id='account'
           name='account'
           type='text'
-          label='Username/Email/No. Handphone'
+          label='Username/Email'
           handleChange={formik.handleChange}
           value={formik.values.account}
-          placeholder='Username/Email/No. Handphone'
+          placeholder='Username/Email'
           errors={formik.errors.account}
         />
         <Input

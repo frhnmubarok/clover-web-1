@@ -55,13 +55,13 @@ export async function deleteProductAPI(id) {
   });
 }
 
-export async function createStoreAPI(formData) {
+export async function createStoreAPI(storeData) {
   const path = `/api/store`;
 
   return callAPI({
     path,
     method: 'POST',
-    data: formData,
+    data: storeData,
     token: Cookies.get('token'),
     formData,
   });

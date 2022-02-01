@@ -7,6 +7,9 @@ import Checkbox from '@/components/atoms/Checkbox';
 import AuthButton from '@/components/atoms/AuthButton';
 import { MdLogin } from 'react-icons/md';
 import { KYCContext } from '@/context/KYCContext';
+import toast from 'react-hot-toast';
+import { Router, useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const validate = (values) => {
   const errors = {};
@@ -57,6 +60,7 @@ const validate = (values) => {
 
 export default function StoreDetails() {
   const { reviewKYC, registerKYC } = useContext(KYCContext);
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       standard_store_min_product: false,
@@ -71,7 +75,16 @@ export default function StoreDetails() {
       form.append('standard_store_min_quantity', values.standard_store_min_quantity);
       form.append('standard_store_term_and_condition', values.standard_store_term_and_condition);
       form.append('standard_store_product_photo', values.standard_store_product_photo);
-      reviewKYC(form);
+      toast
+        .promise(reviewKYC(form), {
+          loading: 'Mohon tunggu...',
+          success: 'Pengajuan KYC berhasil !',
+          error: 'Pengajuan KYC gagal !',
+        })
+        .then(() => {
+          router.push('/');
+          Cookies.remove('token');
+        });
       console.log({ ...values, standard_store_category: values.standard_store_category.toString() });
     },
   });
@@ -81,7 +94,6 @@ export default function StoreDetails() {
         <ul className='w-full steps bg-transparent'>
           <li className='step step-primary '>Data Diri</li>
           <li className='step step-primary'>Persyaratan Mitra</li>
-          <li className='step text-gray-400'>Konfirmasi</li>
         </ul>
       </div>
       <form onSubmit={formik.handleSubmit}>
