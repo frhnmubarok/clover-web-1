@@ -12,10 +12,17 @@ import { AiOutlineShareAlt } from 'react-icons/ai';
 import { HiChat, HiPlusCircle, HiStar } from 'react-icons/hi';
 import { MdFavorite } from 'react-icons/md';
 import { useRouter } from 'next/router';
+import { useCartContext } from '@/context/CartContext';
+import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
+
+
 
 export default function ProductDetail({ data }) {
   const router = useRouter();
   const { product, category, sub_category, photos, store, reviews } = data.data;
+  const [amount, setAmount] = useState(0);
+  const { state, dispatch } = useCartContext();
+
   const [isOpen, setIsOpen] = useState(false);
   const star = () => {
     let tmp = 0;
@@ -32,35 +39,24 @@ export default function ProductDetail({ data }) {
   function openModal() {
     setIsOpen(true);
   }
-  const addToCheckout = async () => {
-    const toastLoading = toast.loading('Tunggu ya, sedang diproses ...');
-    try {
-      const response = await callAPI({
-        path: '/api/carts',
-        method: 'POST',
-        data: { product_id: product.id },
-        token: Cookies.get('token'),
-      });
-      if (response.status === 400) {
-        toast.error(response.data.message, {
-          id: toastLoading,
-        });
-        setTimeout(() => {
-          router.push('/cart');
-        }, 1000);
-      } else {
-        toast.success('silakan lengkapi jumlah pesanan anda dihalaman selanjutnya', {
-          id: toastLoading,
-        });
-        setTimeout(() => {
-          router.push('/cart');
-        }, 4000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+  
+  const send = () => {
+    const tempData = product
+    tempData.photos = photos
+    const data = { store, items: [{product:tempData, amount}] };
+    dispatch({ type: 'ADD_TRANSACTION', payload: data });
+    console.log(data)
+    router.push('/cart/checkout');
+  };
+  const addAmount = () => {
+    setAmount(amount + 1);
   };
 
+  const minusAmount = () => {
+    if (amount > 1) {
+      setAmount(amount - 1);
+    }
+  };
 
   let [categories] = useState({
     Detail: [
@@ -369,15 +365,45 @@ export default function ProductDetail({ data }) {
                     </Dialog.Title>
                     <div className='mt-2'>
                       <p className='text-sm text-gray-500'>
-                        Produk akan ditambahkan, silakan lengkapi jumlah dan alamat pengiriman anda dihalaman selanjutnya.
+                        Produk akan ditambahkan, silakan lengkapi jumlah pesanan anda.
                       </p>
+                      <div className='flex items-end justify-between flex-1 text-sm'>
+                        <p className='text-gray-500'>{formatRupiah(state.totalPrice)}</p>
+                        <div className='flex items-center space-x-5'>
+                          <div className='flex items-center space-x-2'>
+                            <button
+                              type='button'
+                              className='p-1 disabled:text-gray-400'
+                              onClick={() => {
+                                if (amount > 0) {
+                                  dispatch({ type: 'SUB_PRICE', payload: product.product_price });
+                                }
+                                minusAmount();
+                              }}>
+                              <AiOutlineMinusCircle className='w-5 h-5' />
+                            </button>
+                            {/* <input type='number' className='text-sm w-14' readOnly /> */}
+                            <div>{amount}</div>
+                            <div></div>
+                            <button
+                              type='button'
+                              className='p-1 disabled:text-gray-400'
+                              onClick={() => {
+                                dispatch({ type: 'SUM_PRICE', payload: product.product_price });
+                                addAmount();
+                              }}>
+                              <AiOutlinePlusCircle className='w-5 h-5' />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div className='flex mt-4 space-x-2'>
                       <button
                         type='button'
                         className='inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md text-primary-900 bg-primary-100 hover:bg-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500'
-                        onClick={()=>addToCheckout()}>
+                        onClick={()=>send()}>
                         Beli Sekarang
                       </button>
                       <button
