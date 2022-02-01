@@ -140,10 +140,10 @@ export default function Home({ data }) {
         <div>
           <div className='min-h-screen'>
             <div className='container py-14'>
-              <div className='flex items-center justify-between pb-12'>
+              <div className='flex flex-col md:flex-row items-start justify-between space-y-3 pb-12'>
                 <div>
-                  <h2 className='text-3xl font-semibold'>Produk Rekomendasi Untuk Kamu</h2>
-                  <p>Produk - produk rekomendasi spesial untuk kamu</p>
+                  <h2 className='text-lg md:text-2xl font-semibold'>Produk Rekomendasi Untuk Kamu</h2>
+                  <p className='text-xs md:text-base'>Produk - produk rekomendasi spesial untuk kamu</p>
                 </div>
                 <Link
                   href='/products'
